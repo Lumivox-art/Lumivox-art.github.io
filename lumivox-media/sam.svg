@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sm-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#AFD6D8" />
+      <stop offset="55%" stop-color="#6FA8AB" />
+      <stop offset="100%" stop-color="#4C8285" />
+    </linearGradient>
+    <radialGradient id="sm-sun" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#F2EAD6" stop-opacity="0.95" />
+      <stop offset="75%" stop-color="#E8B848" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#E8B848" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="400" height="500" fill="url(#sm-bg)" />
+  <circle cx="200" cy="200" r="170" fill="url(#sm-sun)" />
+  <path d="M 0 360 Q 130 348 200 364 T 400 354 L 400 500 L 0 500 Z" fill="#33595B" opacity="0.5" />
+  <path d="M 0 360 Q 130 348 200 364 T 400 354" stroke="#F2D585" stroke-width="2" fill="none" opacity="0.6" />
+  <text x="200" y="438" font-family="Georgia, serif" font-size="70" font-style="italic" font-weight="600"
+        fill="#F2EAD6" text-anchor="middle" letter-spacing="-1">Sam</text>
+  <text x="200" y="468" font-family="'Manrope', sans-serif" font-size="9" letter-spacing="5"
+        fill="#F2EAD6" fill-opacity="0.6" text-anchor="middle">PLACEHOLDER · LUVINOX</text>
+</svg>
