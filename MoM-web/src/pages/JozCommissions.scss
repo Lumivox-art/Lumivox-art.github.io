@@ -203,17 +203,9 @@
     overflow: hidden;
 
     &--sample {
-      // Layer sample art over the same striped placeholder (RGBA shows through).
-      background-image: var(--jc-style-sample), repeating-linear-gradient(
-          45deg,
-          #f1f1f1,
-          #f1f1f1 8px,
-          #e8e8e8 8px,
-          #e8e8e8 16px
-        );
-      background-size: contain, auto;
-      background-repeat: no-repeat, repeat;
-      background-position: center, center;
+      background: var(--jc-style-sample) center / contain no-repeat, transparent;
+      border-style: solid;
+      border-color: transparent;
     }
 
     span {
@@ -425,13 +417,9 @@
       border-color: #46415a;
 
       &--sample {
-        background-image: var(--jc-style-sample), repeating-linear-gradient(
-            45deg,
-            #2c2738,
-            #2c2738 8px,
-            #332e42 8px,
-            #332e42 16px
-          );
+        background: var(--jc-style-sample) center / contain no-repeat;
+        border-style: solid;
+        border-color: transparent;
       }
 
       span {
