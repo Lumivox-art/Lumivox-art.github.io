@@ -20,7 +20,7 @@ type LookOption = { id: string; price: number };
 const STYLES: StyleOption[] = [
   { id: 'cutsey', name: 'Cutsey', days: '3–5', price: 4 },
   { id: 'chibi', name: 'Chibi+', days: '5–7', price: 7 },
-  { id: 'fiddle', name: 'Fiddle', days: '3–5', price: 7 },
+  { id: 'noodle', name: 'Noodle', days: '3–5', price: 7 },
   { id: 'dull-eyes', name: 'Dull-Eyes', days: '3–7', price: 13 },
   { id: 'anima', name: 'Anima', days: '7–15', price: 21 },
   { id: 'semi-real', name: 'Semi-Real', days: '12–20', price: 25 },
@@ -47,6 +47,7 @@ const mxn = (n: number): string => `$${n * USD_TO_MXN}`;
 const STYLE_SAMPLE_IMAGES: Partial<Record<string, string>> = {
   cutsey: '/lumivox-media/joph-cutsey.webp',
   chibi: '/lumivox-media/joph-chibi.webp',
+  noodle: '/lumivox-media/joph-noodle.webp',
   'dull-eyes': '/lumivox-media/joph-dull-eyes.webp',
   anima: '/lumivox-media/joph-anima.webp',
   'semi-real': '/lumivox-media/joph-semi-real.webp',
