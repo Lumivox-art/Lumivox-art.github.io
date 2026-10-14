@@ -194,6 +194,7 @@
     width: 64px;
     align-self: stretch;
     min-height: 64px;
+    position: relative;
     border-radius: 10px;
     background: repeating-linear-gradient(45deg, #f1f1f1, #f1f1f1 8px, #e8e8e8 8px, #e8e8e8 16px);
     border: 2px dashed #cdd2d2;
@@ -201,11 +202,18 @@
     place-items: center;
     overflow: hidden;
 
+    &:has(> img) {
+      display: block;
+    }
+
     img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: contain;
       display: block;
+      max-width: none;
     }
 
     span {

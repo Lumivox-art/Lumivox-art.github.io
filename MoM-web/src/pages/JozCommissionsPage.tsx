@@ -129,8 +129,6 @@ export function JozCommissionsPage() {
                   <img
                     src={STYLE_SAMPLE_IMAGES[s.id]}
                     alt={`${s.name} — commission style example`}
-                    width={64}
-                    height={64}
                   />
                 ) : (
                   <span>{t('common.example')}</span>
