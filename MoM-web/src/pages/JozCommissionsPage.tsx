@@ -43,6 +43,15 @@ const USD_TO_MXN = 20;
 const usd = (n: number): string => `$${n}`;
 const mxn = (n: number): string => `$${n * USD_TO_MXN}`;
 
+/** Style sample art — keyed by STYLES[].id when a figure file exists. */
+const STYLE_SAMPLE_IMAGES: Partial<Record<string, string>> = {
+  cutsey: '/lumivox-media/joph-cutsey.webp',
+  chibi: '/lumivox-media/joph-chibi.webp',
+  'dull-eyes': '/lumivox-media/joph-dull-eyes.webp',
+  anima: '/lumivox-media/joph-anima.webp',
+  'semi-real': '/lumivox-media/joph-semi-real.webp',
+};
+
 // The included region of a full figure, as a fraction of its height, per crop.
 const CROP_FRACTION: Record<SizeCrop, number> = { shoulders: 0.34, half: 0.62, full: 1 };
 
@@ -116,7 +125,16 @@ export function JozCommissionsPage() {
                 <span className="jc-price">{usd(s.price)}</span>
               </div>
               <div className="jc-style-art">
-                <span>{t('common.example')}</span>
+                {STYLE_SAMPLE_IMAGES[s.id] ? (
+                  <img
+                    src={STYLE_SAMPLE_IMAGES[s.id]}
+                    alt={`${s.name} — commission style example`}
+                    width={64}
+                    height={64}
+                  />
+                ) : (
+                  <span>{t('common.example')}</span>
+                )}
               </div>
             </button>
           ))}
