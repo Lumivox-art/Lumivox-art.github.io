@@ -124,15 +124,21 @@ export function JozCommissionsPage() {
                 </span>
                 <span className="jc-price">{usd(s.price)}</span>
               </div>
-              <div className="jc-style-art">
-                {STYLE_SAMPLE_IMAGES[s.id] ? (
-                  <img
-                    src={STYLE_SAMPLE_IMAGES[s.id]}
-                    alt={`${s.name} — commission style example`}
-                  />
-                ) : (
-                  <span>{t('common.example')}</span>
-                )}
+              <div
+                className={`jc-style-art${STYLE_SAMPLE_IMAGES[s.id] ? ' jc-style-art--sample' : ''}`}
+                style={
+                  STYLE_SAMPLE_IMAGES[s.id]
+                    ? { ['--jc-style-sample' as string]: `url(${STYLE_SAMPLE_IMAGES[s.id]})` }
+                    : undefined
+                }
+                {...(STYLE_SAMPLE_IMAGES[s.id]
+                  ? {
+                      role: 'img' as const,
+                      'aria-label': `${s.name} — commission style example`,
+                    }
+                  : {})}
+              >
+                {!STYLE_SAMPLE_IMAGES[s.id] ? <span>{t('common.example')}</span> : null}
               </div>
             </button>
           ))}
