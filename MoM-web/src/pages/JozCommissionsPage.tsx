@@ -8,7 +8,7 @@ import './JozCommissions.scss';
 
 // Functional commission quote builder for Joz.
 // Pick one option per step (style + size + look); the total updates live.
-// Total is shown in USD and in MXN at a fixed 1 USD = 20 MXN rate.
+// Total is shown in USD and in MXN at a fixed 1 USD = 19 MXN rate.
 // Labels are localized via the i18n layer (size/look names live in the dictionary
 // keyed by id; style names are proper names and stay as-is).
 
@@ -18,30 +18,40 @@ type CropOption = { id: SizeCrop; price: number };
 type LookOption = { id: string; price: number };
 
 const STYLES: StyleOption[] = [
-  { id: 'cutsey', name: 'Cutsey', days: '3–5', price: 3 },
+  { id: 'cutsey', name: 'Cutsey', days: '3–5', price: 4 },
   { id: 'chibi', name: 'Chibi+', days: '5–7', price: 7 },
-  { id: 'fiddle', name: 'Fiddle', days: '3–5', price: 7 },
-  { id: 'dull-eyes', name: 'Dull-Eyes', days: '3–7', price: 10 },
-  { id: 'anima', name: 'Anima', days: '7–15', price: 18 },
-  { id: 'semi-real', name: 'Semi-Real', days: '12–20', price: 22 },
+  { id: 'noodle', name: 'Noodle', days: '3–5', price: 7 },
+  { id: 'dull-eyes', name: 'Dull-Eyes', days: '3–7', price: 13 },
+  { id: 'anima', name: 'Anima', days: '7–15', price: 21 },
+  { id: 'semi-real', name: 'Semi-Real', days: '12–20', price: 25 },
 ];
 
 const SIZES: CropOption[] = [
-  { id: 'shoulders', price: 2 },
-  { id: 'half', price: 4 },
-  { id: 'full', price: 8 },
+  { id: 'shoulders', price: 3 },
+  { id: 'half', price: 5 },
+  { id: 'full', price: 10 },
 ];
 
 const LOOKS: LookOption[] = [
-  { id: 'draft', price: 2 },
+  { id: 'draft', price: 3 },
   { id: 'lineart', price: 6 },
-  { id: 'clean', price: 7 },
-  { id: 'rendered', price: 10 },
+  { id: 'clean', price: 9 },
+  { id: 'rendered', price: 12 },
 ];
 
-const USD_TO_MXN = 20;
+const USD_TO_MXN = 19;
 const usd = (n: number): string => `$${n}`;
 const mxn = (n: number): string => `$${n * USD_TO_MXN}`;
+
+/** Style sample art — keyed by STYLES[].id when a figure file exists. */
+const STYLE_SAMPLE_IMAGES: Partial<Record<string, string>> = {
+  cutsey: '/lumivox-media/joph-cutsey.webp',
+  chibi: '/lumivox-media/joph-chibi.webp',
+  noodle: '/lumivox-media/joph-noodle.webp',
+  'dull-eyes': '/lumivox-media/joph-dull-eyes.webp',
+  anima: '/lumivox-media/joph-anima.webp',
+  'semi-real': '/lumivox-media/joph-semi-real.webp',
+};
 
 // The included region of a full figure, as a fraction of its height, per crop.
 const CROP_FRACTION: Record<SizeCrop, number> = { shoulders: 0.34, half: 0.62, full: 1 };
@@ -115,8 +125,21 @@ export function JozCommissionsPage() {
                 </span>
                 <span className="jc-price">{usd(s.price)}</span>
               </div>
-              <div className="jc-style-art">
-                <span>{t('common.example')}</span>
+              <div
+                className={`jc-style-art${STYLE_SAMPLE_IMAGES[s.id] ? ' jc-style-art--sample' : ''}`}
+                style={
+                  STYLE_SAMPLE_IMAGES[s.id]
+                    ? { ['--jc-style-sample' as string]: `url(${STYLE_SAMPLE_IMAGES[s.id]})` }
+                    : undefined
+                }
+                {...(STYLE_SAMPLE_IMAGES[s.id]
+                  ? {
+                      role: 'img' as const,
+                      'aria-label': `${s.name} — commission style example`,
+                    }
+                  : {})}
+              >
+                {!STYLE_SAMPLE_IMAGES[s.id] ? <span>{t('common.example')}</span> : null}
               </div>
             </button>
           ))}

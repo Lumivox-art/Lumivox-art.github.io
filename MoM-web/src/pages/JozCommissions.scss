@@ -192,11 +192,21 @@
   .jc-style-art {
     flex: none;
     width: 64px;
+    align-self: stretch;
+    min-height: 64px;
+    position: relative;
     border-radius: 10px;
     background: repeating-linear-gradient(45deg, #f1f1f1, #f1f1f1 8px, #e8e8e8 8px, #e8e8e8 16px);
     border: 2px dashed #cdd2d2;
     display: grid;
     place-items: center;
+    overflow: hidden;
+
+    &--sample {
+      background: var(--jc-style-sample) center / contain no-repeat, transparent;
+      border-style: solid;
+      border-color: transparent;
+    }
 
     span {
       font-size: 0.62rem;
@@ -405,6 +415,12 @@
     .jc-style-art {
       background: repeating-linear-gradient(45deg, #2c2738, #2c2738 8px, #332e42 8px, #332e42 16px);
       border-color: #46415a;
+
+      &--sample {
+        background: var(--jc-style-sample) center / contain no-repeat;
+        border-style: solid;
+        border-color: transparent;
+      }
 
       span {
         color: #8a85a0;
