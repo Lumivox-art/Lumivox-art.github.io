@@ -35,6 +35,8 @@ jobs:
       - name: Build for GitHub Pages
         run: npm run build:gh-pages
         working-directory: ./MoM-web
+        env:
+          FIREBASE_DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
 
       # Pages is sourced from the main branch root, so mirror the built dist there.
       - name: Publish built site to repository root
