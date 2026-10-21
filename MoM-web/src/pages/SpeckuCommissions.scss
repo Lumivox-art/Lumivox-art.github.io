@@ -59,6 +59,19 @@
       max-width: 34rem;
       font-weight: 600;
       opacity: 0.8;
+
+      .jc-gallery-link {
+        color: var(--jc-coral);
+        font-weight: 800;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: opacity 0.15s;
+
+        &:hover {
+          opacity: 0.8;
+          color: var(--jc-coral);
+        }
+      }
     }
   }
 
@@ -1014,6 +1027,14 @@
         .jc-terms-link {
           color: #34c9ec;
         }
+      }
+    }
+
+    .jc-hero p .jc-gallery-link {
+      color: #34c9ec;
+
+      &:hover {
+        color: #34c9ec;
       }
     }
   }

@@ -222,7 +222,12 @@ export function SpeckuCommissionsPage() {
 
       <header className="jc-hero">
         <h1>{t('specku.title')}</h1>
-        <p>{t('specku.subtitle')}</p>
+        <p>
+          {t('specku.subtitle.prefix')}{' '}
+          <Link to="/home/specku/galeria" className="jc-gallery-link">
+            {t('specku.subtitle.link')}
+          </Link>
+        </p>
       </header>
 
       {/* Step 1 — style */}

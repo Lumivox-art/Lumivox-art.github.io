@@ -32,7 +32,9 @@ const DICT: Record<Lang, Record<string, string>> = {
       "We live in a time when digitalization makes spreading a digital brand remarkably easy. If you're looking to grow your brand through digital solutions, reach out!",
     // specku commissions
     'specku.title': "Specku's Commissions!",
-    'specku.subtitle': 'Build your quote — pick one option per step and watch your total live.',
+    'specku.subtitle': 'Not sure what to order? Visit my gallery',
+    'specku.subtitle.prefix': 'Not sure what to order? Visit my',
+    'specku.subtitle.link': 'gallery',
     'specku.step.style': 'Choose a style',
     'specku.step.size': 'Choose a size',
     'specku.step.look': 'Choose a look',
@@ -148,7 +150,16 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.terms.s3.authorship.text':
       'You gain the ownership of the art piece; however, I remain having the right of being the artist/creator and to be recognized as such.',
 
-    'specku.terms.ctaBack': 'Back to Commission Builder',
+        'specku.terms.ctaBack': 'Back to Commission Builder',
+
+    // specku gallery
+    'specku.gallery.badge': 'Gallery',
+    'specku.gallery.title': "Specku's Gallery",
+    'specku.gallery.subtitle': 'Explore art samples and illustrations.',
+    'specku.gallery.back': 'Back to commissions',
+    'specku.gallery.ctaCard': 'Interested in getting a custom illustration?',
+    'specku.gallery.ctaCommissions': 'Build your quote',
+    'specku.gallery.close': 'Close preview',
 
     // sam commissions (mockup)
     'sam.tag': 'commissions',
@@ -175,7 +186,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     'artist.luis.brief':
       'Estamos en un tiempo donde la facilidad que trae la digitalización a la propagación de una marca digital es bastante evidente. Si estás buscando impulsar tu marca mediante soluciones digitales, ¡puedes contactarme!',
     'specku.title': '¡Comisiones de Specku!',
-    'specku.subtitle': 'Arma tu cotización — elige una opción en cada paso y mira tu total en vivo.',
+    'specku.subtitle': '¿No sabes qué pedir? Visita mi galería',
+    'specku.subtitle.prefix': '¿No sabes qué pedir? Visita mi',
+    'specku.subtitle.link': 'galería',
     'specku.step.style': 'Elige un estilo',
     'specku.step.size': 'Elige un tamaño',
     'specku.step.look': 'Elige un acabado',
@@ -291,7 +304,16 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.terms.s3.authorship.text':
       'Obtienes la propiedad de la pieza; sin embargo, conservo el derecho moral como artista/creador de ser reconocido y acreditado como autor.',
 
-    'specku.terms.ctaBack': 'Volver al Cotizador de Comisiones',
+        'specku.terms.ctaBack': 'Volver al Cotizador de Comisiones',
+
+    // specku gallery
+    'specku.gallery.badge': 'Galería',
+    'specku.gallery.title': 'Galería de Specku',
+    'specku.gallery.subtitle': 'Explora muestras de arte e ilustraciones.',
+    'specku.gallery.back': 'Volver a comisiones',
+    'specku.gallery.ctaCard': '¿Te interesa una ilustración personalizada?',
+    'specku.gallery.ctaCommissions': 'Cotiza tu comisión',
+    'specku.gallery.close': 'Cerrar vista previa',
 
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',
