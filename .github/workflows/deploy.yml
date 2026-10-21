@@ -11,8 +11,6 @@ concurrency:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   build:
@@ -38,14 +36,6 @@ jobs:
         run: npm run build:gh-pages
         working-directory: ./MoM-web
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./MoM-web/dist
-
       # Pages is sourced from the main branch root, so mirror the built dist there.
       - name: Publish built site to repository root
         run: |
@@ -63,16 +53,3 @@ jobs:
           fi
           git commit -m "deploy: publish GitHub Pages build [skip ci]"
           git push
-
-  deploy:
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
