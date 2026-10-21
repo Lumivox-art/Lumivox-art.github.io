@@ -26,6 +26,36 @@
     gap: 1rem;
   }
 
+  .st-topbar-brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .st-back-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--st-coral);
+    text-decoration: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: background 0.15s, transform 0.1s, color 0.15s;
+
+    &:hover {
+      background: rgba(255, 111, 89, 0.12);
+      transform: translateX(-2px);
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+
   .st-topbar-actions {
     display: flex;
     align-items: center;
@@ -215,6 +245,13 @@
 
   // --- Night Theme ---
   &[data-theme='night'] {
+    .st-back-arrow {
+      color: #34c9ec;
+
+      &:hover {
+        background: rgba(52, 201, 236, 0.15);
+      }
+    }
     background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%);
     color: #f1ece0;
 
