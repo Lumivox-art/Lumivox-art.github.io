@@ -1,13 +1,13 @@
-import { useState, type FormEvent } from 'react';
-import {
-  buildDiscordCommissionPayload,
-  sendDiscordCommissionQuote,
-} from '../utils/discordWebhook';
+import { useState } from 'react';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
+import {
+  JOPH_DISCORD_PROFILE_URL,
+  buildDiscordCommissionMessage,
+} from '../utils/discordMessage';
 import './JozCommissions.scss';
 
 // Functional commission quote builder for Joz.
@@ -85,6 +85,7 @@ export function JozCommissionsPage() {
   const [styleId, setStyleId] = useState<string | null>(null);
   const [sizeId, setSizeId] = useState<string | null>(null);
   const [lookId, setLookId] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const style = STYLES.find((s) => s.id === styleId) ?? null;
   const size = SIZES.find((s) => s.id === sizeId) ?? null;
@@ -93,43 +94,28 @@ export function JozCommissionsPage() {
   const total = (style?.price ?? 0) + (size?.price ?? 0) + (look?.price ?? 0);
   const complete = !!style && !!size && !!look;
 
-  const [discordUser, setDiscordUser] = useState('');
-  const [notes, setNotes] = useState('');
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const handleOpenDiscord = async () => {
+    if (!style || !size || !look) return;
 
-  const canSubmit = complete && discordUser.trim().length > 0 && submitStatus !== 'submitting';
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!canSubmit || !style || !size || !look) return;
-
-    setSubmitStatus('submitting');
-    setErrorMessage(null);
-
-    const items = [
-      { category: t('joz.line.style'), label: style.name, price: style.price },
-      { category: t('joz.line.size'), label: t(`joz.size.${size.id}`), price: size.price },
-      { category: t('joz.line.look'), label: t(`joz.look.${look.id}`), price: look.price },
-    ];
-
-    const payload = buildDiscordCommissionPayload({
-      discordUser,
-      notes,
-      items,
+    const message = buildDiscordCommissionMessage({
+      greeting: t('joz.discord.msg.greeting'),
+      items: [
+        { category: t('joz.line.style'), label: style.name, price: style.price },
+        { category: t('joz.line.size'), label: t(`joz.size.${size.id}`), price: size.price },
+        { category: t('joz.line.look'), label: t(`joz.look.${look.id}`), price: look.price },
+      ],
       totalUsd: total,
       totalMxn: total * USD_TO_MXN,
     });
 
     try {
-      const webhookUrl = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
-      await sendDiscordCommissionQuote(webhookUrl, payload);
-      setSubmitStatus('success');
-    } catch (err: unknown) {
-      console.error('Error submitting commission quote:', err);
-      setSubmitStatus('error');
-      setErrorMessage(err instanceof Error ? err.message : t('joz.submit.error'));
+      await navigator.clipboard.writeText(message);
+      setCopied(true);
+    } catch (err) {
+      console.warn('Clipboard write failed:', err);
     }
+
+    window.open(JOPH_DISCORD_PROFILE_URL, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -159,7 +145,10 @@ export function JozCommissionsPage() {
               type="button"
               className={`jc-card jc-style-card${styleId === s.id ? ' selected' : ''}`}
               aria-pressed={styleId === s.id}
-              onClick={() => setStyleId(s.id)}
+              onClick={() => {
+                setStyleId(s.id);
+                setCopied(false);
+              }}
             >
               <div className="jc-style-info">
                 <span className="jc-style-name">{s.name}</span>
@@ -201,7 +190,10 @@ export function JozCommissionsPage() {
               type="button"
               className={`jc-card jc-size-card${sizeId === s.id ? ' selected' : ''}`}
               aria-pressed={sizeId === s.id}
-              onClick={() => setSizeId(s.id)}
+              onClick={() => {
+                setSizeId(s.id);
+                setCopied(false);
+              }}
             >
               <SizeFigure crop={s.id} />
               <span className="jc-size-name">{t(`joz.size.${s.id}`)}</span>
@@ -224,7 +216,10 @@ export function JozCommissionsPage() {
               type="button"
               className={`jc-card jc-look-card${lookId === l.id ? ' selected' : ''}`}
               aria-pressed={lookId === l.id}
-              onClick={() => setLookId(l.id)}
+              onClick={() => {
+                setLookId(l.id);
+                setCopied(false);
+              }}
             >
               <span className="jc-look-name">{t(`joz.look.${l.id}`)}</span>
               <span className="jc-look-desc">{t(`joz.look.${l.id}.desc`)}</span>
@@ -268,73 +263,37 @@ export function JozCommissionsPage() {
 
         {!complete && <p className="jc-hint">{t('joz.hint')}</p>}
 
-        <form className="jc-discord-form" onSubmit={handleSubmit}>
-          <div className="jc-form-header">
-            <h3>{t('joz.discord.title')}</h3>
-          </div>
-
-          <div className="jc-field">
-            <label htmlFor="jc-discord-user">
-              {t('joz.discord.label')} <span className="jc-required">*</span>
-            </label>
-            <input
-              id="jc-discord-user"
-              type="text"
-              required
-              placeholder={t('joz.discord.placeholder')}
-              value={discordUser}
-              onChange={(e) => {
-                setDiscordUser(e.target.value);
-                if (submitStatus === 'error') setSubmitStatus('idle');
-              }}
-              disabled={submitStatus === 'submitting'}
-            />
-            <p className="jc-field-help">{t('joz.discord.help')}</p>
-          </div>
-
-          <div className="jc-field">
-            <label htmlFor="jc-notes">{t('joz.notes.label')}</label>
-            <textarea
-              id="jc-notes"
-              rows={3}
-              placeholder={t('joz.notes.placeholder')}
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              disabled={submitStatus === 'submitting'}
-            />
-          </div>
-
-          {submitStatus === 'success' && (
-            <div className="jc-alert jc-alert--success" role="alert">
-              <span className="jc-alert-icon">🎉</span>
-              <span>{t('joz.submit.success')}</span>
-            </div>
-          )}
-
-          {submitStatus === 'error' && (
-            <div className="jc-alert jc-alert--error" role="alert">
-              <span className="jc-alert-icon">⚠️</span>
-              <span>{errorMessage || t('joz.submit.error')}</span>
-            </div>
-          )}
-
+        <div className="jc-discord-action">
           <button
-            type="submit"
-            className={`jc-submit-btn${submitStatus === 'submitting' ? ' is-loading' : ''}`}
-            disabled={!canSubmit}
+            type="button"
+            className={`jc-discord-btn${!complete ? ' is-disabled' : ''}`}
+            onClick={handleOpenDiscord}
+            disabled={!complete}
+            aria-label={t('joz.discord.action')}
           >
-            {submitStatus === 'submitting' ? (
-              <>
-                <span className="jc-spinner" aria-hidden="true" />
-                <span>{t('joz.submit.submitting')}</span>
-              </>
-            ) : submitStatus === 'error' ? (
-              t('joz.submit.retry')
-            ) : (
-              t('joz.submit.button')
-            )}
+            <svg
+              className="jc-discord-icon"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+            </svg>
+            <span>{t('joz.discord.action')}</span>
           </button>
-        </form>
+
+          {copied && (
+            <div className="jc-discord-feedback" role="status">
+              <span className="jc-discord-feedback-check">✓</span>
+              <div className="jc-discord-feedback-text">
+                <strong>{t('joz.discord.copied.title')}</strong>
+                <p>{t('joz.discord.copied.desc')}</p>
+              </div>
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );

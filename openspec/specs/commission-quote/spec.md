@@ -1,38 +1,34 @@
 # commission-quote Specification
 
 ## Purpose
-Enables clients to build an itemized commission quote and automatically submit it to artist Joph's Discord channel via Webhook.
+Enables clients to build an itemized commission quote and directly dispatch it to artist Joph's Discord profile (ID: `984706414914187284`) via clipboard-ready formatted message and direct profile navigation.
 
 ## Requirements
 
-### Requirement: Client Discord identifier validation
-The system SHALL require the client to provide a valid Discord username or numeric ID before allowing the commission quote to be submitted.
+### Requirement: Mandatory commission selections validation
+The system SHALL require the client to select all mandatory commission options (style, size, and look) before enabling the direct Discord message action button.
 
-#### Scenario: Submission blocked when Discord identifier is missing
-- **WHEN** the client selects all commission options but leaves the Discord username or ID empty
-- **THEN** the submission button remains disabled and an indicator prompts for the Discord identifier
+#### Scenario: Button disabled when selections are incomplete
+- **WHEN** the client has not picked a style, size, or look
+- **THEN** the Discord action button remains disabled and an indicator prompts to complete the selections
 
-#### Scenario: Submission allowed with complete selections and Discord identifier
-- **WHEN** the client has selected style, size, and look options, and entered a non-empty Discord username or ID
-- **THEN** the submission button becomes enabled
+#### Scenario: Button enabled when all selections are complete
+- **WHEN** the client has chosen style, size, and look
+- **THEN** the Discord action button becomes enabled
 
 ### Requirement: Commission quote itemization and total calculation
-The system SHALL format all active commission selections into an itemized Markdown bullet list with individual prices, compute the total price in USD, and associate the request with artist Joph's Discord ID (984706414914187284).
+The system SHALL format all active commission selections into an itemized bullet list with individual prices, compute the total price in USD and local currency (MXN), and format the message text for direct transmission.
 
 #### Scenario: Summary formatting and total aggregation
 - **WHEN** the client selects a style at $21, size at $5, and look at $12
-- **THEN** the quote summary compiles each selected item into bullet format `• Category: Selection ($Price USD)`
+- **THEN** the quote compiles each selected item into bullet format `• Category: Selection ($Price USD)`
 - **AND** the computed total equals $38 USD
 
-### Requirement: Discord Webhook submission and state handling
-The system SHALL transmit the structured commission embed payload to the Discord Webhook via an HTTP POST request and provide clear visual feedback while preventing duplicate submissions.
+### Requirement: Direct Discord profile dispatch and clipboard integration
+The system SHALL automatically copy the assembled quote message to the client's clipboard and open artist Joph's Discord profile (`https://discord.com/users/984706414914187284`) in a new tab when the action button is triggered.
 
-#### Scenario: Successful quote transmission
-- **WHEN** the client submits the form and the Discord Webhook returns HTTP 200 or 204
-- **THEN** the submission button disables while in flight
-- **AND** a success message confirms the quote was sent and that artist Joph will contact the client on Discord
-
-#### Scenario: Submission failure handling
-- **WHEN** the HTTP POST request to the Webhook fails or returns an error status
-- **THEN** the system displays an error alert allowing the client to retry
-- **AND** re-enables the submission button
+#### Scenario: Triggering direct Discord action
+- **WHEN** the client clicks the Discord action button with complete selections
+- **THEN** the formatted message is copied to the user's clipboard
+- **AND** a new browser tab navigates to `https://discord.com/users/984706414914187284`
+- **AND** visual confirmation informs the client that the quote is copied and ready to paste into Joph's chat
