@@ -1,5 +1,6 @@
 import type { Artist, ArtistModule } from '../../data/artists';
 import { useLang } from '../../i18n';
+import { LumivoxDbImage } from '../LumivoxDbImage';
 import { BriefModule } from './modules/BriefModule';
 import { EmailModule } from './modules/EmailModule';
 import { PortalModule } from './modules/PortalModule';
@@ -28,7 +29,11 @@ export function ArtistShowcase({ artist, panelId, labelledBy }: ArtistShowcasePr
       style={{ ['--accent-color' as string]: artist.accentColor }}
     >
       <div className="lumivox-splash">
-        <img src={artist.splash} alt={`${artist.displayName} — splash art`} loading="lazy" />
+        <LumivoxDbImage
+          src={artist.splash}
+          alt={`${artist.displayName} — splash art`}
+          circleSize={64}
+        />
       </div>
 
       <div className="lumivox-identity">

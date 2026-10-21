@@ -32,8 +32,8 @@ export type Artist = {
   tagline: string;
   discipline: string;
   bio: string;
-  splash: string;
-  icon: string;
+  splash?: string | null;
+  icon?: string | null;
   accentColor: string;
   modules: ArtistModule[];
 };
@@ -46,8 +46,8 @@ export const artists: Artist[] = [
     tagline: 'artist.luis.hook',
     discipline: 'artist.luis.discipline',
     bio: 'artist.luis.bio',
-    splash: '/lumivox-media/luis-m.jpg',
-    icon: '/lumivox-media/luis-m.jpg',
+    splash: null,
+    icon: null,
     accentColor: '#3B5673',
     modules: [
       {
@@ -74,8 +74,8 @@ export const artists: Artist[] = [
     tagline: 'Lorem ipsum dolor sit amet, consectetur',
     discipline: 'Lorem Ipsum Dolor',
     bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-    splash: '/lumivox-media/specku.svg',
-    icon: '/lumivox-media/specku.svg',
+    splash: null,
+    icon: null,
     accentColor: '#D17865',
     modules: [
       {
@@ -106,8 +106,8 @@ export const artists: Artist[] = [
     tagline: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
     discipline: 'Lorem Ipsum · Dolor Sit',
     bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
-    splash: '/lumivox-media/sam.svg',
-    icon: '/lumivox-media/sam.svg',
+    splash: null,
+    icon: null,
     accentColor: '#6FA8AB',
     modules: [
       {

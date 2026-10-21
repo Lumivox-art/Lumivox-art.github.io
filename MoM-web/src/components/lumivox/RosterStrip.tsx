@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import type { Artist } from '../../data/artists';
+import { LumivoxDbImage } from '../LumivoxDbImage';
 
 type RosterStripProps = {
   artists: Artist[];
@@ -60,13 +61,17 @@ export function RosterStrip({
             onClick={() => onSelect(artist.handle)}
             onKeyDown={(event) => handleKeyDown(event, index)}
           >
-            <img
+            <div
               className="lumivox-roster-icon"
-              src={artist.icon}
-              alt={artist.displayName}
-              loading="lazy"
               style={{ backgroundColor: artist.accentColor }}
-            />
+            >
+              <LumivoxDbImage
+                src={artist.icon}
+                alt={artist.displayName}
+                circleSize={22}
+                compactError={true}
+              />
+            </div>
             <span className="lumivox-roster-name">{artist.displayName}</span>
           </button>
         );

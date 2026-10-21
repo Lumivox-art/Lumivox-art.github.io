@@ -6,6 +6,7 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import { SpeckuGalleryService } from '../services/SpeckuGalleryService';
+import { LumivoxLoadingCircle } from '../components/LumivoxLoadingCircle';
 import {
   SPECKU_DISCORD_PROFILE_URL,
   buildDiscordCommissionMessage,
@@ -280,7 +281,7 @@ export function SpeckuCommissionsPage() {
                     }
                   : {})}
               >
-                {!styleSamples[s.id] ? <span>{t('common.example')}</span> : null}
+                {!styleSamples[s.id] ? <LumivoxLoadingCircle size={28} /> : null}
               </div>
             </button>
           ))}

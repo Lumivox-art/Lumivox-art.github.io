@@ -1,0 +1,33 @@
+.lvx-loading-circle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .lvx-loading-circle-mark {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: lvx-spin-loading 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 2px 8px rgba(229, 166, 59, 0.35));
+    }
+  }
+}
+
+@keyframes lvx-spin-loading {
+  0% {
+    transform: rotate(0deg) scale(0.95);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(360deg) scale(0.95);
+  }
+}

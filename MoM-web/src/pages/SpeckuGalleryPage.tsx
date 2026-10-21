@@ -13,6 +13,9 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import { SpeckuGalleryService } from '../services/SpeckuGalleryService';
+import { LumivoxDbImage } from '../components/LumivoxDbImage';
+import { LumivoxLoadingCircle } from '../components/LumivoxLoadingCircle';
+import { ConnectionFailurePlaceholder } from '../components/ConnectionFailurePlaceholder';
 import type { GalleryItemBase } from '../models/Gallery';
 import './SpeckuGallery.scss';
 
@@ -30,6 +33,8 @@ export function SpeckuGalleryPage() {
   const [items, setItems] = useState<GalleryItemBase[]>([]);
   const [selectedItem, setSelectedItem] = useState<GalleryItemBase | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
 
   // Private touch gesture tracking refs for mobile swipe navigation
   const touchStartX = useRef<number | null>(null);
@@ -41,8 +46,12 @@ export function SpeckuGalleryPage() {
   /// </summary>
   useEffect(() => {
     const unsubscribe = SpeckuGalleryService.Subscribe((response) => {
+      setIsLoading(false);
       if (response.Result && response.Result.length > 0) {
         setItems(response.Result);
+        setIsError(false);
+      } else if (response.CodeNumber && response.CodeNumber >= 400) {
+        setIsError(true);
       }
     });
 
@@ -135,102 +144,135 @@ export function SpeckuGalleryPage() {
 
       {/* Main presentation area */}
       <main className="sg-content">
-        {/* Binder sheet carousel: strictly 3 columns x 2 rows per sheet */}
-        <section
-          className="sg-carousel"
-          aria-label={t('specku.gallery.title')}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className="sg-viewport">
-            <div
-              className="sg-track"
-              style={{ transform: `translateX(-${activePage * 100}%)` }}
-            >
-              {sheets.map((sheet, sheetIndex) => (
-                <div
-                  key={sheetIndex}
-                  className="sg-sheet"
-                  aria-hidden={sheetIndex !== activePage}
-                >
-                  {sheet.map((item) => (
-                    <article
-                      key={item.Key ?? item.GalleryItemID ?? Math.random()}
-                      className="sg-card"
-                      onClick={() => setSelectedItem(item)}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setSelectedItem(item);
-                        }
-                      }}
-                      aria-label={`${item.Title ?? 'Artwork'} - Zoom in`}
-                    >
-                      <div className="sg-card-media">
-                        <img
-                          src={item.ImageBinary ?? ''}
-                          alt={item.AltText ?? item.Title ?? 'Specku artwork'}
-                          loading="lazy"
-                        />
-                        <div className="sg-card-overlay">
-                          <span className="sg-view-hint">🔍 Zoom in</span>
-                        </div>
-                      </div>
-                      <div className="sg-card-meta">
-                        <h2 className="sg-card-title">{item.Title}</h2>
-                        {item.Category && (
-                          <span className="sg-card-category">{item.Category}</span>
-                        )}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ))}
-            </div>
+        {isLoading && items.length === 0 ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '340px',
+              gap: '1.25rem',
+            }}
+          >
+            <LumivoxLoadingCircle size={72} />
+            <span style={{ fontSize: '0.95rem', color: 'var(--lvx-sub, #8D3E2E)', fontWeight: 500 }}>
+              Cargando obras desde la base de datos...
+            </span>
           </div>
-
-          {/* Navigation controls rendered when more than 1 sheet exists */}
-          {totalSheets > 1 && (
-            <div className="sg-nav-bar">
-              <button
-                type="button"
-                className="sg-nav-btn sg-nav-btn--prev"
-                onClick={goToPrevSheet}
-                disabled={activePage === 0}
-                aria-label={t('specku.gallery.prev')}
+        ) : isError && items.length === 0 ? (
+          <div style={{ maxWidth: 440, margin: '2rem auto' }}>
+            <ConnectionFailurePlaceholder
+              onRetry={() => {
+                setIsLoading(true);
+                SpeckuGalleryService.List().then((res) => {
+                  setIsLoading(false);
+                  if (res.Result && res.Result.length > 0) {
+                    setItems(res.Result);
+                    setIsError(false);
+                  }
+                });
+              }}
+            />
+          </div>
+        ) : (
+          /* Binder sheet carousel: strictly 3 columns x 2 rows per sheet */
+          <section
+            className="sg-carousel"
+            aria-label={t('specku.gallery.title')}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="sg-viewport">
+              <div
+                className="sg-track"
+                style={{ transform: `translateX(-${activePage * 100}%)` }}
               >
-                ← {t('specku.gallery.prev')}
-              </button>
-
-              <div className="sg-nav-dots" role="tablist" aria-label="Sheet indicators">
-                {sheets.map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    className={`sg-dot${idx === activePage ? ' is-active' : ''}`}
-                    onClick={() => setCurrentPage(idx)}
-                    aria-label={`${t('specku.gallery.sheet')} ${idx + 1}`}
-                    aria-selected={idx === activePage}
-                    role="tab"
-                  />
+                {sheets.map((sheet, sheetIndex) => (
+                  <div
+                    key={sheetIndex}
+                    className="sg-sheet"
+                    aria-hidden={sheetIndex !== activePage}
+                  >
+                    {sheet.map((item) => (
+                      <article
+                        key={item.Key ?? item.GalleryItemID ?? Math.random()}
+                        className="sg-card"
+                        onClick={() => setSelectedItem(item)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setSelectedItem(item);
+                          }
+                        }}
+                        aria-label={`${item.Title ?? 'Artwork'} - Zoom in`}
+                      >
+                        <div className="sg-card-media">
+                          <LumivoxDbImage
+                            src={item.ImageBinary}
+                            alt={item.AltText ?? item.Title ?? 'Specku artwork'}
+                            circleSize={48}
+                          />
+                          <div className="sg-card-overlay">
+                            <span className="sg-view-hint">🔍 Zoom in</span>
+                          </div>
+                        </div>
+                        <div className="sg-card-meta">
+                          <h2 className="sg-card-title">{item.Title}</h2>
+                          {item.Category && (
+                            <span className="sg-card-category">{item.Category}</span>
+                          )}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
                 ))}
               </div>
-
-              <button
-                type="button"
-                className="sg-nav-btn sg-nav-btn--next"
-                onClick={goToNextSheet}
-                disabled={activePage === totalSheets - 1}
-                aria-label={t('specku.gallery.next')}
-              >
-                {t('specku.gallery.next')} →
-              </button>
             </div>
-          )}
-        </section>
+
+            {/* Navigation controls rendered when more than 1 sheet exists */}
+            {totalSheets > 1 && (
+              <div className="sg-nav-bar">
+                <button
+                  type="button"
+                  className="sg-nav-btn sg-nav-btn--prev"
+                  onClick={goToPrevSheet}
+                  disabled={activePage === 0}
+                  aria-label={t('specku.gallery.prev')}
+                >
+                  ← {t('specku.gallery.prev')}
+                </button>
+
+                <div className="sg-nav-dots" role="tablist" aria-label="Sheet indicators">
+                  {sheets.map((_, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={`sg-dot${idx === activePage ? ' is-active' : ''}`}
+                      onClick={() => setCurrentPage(idx)}
+                      aria-label={`${t('specku.gallery.sheet')} ${idx + 1}`}
+                      aria-selected={idx === activePage}
+                      role="tab"
+                    />
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className="sg-nav-btn sg-nav-btn--next"
+                  onClick={goToNextSheet}
+                  disabled={activePage === totalSheets - 1}
+                  aria-label={t('specku.gallery.next')}
+                >
+                  {t('specku.gallery.next')} →
+                </button>
+              </div>
+            )}
+          </section>
+        )}
 
         {/* Bottom CTA card pointing back to commissions */}
         <section className="sg-cta-card">
@@ -262,9 +304,10 @@ export function SpeckuGalleryPage() {
               ✕
             </button>
             <div className="sg-modal-image-wrapper">
-              <img
-                src={selectedItem.ImageBinary ?? ''}
+              <LumivoxDbImage
+                src={selectedItem.ImageBinary}
                 alt={selectedItem.AltText ?? selectedItem.Title ?? 'Artwork'}
+                circleSize={64}
               />
             </div>
             <div className="sg-modal-footer">
