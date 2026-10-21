@@ -899,9 +899,10 @@
     }
 
     .jc-num {
-      background: #e07a6f;
-      color: #15131f;
-      box-shadow: 0 2px 8px rgba(224, 122, 111, 0.35);
+      background: #ffe500;
+      color: #0c0b16;
+      font-weight: 900;
+      box-shadow: 0 2px 10px rgba(255, 229, 0, 0.4);
     }
 
     .jc-topbar .lvx-brand-logo {
@@ -914,7 +915,7 @@
     }
 
     .jc-price {
-      color: #e07a6f;
+      color: #ffe500;
       -webkit-text-stroke-width: 0;
     }
 
@@ -925,19 +926,20 @@
 
       &:hover {
         background: #241f30;
-        border-color: #e07a6f;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        border-color: #ffe500;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(255, 229, 0, 0.15);
       }
 
       &.selected {
         background: #241f30;
-        border-color: #e07a6f;
-        box-shadow: 0 0 0 3px rgba(224, 122, 111, 0.25);
+        border-color: #ffe500;
+        box-shadow: 0 0 0 3px rgba(255, 229, 0, 0.3);
 
         &::after {
-          background: #e07a6f;
-          color: #15131f;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+          background: #ffe500;
+          color: #0c0b16;
+          font-weight: 900;
+          box-shadow: 0 2px 8px rgba(255, 229, 0, 0.45);
         }
       }
     }
@@ -957,9 +959,17 @@
       }
     }
 
-    .jc-fig .jc-fig-cut {
-      fill: #15131f;
-      opacity: 0.82;
+    .jc-fig {
+      .jc-fig-body {
+        fill: #ffe500;
+      }
+      .jc-fig-cut {
+        fill: #15131f;
+        opacity: 0.82;
+      }
+      .jc-fig-line {
+        stroke: #ff3d8b;
+      }
     }
 
     .jc-summary {
@@ -978,30 +988,31 @@
     }
 
     .jc-line-step {
-      color: #e07a6f;
+      color: #ffe500;
     }
 
     // Make the USD total pop as a light chip on the dark page.
     .jc-total-usd {
-      background: #f1ece0;
-      color: #15131f;
+      background: #ffe500;
+      color: #0c0b16;
 
       strong {
-        color: #15131f;
+        color: #0c0b16;
       }
     }
 
     .jc-total-mxn {
-      background: rgba(224, 122, 111, 0.18);
-      color: #ff9d8f;
+      background: rgba(255, 0, 127, 0.18);
+      color: #ff7ab8;
+      border: 1px solid rgba(255, 0, 127, 0.35);
 
       strong {
-        color: #ff9d8f;
+        color: #ff7ab8;
       }
     }
 
     .jc-hint {
-      color: #e07a6f;
+      color: #ff3d8b;
     }
 
     .jc-discord-action {
@@ -1015,13 +1026,13 @@
 
       &.is-active {
         background: #241f30;
-        border-color: #e07a6f;
-        box-shadow: 0 4px 18px rgba(224, 122, 111, 0.15);
+        border-color: #ff3d8b;
+        box-shadow: 0 4px 18px rgba(255, 61, 139, 0.22);
       }
     }
 
     .jc-extra-badge {
-      color: #e07a6f;
+      color: #ff3d8b;
     }
 
     .jc-extra-question {
@@ -1038,7 +1049,7 @@
     }
 
     .jc-switch input:checked + .jc-slider {
-      background-color: #e07a6f;
+      background-color: #ff3d8b;
     }
 
     .jc-stepper-controls {
@@ -1051,6 +1062,7 @@
 
       &:hover:not(:disabled) {
         background: #2b253b;
+        color: #ffe500;
       }
     }
 
@@ -1103,16 +1115,20 @@
         color: #f1ece0;
 
         .jc-terms-link {
-          color: #e07a6f;
+          color: #ffe500;
+
+          &:hover {
+            color: #fff176;
+          }
         }
       }
     }
 
     .jc-hero p .jc-gallery-link {
-      color: #e07a6f;
+      color: #ffe500;
 
       &:hover {
-        color: #e07a6f;
+        color: #fff176;
       }
     }
   }

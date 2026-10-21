@@ -575,6 +575,10 @@ img {
       color: #9a93b0;
     }
 
+    .lumivox-discipline {
+      color: #ff3d8b;
+    }
+
     .lumivox-display-name {
       color: #f1ece0;
     }
@@ -597,6 +601,15 @@ img {
       }
     }
 
+    .lumivox-roster-item:hover .lumivox-roster-icon {
+      border-color: #ffe500;
+    }
+
+    .lumivox-roster-item[aria-selected='true'] .lumivox-roster-icon {
+      border-color: #ffe500;
+      box-shadow: 0 0 0 4px rgba(255, 229, 0, 0.35);
+    }
+
     .lumivox-roster-name {
       color: #f1ece0;
     }
@@ -605,14 +618,25 @@ img {
       background: #ffe500;
       color: #0c0b16;
       border-color: #ffe500;
+
+      &:hover,
+      &:focus-visible {
+        background: #fff066;
+        color: #0c0b16;
+      }
     }
 
     .lumivox-portal {
-      background: rgba(244, 239, 230, 0.08);
-      color: #f1ece0;
-      border-color: rgba(244, 239, 230, 0.22);
-      &:hover {
-        background: rgba(244, 239, 230, 0.16);
+      background: #ffe500;
+      color: #0c0b16;
+      border-color: #ffe500;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(255, 229, 0, 0.28);
+
+      &:hover,
+      &:focus-visible {
+        background: #fff066;
+        color: #0c0b16;
       }
     }
   }

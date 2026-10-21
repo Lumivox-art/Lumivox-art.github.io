@@ -529,8 +529,8 @@
       @media (hover: hover) and (pointer: fine) and (min-width: 769px) {
         &:hover,
         &:focus-visible {
-          box-shadow: 0 7px 0 #181422;
-          border-color: #e07a6f;
+          box-shadow: 0 7px 0 #181422, 0 0 16px rgba(255, 229, 0, 0.18);
+          border-color: #ffe500;
         }
       }
 
@@ -544,9 +544,9 @@
         }
 
         .sg-card-category {
-          color: #ff9d8f;
-          background: rgba(224, 122, 111, 0.18);
-          border: 1px solid rgba(224, 122, 111, 0.3);
+          color: #ff7ab8;
+          background: rgba(255, 0, 127, 0.18);
+          border: 1px solid rgba(255, 0, 127, 0.35);
         }
       }
     }
@@ -563,9 +563,17 @@
     }
 
     .sg-nav-btn {
-      box-shadow: 0 3px 0 #6e2a1d;
+      background: #ffe500;
+      color: #0c0b16;
+      box-shadow: 0 3px 0 #bfa800;
+
+      &:hover:not(:disabled) {
+        background: #fff066;
+      }
 
       &:disabled {
+        background: rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.35);
         box-shadow: none;
       }
     }
@@ -578,7 +586,8 @@
       }
 
       &.is-active {
-        background: #e07a6f;
+        background: #ffe500;
+        box-shadow: 0 0 8px rgba(255, 229, 0, 0.6);
       }
     }
 
@@ -594,7 +603,13 @@
       }
 
       .sg-cta-btn {
-        box-shadow: 0 3px 0 #6e2a1d;
+        background: #ffe500;
+        color: #0c0b16;
+        box-shadow: 0 3px 0 #bfa800;
+
+        &:hover {
+          background: #fff066;
+        }
       }
     }
 
@@ -610,9 +625,9 @@
         }
 
         .sg-modal-category {
-          color: #ff9d8f;
-          background: rgba(224, 122, 111, 0.18);
-          border: 1px solid rgba(224, 122, 111, 0.3);
+          color: #ff7ab8;
+          background: rgba(255, 0, 127, 0.18);
+          border: 1px solid rgba(255, 0, 127, 0.35);
         }
       }
     }

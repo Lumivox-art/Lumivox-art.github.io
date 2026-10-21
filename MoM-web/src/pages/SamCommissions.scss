@@ -20,14 +20,14 @@
   color: var(--ink);
 }
 
-// Night theme: cooler, deeper palette with fixed glowing halo.
+// Night theme: cooler, deeper palette with fixed glowing halo and Night Logo palette.
 .sam-commissions[data-theme='night'] {
   --bg: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%);
-  --red: #8d3e2e;
-  --red-dk: #6e2a1d;
-  --cream: #ece4d0;
-  --blue: #8bb4b5;
-  --blue-dk: #66908f;
+  --red: #ff3d8b;
+  --red-dk: #c71f65;
+  --cream: #f4efe6;
+  --blue: #241f30;
+  --blue-dk: #332d42;
   --ink: #f1ece0;
 
   background: var(--bg) !important;
@@ -39,6 +39,18 @@
 
   .sc-topbar-actions {
     color: #f1ece0;
+  }
+
+  .sc-tag {
+    background: #ffe500;
+    color: #0c0b16;
+  }
+
+  .sc-random {
+    background-color: #ffe500;
+    color: #0c0b16;
+    background-image: radial-gradient(#bfa800 1.4px, transparent 1.6px);
+    box-shadow: inset 0 -5px 0 #bfa800;
   }
 }
 
