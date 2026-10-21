@@ -160,6 +160,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.gallery.ctaCard': 'Interested in getting a custom illustration?',
     'specku.gallery.ctaCommissions': 'Build your quote',
     'specku.gallery.close': 'Close preview',
+    'specku.gallery.prev': 'Previous sheet',
+    'specku.gallery.next': 'Next sheet',
+    'specku.gallery.sheet': 'Sheet',
 
     // sam commissions (mockup)
     'sam.tag': 'commissions',
@@ -314,6 +317,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.gallery.ctaCard': '¿Te interesa una ilustración personalizada?',
     'specku.gallery.ctaCommissions': 'Cotiza tu comisión',
     'specku.gallery.close': 'Cerrar vista previa',
+    'specku.gallery.prev': 'Hoja anterior',
+    'specku.gallery.next': 'Siguiente hoja',
+    'specku.gallery.sheet': 'Hoja',
 
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ref, onValue } from 'firebase/database';
 import { db } from '../firebase';
@@ -69,11 +69,19 @@ export const SPECKU_GALLERY_IMAGES: GalleryItem[] = [
   },
 ];
 
+const ITEMS_PER_SHEET = 6;
+
 export function SpeckuGalleryPage() {
   const { theme } = useTheme();
   const { t } = useLang();
   const [items, setItems] = useState<GalleryItem[]>(SPECKU_GALLERY_IMAGES);
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  // Touch gesture refs for mobile swipe
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchDeltaX = useRef<number>(0);
 
   // Listen for real-time updates from Firebase RTDB Specku_Gallery
   useEffect(() => {
@@ -120,6 +128,56 @@ export function SpeckuGalleryPage() {
     };
   }, []);
 
+  // Split gallery items into binder sheets of strictly 6 items (3 columns x 2 rows)
+  const totalSheets = Math.ceil(items.length / ITEMS_PER_SHEET) || 1;
+  const sheets: GalleryItem[][] = [];
+  for (let i = 0; i < items.length; i += ITEMS_PER_SHEET) {
+    sheets.push(items.slice(i, i + ITEMS_PER_SHEET));
+  }
+
+  const activePage = Math.min(currentPage, totalSheets - 1);
+
+  const goToNextSheet = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalSheets - 1));
+  };
+
+  const goToPrevSheet = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 0));
+  };
+
+  // Touch / Swipe listeners for mobile devices
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    touchDeltaX.current = 0;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - touchStartX.current;
+    const diffY = currentY - touchStartY.current;
+
+    // Only consider horizontal swipes
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      touchDeltaX.current = diffX;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null) return;
+    const swipeThreshold = 45;
+    if (touchDeltaX.current < -swipeThreshold) {
+      goToNextSheet();
+    } else if (touchDeltaX.current > swipeThreshold) {
+      goToPrevSheet();
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchDeltaX.current = 0;
+  };
+
   // Close modal on Escape key press
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -152,7 +210,100 @@ export function SpeckuGalleryPage() {
       </header>
 
       <main className="sg-content">
-        {/* Top CTA banner */}
+        {/* Card sheet slider (3 columns x 2 rows per sheet) */}
+        <section
+          className="sg-carousel"
+          aria-label={t('specku.gallery.title')}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="sg-viewport">
+            <div
+              className="sg-track"
+              style={{ transform: `translateX(-${activePage * 100}%)` }}
+            >
+              {sheets.map((sheet, sheetIndex) => (
+                <div
+                  key={sheetIndex}
+                  className="sg-sheet"
+                  aria-hidden={sheetIndex !== activePage}
+                >
+                  {sheet.map((item) => (
+                    <article
+                      key={item.id}
+                      className="sg-card"
+                      onClick={() => setSelectedItem(item)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedItem(item);
+                        }
+                      }}
+                      aria-label={`${item.title} - ${t('specku.gallery.view')}`}
+                    >
+                      <div className="sg-card-media">
+                        <img src={item.src} alt={item.alt} loading="lazy" />
+                        <div className="sg-card-overlay">
+                          <span className="sg-view-hint">🔍 {t('specku.gallery.view')}</span>
+                        </div>
+                      </div>
+                      <div className="sg-card-meta">
+                        <h2 className="sg-card-title">{item.title}</h2>
+                        {item.category && (
+                          <span className="sg-card-category">{item.category}</span>
+                        )}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation controls activated when there is more than 1 sheet */}
+          {totalSheets > 1 && (
+            <div className="sg-nav-bar">
+              <button
+                type="button"
+                className="sg-nav-btn sg-nav-btn--prev"
+                onClick={goToPrevSheet}
+                disabled={activePage === 0}
+                aria-label={t('specku.gallery.prev')}
+              >
+                ← {t('specku.gallery.prev')}
+              </button>
+
+              <div className="sg-nav-dots" role="tablist" aria-label="Sheet indicators">
+                {sheets.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`sg-dot${idx === activePage ? ' is-active' : ''}`}
+                    onClick={() => setCurrentPage(idx)}
+                    aria-label={`${t('specku.gallery.sheet')} ${idx + 1}`}
+                    aria-selected={idx === activePage}
+                    role="tab"
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="sg-nav-btn sg-nav-btn--next"
+                onClick={goToNextSheet}
+                disabled={activePage === totalSheets - 1}
+                aria-label={t('specku.gallery.next')}
+              >
+                {t('specku.gallery.next')} →
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* Bottom CTA card */}
         <section className="sg-cta-card">
           <div className="sg-cta-body">
             <h3>{t('specku.gallery.ctaCard')}</h3>
@@ -160,37 +311,6 @@ export function SpeckuGalleryPage() {
           <Link to="/home/specku/comisiones" className="sg-cta-btn">
             {t('specku.gallery.ctaCommissions')}
           </Link>
-        </section>
-
-        {/* Gallery grid */}
-        <section className="sg-grid" aria-label={t('specku.gallery.title')}>
-          {items.map((item) => (
-            <article
-              key={item.id}
-              className="sg-card"
-              onClick={() => setSelectedItem(item)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setSelectedItem(item);
-                }
-              }}
-              aria-label={`${item.title} - ${t('specku.gallery.view')}`}
-            >
-              <div className="sg-card-media">
-                <img src={item.src} alt={item.alt} loading="lazy" />
-                <div className="sg-card-overlay">
-                  <span className="sg-view-hint">🔍 {t('specku.gallery.view')}</span>
-                </div>
-              </div>
-              <div className="sg-card-meta">
-                <h2 className="sg-card-title">{item.title}</h2>
-                {item.category && <span className="sg-card-category">{item.category}</span>}
-              </div>
-            </article>
-          ))}
         </section>
       </main>
 
