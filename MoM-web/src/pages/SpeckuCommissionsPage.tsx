@@ -574,20 +574,7 @@ export function SpeckuCommissionsPage() {
           {copied && copiedMessage && (
             <div className="jc-discord-feedback" role="status">
               <div className="jc-discord-feedback-main">
-                <span className="jc-discord-feedback-check" aria-hidden="true">
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="14"
-                    height="14"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                </span>
+                <span className="jc-discord-feedback-check">✓</span>
                 <div className="jc-discord-feedback-text">
                   <strong>{t('specku.discord.copied.title')}</strong>
                   <p>{t('specku.discord.copied.desc')}</p>
@@ -603,28 +590,8 @@ export function SpeckuCommissionsPage() {
                     className="jc-discord-recopy-btn"
                     onClick={handleRecopy}
                   >
-                    <svg
-                      className="jc-discord-copy-icon"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      height="16"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      {recopied ? (
-                        <polyline points="20 6 9 17 4 12" />
-                      ) : (
-                        <>
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                        </>
-                      )}
-                    </svg>
-                    <span>{recopied ? t('specku.discord.copied.copied') : t('specku.discord.copied.recopy')}</span>
+                    {recopied ? '✓' : '📋'}{' '}
+                    {recopied ? t('specku.discord.copied.copied') : t('specku.discord.copied.recopy')}
                   </button>
 
                   <a
