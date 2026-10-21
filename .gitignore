@@ -7,7 +7,7 @@ index.html
 !MoM-web/index.html
 
 # Archive folder (old/obsolete files)
-archive/
+/archive/
 
 # OS generated files
 .DS_Store

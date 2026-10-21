@@ -1,4 +1,8 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
+import {
+  buildDiscordCommissionPayload,
+  sendDiscordCommissionQuote,
+} from '../utils/discordWebhook';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
@@ -88,6 +92,45 @@ export function JozCommissionsPage() {
 
   const total = (style?.price ?? 0) + (size?.price ?? 0) + (look?.price ?? 0);
   const complete = !!style && !!size && !!look;
+
+  const [discordUser, setDiscordUser] = useState('');
+  const [notes, setNotes] = useState('');
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const canSubmit = complete && discordUser.trim().length > 0 && submitStatus !== 'submitting';
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit || !style || !size || !look) return;
+
+    setSubmitStatus('submitting');
+    setErrorMessage(null);
+
+    const items = [
+      { category: t('joz.line.style'), label: style.name, price: style.price },
+      { category: t('joz.line.size'), label: t(`joz.size.${size.id}`), price: size.price },
+      { category: t('joz.line.look'), label: t(`joz.look.${look.id}`), price: look.price },
+    ];
+
+    const payload = buildDiscordCommissionPayload({
+      discordUser,
+      notes,
+      items,
+      totalUsd: total,
+      totalMxn: total * USD_TO_MXN,
+    });
+
+    try {
+      const webhookUrl = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
+      await sendDiscordCommissionQuote(webhookUrl, payload);
+      setSubmitStatus('success');
+    } catch (err: unknown) {
+      console.error('Error submitting commission quote:', err);
+      setSubmitStatus('error');
+      setErrorMessage(err instanceof Error ? err.message : t('joz.submit.error'));
+    }
+  };
 
   return (
     <div className="joz-comm" data-theme={theme}>
@@ -224,6 +267,74 @@ export function JozCommissionsPage() {
         </div>
 
         {!complete && <p className="jc-hint">{t('joz.hint')}</p>}
+
+        <form className="jc-discord-form" onSubmit={handleSubmit}>
+          <div className="jc-form-header">
+            <h3>{t('joz.discord.title')}</h3>
+          </div>
+
+          <div className="jc-field">
+            <label htmlFor="jc-discord-user">
+              {t('joz.discord.label')} <span className="jc-required">*</span>
+            </label>
+            <input
+              id="jc-discord-user"
+              type="text"
+              required
+              placeholder={t('joz.discord.placeholder')}
+              value={discordUser}
+              onChange={(e) => {
+                setDiscordUser(e.target.value);
+                if (submitStatus === 'error') setSubmitStatus('idle');
+              }}
+              disabled={submitStatus === 'submitting'}
+            />
+            <p className="jc-field-help">{t('joz.discord.help')}</p>
+          </div>
+
+          <div className="jc-field">
+            <label htmlFor="jc-notes">{t('joz.notes.label')}</label>
+            <textarea
+              id="jc-notes"
+              rows={3}
+              placeholder={t('joz.notes.placeholder')}
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              disabled={submitStatus === 'submitting'}
+            />
+          </div>
+
+          {submitStatus === 'success' && (
+            <div className="jc-alert jc-alert--success" role="alert">
+              <span className="jc-alert-icon">🎉</span>
+              <span>{t('joz.submit.success')}</span>
+            </div>
+          )}
+
+          {submitStatus === 'error' && (
+            <div className="jc-alert jc-alert--error" role="alert">
+              <span className="jc-alert-icon">⚠️</span>
+              <span>{errorMessage || t('joz.submit.error')}</span>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className={`jc-submit-btn${submitStatus === 'submitting' ? ' is-loading' : ''}`}
+            disabled={!canSubmit}
+          >
+            {submitStatus === 'submitting' ? (
+              <>
+                <span className="jc-spinner" aria-hidden="true" />
+                <span>{t('joz.submit.submitting')}</span>
+              </>
+            ) : submitStatus === 'error' ? (
+              t('joz.submit.retry')
+            ) : (
+              t('joz.submit.button')
+            )}
+          </button>
+        </form>
       </section>
     </div>
   );
