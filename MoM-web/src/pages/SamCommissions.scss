@@ -1,16 +1,17 @@
 // Mockup styles for Sam's commissions landing — retro diner "menu" poster.
 // Self-contained and scoped under .sam-commissions; safe to rework later.
 .sam-commissions {
-  --bg: #2c2926;
-  --red: #b14a3e;
-  --red-dk: #8f3a30;
-  --cream: #f3ecd7;
+  --bg: radial-gradient(circle at 50% -8%, #fbf5ea 0%, #f4ece0 50%, #eadcc8 100%);
+  --red: #8d3e2e;
+  --red-dk: #6e2a1d;
+  --cream: #fbf5ea;
   --blue: #a9d2d3;
   --blue-dk: #7fb3b5;
-  --ink: #3a322d;
+  --ink: #2a1a12;
 
   min-height: 100vh;
-  background: var(--bg);
+  background: var(--bg) !important;
+  background-attachment: fixed !important;
   padding: 1.5rem 1rem 3rem;
   display: flex;
   flex-direction: column;
@@ -19,14 +20,26 @@
   color: var(--ink);
 }
 
-// Night theme: cooler, deeper palette. Tokens cascade to every .sc-* child.
+// Night theme: cooler, deeper palette with fixed glowing halo.
 .sam-commissions[data-theme='night'] {
-  --bg: #14110d;
-  --red: #9a3e34;
-  --red-dk: #6f2c24;
+  --bg: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%);
+  --red: #8d3e2e;
+  --red-dk: #6e2a1d;
   --cream: #ece4d0;
   --blue: #8bb4b5;
   --blue-dk: #66908f;
+  --ink: #f1ece0;
+
+  background: var(--bg) !important;
+  background-attachment: fixed !important;
+
+  .lvx-brand-logo {
+    color: #f1ece0;
+  }
+
+  .sc-topbar-actions {
+    color: #f1ece0;
+  }
 }
 
 .sc-topbar {
@@ -38,16 +51,15 @@
   justify-content: space-between;
   gap: 1rem;
 
-  // light wordmark on the dark diner background (day/night mark has its own colors)
   .lvx-brand-logo {
-    color: var(--cream);
+    color: var(--ink);
   }
 
   .sc-topbar-actions {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    color: var(--cream); // keep the EN/ES toggle legible on the dark bg
+    color: var(--ink);
   }
 }
 

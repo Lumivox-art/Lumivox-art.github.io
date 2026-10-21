@@ -1,17 +1,18 @@
-// Specku commission quote builder — Lumivox day palette (cream + warm ink) with the
-// original commission-sheet accents (teal panels, cyan prices, coral) kept.
+// Specku commission quote builder — grounded in the Lumivox brand identity
 .specku-comm,
 .joz-comm {
-  --jc-teal: #2fbfa8;
-  --jc-teal-deep: #1f9d8a;
-  --jc-cyan: #16b8de;
-  --jc-coral: #ff6f59;
-  --jc-ink: #2a1a12; // Lumivox day ink
-  --jc-card: #fffdf8;
+  --jc-teal: #8d3e2e; // Brand terracotta / rust red
+  --jc-teal-deep: #6e2a1d;
+  --jc-cyan: #8d3e2e;
+  --jc-coral: #e07a6f; // Brand warm coral
+  --jc-amber: #e5a63b; // Brand golden amber
+  --jc-ink: #2a1a12; // Brand warm ink
+  --jc-card: #ffffff;
 
   min-height: 100vh;
-  // Lumivox day background (warm cream), not the old bright yellow.
-  background: radial-gradient(circle at 50% -10%, #fbf3e3 0%, #f4ece0 48%, #e8dcc0 100%);
+  // Lumivox warm cream gradient pinned to viewport
+  background: radial-gradient(circle at 50% -8%, #fbf5ea 0%, #f4ece0 50%, #eadcc8 100%) !important;
+  background-attachment: fixed !important;
   color: var(--jc-ink);
   padding: 1.5rem 1rem 4rem;
   font-family: 'Manrope', system-ui, sans-serif;
@@ -29,7 +30,6 @@
     justify-content: space-between;
     gap: 1rem;
 
-    // dark wordmark on the bright yellow background (mark has its own colors)
     .lvx-brand-logo {
       color: var(--jc-ink);
     }
@@ -51,7 +51,7 @@
       font-size: clamp(2.4rem, 7vw, 4rem);
       margin: 0;
       color: var(--jc-ink);
-      text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--jc-teal);
+      text-shadow: none;
     }
 
     p {
@@ -61,7 +61,7 @@
       opacity: 0.8;
 
       .jc-gallery-link {
-        color: var(--jc-coral);
+        color: #8d3e2e;
         font-weight: 800;
         text-decoration: underline;
         text-underline-offset: 3px;
@@ -69,7 +69,7 @@
 
         &:hover {
           opacity: 0.8;
-          color: var(--jc-coral);
+          color: #8d3e2e;
         }
       }
     }
@@ -78,18 +78,18 @@
   .jc-step {
     max-width: 920px;
     margin: 0 auto 1.5rem;
-    background: var(--jc-teal);
-    border: 3px solid var(--jc-teal-deep);
-    border-radius: 22px;
-    padding: 1.25rem 1.25rem 1.5rem;
-    box-shadow: 0 10px 0 rgba(31, 157, 138, 0.35);
+    background: #ffffff;
+    border: 1px solid rgba(42, 26, 18, 0.08);
+    border-radius: 20px;
+    padding: 1.35rem 1.35rem 1.6rem;
+    box-shadow: 0 4px 20px rgba(42, 26, 18, 0.05);
 
     h2 {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      margin: 0 0 1rem;
-      color: #fff;
+      gap: 0.65rem;
+      margin: 0 0 1.1rem;
+      color: var(--jc-ink);
       font-family: 'Fraunces', serif;
       font-size: clamp(1.3rem, 3.5vw, 1.8rem);
     }
@@ -98,54 +98,61 @@
   .jc-num {
     display: inline-grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
+    width: 2.1rem;
+    height: 2.1rem;
     border-radius: 50%;
-    background: #fff;
-    color: var(--jc-teal-deep);
+    background: #8d3e2e;
+    color: #ffffff;
     font-weight: 800;
+    font-size: 0.95rem;
     flex: none;
+    box-shadow: 0 2px 6px rgba(141, 62, 46, 0.28);
   }
 
   // --- generic selectable card ---
   .jc-card {
     position: relative;
-    border: 3px solid transparent;
-    border-radius: 16px;
-    background: var(--jc-card);
+    border: 1.5px solid rgba(42, 26, 18, 0.1);
+    border-radius: 14px;
+    background: #faf6f0;
     cursor: pointer;
     text-align: left;
-    transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
     font-family: inherit;
     color: var(--jc-ink);
 
     &:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
+      border-color: #8d3e2e;
+      background: #ffffff;
+      box-shadow: 0 6px 16px rgba(42, 26, 18, 0.08);
     }
 
     &.selected {
-      border-color: var(--jc-coral);
-      box-shadow: 0 0 0 4px rgba(255, 111, 89, 0.3);
+      border-color: #8d3e2e;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(141, 62, 46, 0.18), 0 4px 12px rgba(141, 62, 46, 0.1);
 
       &::after {
         content: '✓';
         position: absolute;
-        top: -10px;
-        right: -10px;
-        width: 26px;
-        height: 26px;
+        top: -8px;
+        right: -8px;
+        width: 24px;
+        height: 24px;
         display: grid;
         place-items: center;
-        background: var(--jc-coral);
+        background: #8d3e2e;
         color: #fff;
         border-radius: 50%;
         font-weight: 800;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        font-size: 0.85rem;
+        box-shadow: 0 2px 6px rgba(141, 62, 46, 0.35);
       }
     }
 
     &:focus-visible {
-      outline: 3px solid #fff;
+      outline: 2px solid #8d3e2e;
       outline-offset: 2px;
     }
   }
@@ -153,10 +160,10 @@
   .jc-price {
     display: inline-block;
     font-family: 'Fraunces', serif;
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 800;
-    color: var(--jc-cyan);
-    -webkit-text-stroke: 1.5px var(--jc-ink);
+    color: #8d3e2e;
+    -webkit-text-stroke: 0;
     line-height: 1;
   }
 
@@ -259,14 +266,14 @@
     height: 94px;
 
     .jc-fig-body {
-      fill: var(--jc-teal-deep);
+      fill: #8d3e2e;
     }
     .jc-fig-cut {
-      fill: #fff;
-      opacity: 0.72;
+      fill: #f4ece0;
+      opacity: 0.9;
     }
     .jc-fig-line {
-      stroke: var(--jc-coral);
+      stroke: #e07a6f;
       stroke-width: 2;
     }
   }
@@ -324,16 +331,17 @@
   }
 
   .jc-extra-card {
-    background: #fff;
-    border: 2px solid #e1e7e7;
+    background: #faf6f0;
+    border: 1.5px solid rgba(42, 26, 18, 0.1);
     border-radius: 14px;
     padding: 1.1rem 1.25rem;
-    box-shadow: 0 4px 0 #d0dcdc;
+    box-shadow: 0 2px 8px rgba(42, 26, 18, 0.04);
     transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 
     &.is-active {
-      border-color: var(--jc-teal-deep);
-      box-shadow: 0 5px 0 var(--jc-teal-deep);
+      background: #ffffff;
+      border-color: #8d3e2e;
+      box-shadow: 0 4px 16px rgba(141, 62, 46, 0.12);
     }
   }
 
@@ -355,7 +363,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--jc-coral);
+    color: #8d3e2e;
   }
 
   .jc-extra-question {
@@ -381,7 +389,7 @@
       height: 0;
 
       &:checked + .jc-slider {
-        background-color: var(--jc-coral);
+        background-color: #8d3e2e;
       }
 
       &:checked + .jc-slider:before {
@@ -389,7 +397,7 @@
       }
 
       &:focus-visible + .jc-slider {
-        outline: 2px solid var(--jc-coral);
+        outline: 2px solid #8d3e2e;
         outline-offset: 2px;
       }
     }
@@ -401,7 +409,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #cbd5d5;
+      background-color: #d8cebf;
       transition: background-color 0.2s;
       border-radius: 30px;
 
@@ -555,16 +563,17 @@
   .jc-summary {
     max-width: 920px;
     margin: 0 auto;
-    background: #fff;
-    border: 3px solid var(--jc-ink);
-    border-radius: 22px;
-    padding: 1.25rem 1.4rem 1.5rem;
-    box-shadow: 0 10px 0 rgba(31, 43, 43, 0.18);
+    background: #ffffff;
+    border: 1px solid rgba(42, 26, 18, 0.1);
+    border-radius: 20px;
+    padding: 1.35rem 1.5rem 1.6rem;
+    box-shadow: 0 4px 20px rgba(42, 26, 18, 0.06);
 
     h2 {
       margin: 0 0 0.9rem;
       font-family: 'Fraunces', serif;
       font-size: 1.5rem;
+      color: var(--jc-ink);
     }
   }
 
@@ -585,7 +594,7 @@
 
   .jc-line-step {
     font-weight: 800;
-    color: var(--jc-teal-deep);
+    color: #8d3e2e;
   }
 
   .jc-line-pick {
@@ -627,7 +636,7 @@
   }
 
   .jc-total-usd {
-    background: var(--jc-ink);
+    background: #2a1a12;
     color: #fff;
     strong {
       color: #fff;
@@ -635,14 +644,17 @@
   }
 
   .jc-total-mxn {
-    background: var(--jc-cyan);
-    color: var(--jc-ink);
+    background: rgba(141, 62, 46, 0.1);
+    color: #8d3e2e;
+    strong {
+      color: #8d3e2e;
+    }
   }
 
   .jc-hint {
     margin: 0.9rem 0 0;
     font-weight: 600;
-    color: var(--jc-coral);
+    color: #8d3e2e;
   }
 
     // --- Direct Discord message action (WhatsApp Web-style) ---
@@ -670,7 +682,7 @@
     font-size: 1.15rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 6px 0 #3c45a5;
+    box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
     transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
 
     .jc-discord-icon {
@@ -680,22 +692,22 @@
     &:hover:not(:disabled) {
       background: #4752c4;
       transform: translateY(-2px);
-      box-shadow: 0 8px 0 #3c45a5;
+      box-shadow: 0 6px 18px rgba(88, 101, 242, 0.45);
     }
 
     &:active:not(:disabled) {
-      transform: translateY(3px);
-      box-shadow: 0 3px 0 #3c45a5;
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px rgba(88, 101, 242, 0.35);
     }
 
     &:disabled,
     &.is-disabled {
-      background: #b0bcbc;
-      color: #f2f5f5;
+      background: #cbd3d3;
+      color: #7d8888;
       cursor: not-allowed;
-      box-shadow: 0 4px 0 #95a3a3;
+      box-shadow: none;
       transform: none;
-      opacity: 0.65;
+      opacity: 0.7;
     }
   }
 
@@ -871,8 +883,26 @@
   // --- Night theme (toggled via data-theme on the root) ---
   &[data-theme='night'] {
     --jc-card: #241f30;
-    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%);
+    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%) !important;
+    background-attachment: fixed !important;
     color: #f1ece0;
+
+    .jc-step {
+      background: rgba(36, 31, 48, 0.85);
+      border: 1px solid #46415a;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+
+      h2 {
+        color: #f1ece0;
+      }
+    }
+
+    .jc-num {
+      background: #e07a6f;
+      color: #15131f;
+      box-shadow: 0 2px 8px rgba(224, 122, 111, 0.35);
+    }
 
     .jc-topbar .lvx-brand-logo {
       color: #f1ece0;
@@ -880,18 +910,36 @@
 
     .jc-hero h1 {
       color: #f1ece0;
-      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45), 5px 5px 0 var(--jc-teal-deep);
+      text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
     }
 
-    // The dark text-stroke blends into the dark cards and muddies the price.
-    // Drop the stroke and brighten the cyan so it reads cleanly.
     .jc-price {
-      color: #34c9ec;
+      color: #e07a6f;
       -webkit-text-stroke-width: 0;
     }
 
     .jc-card {
+      background: #1c1827;
+      border: 1.5px solid #3d374e;
       color: #f1ece0;
+
+      &:hover {
+        background: #241f30;
+        border-color: #e07a6f;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      }
+
+      &.selected {
+        background: #241f30;
+        border-color: #e07a6f;
+        box-shadow: 0 0 0 3px rgba(224, 122, 111, 0.25);
+
+        &::after {
+          background: #e07a6f;
+          color: #15131f;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+        }
+      }
     }
 
     .jc-style-art {
@@ -915,13 +963,22 @@
     }
 
     .jc-summary {
-      background: var(--jc-card);
+      background: rgba(36, 31, 48, 0.9);
       border-color: #46415a;
-      box-shadow: 0 10px 0 rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+
+      h2 {
+        color: #f1ece0;
+      }
     }
 
     .jc-lines li {
       border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .jc-line-step {
+      color: #e07a6f;
     }
 
     // Make the USD total pop as a light chip on the dark page.
@@ -934,20 +991,37 @@
       }
     }
 
-        .jc-discord-action {
+    .jc-total-mxn {
+      background: rgba(224, 122, 111, 0.18);
+      color: #ff9d8f;
+
+      strong {
+        color: #ff9d8f;
+      }
+    }
+
+    .jc-hint {
+      color: #e07a6f;
+    }
+
+    .jc-discord-action {
       border-top-color: rgba(255, 255, 255, 0.12);
     }
 
-
     .jc-extra-card {
-      background: var(--jc-card);
-      border-color: #46415a;
-      box-shadow: 0 4px 0 #282434;
+      background: #1c1827;
+      border-color: #3d374e;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 
       &.is-active {
-        border-color: #34c9ec;
-        box-shadow: 0 5px 0 #185e72;
+        background: #241f30;
+        border-color: #e07a6f;
+        box-shadow: 0 4px 18px rgba(224, 122, 111, 0.15);
       }
+    }
+
+    .jc-extra-badge {
+      color: #e07a6f;
     }
 
     .jc-extra-question {
@@ -961,6 +1035,10 @@
 
     .jc-switch .jc-slider {
       background-color: #393448;
+    }
+
+    .jc-switch input:checked + .jc-slider {
+      background-color: #e07a6f;
     }
 
     .jc-stepper-controls {
@@ -1015,7 +1093,7 @@
     .jc-discord-btn.is-disabled {
       background: #393448;
       color: #7d7890;
-      box-shadow: 0 4px 0 #282434;
+      box-shadow: none;
     }
 
     .jc-footer {
@@ -1025,16 +1103,16 @@
         color: #f1ece0;
 
         .jc-terms-link {
-          color: #34c9ec;
+          color: #e07a6f;
         }
       }
     }
 
     .jc-hero p .jc-gallery-link {
-      color: #34c9ec;
+      color: #e07a6f;
 
       &:hover {
-        color: #34c9ec;
+        color: #e07a6f;
       }
     }
   }

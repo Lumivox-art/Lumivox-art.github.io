@@ -1,14 +1,16 @@
 .specku-gallery {
-  --sg-teal: #2fbfa8;
-  --sg-teal-deep: #1f9d8a;
-  --sg-coral: #ff6f59;
-  --sg-coral-deep: #cc5846;
+  // Lumivox logo palette tokens
+  --sg-accent: #8d3e2e;
+  --sg-coral: #e07a6f;
+  --sg-amber: #e5a63b;
+  --sg-gold: #ffe500;
   --sg-ink: #2a1a12;
-  --sg-card: #fffdf8;
-  --sg-muted: #667272;
+  --sg-card: #ffffff;
+  --sg-muted: #726258;
 
   min-height: 100vh;
-  background: radial-gradient(circle at 50% -10%, #fbf3e3 0%, #f4ece0 48%, #e8dcc0 100%);
+  background: radial-gradient(circle at 50% -8%, #fbf5ea 0%, #f4ece0 50%, #eadcc8 100%);
+  background-attachment: fixed;
   color: var(--sg-ink);
   padding: 1rem 1rem 3rem;
   font-family: 'Manrope', system-ui, sans-serif;
@@ -49,7 +51,7 @@
       line-height: 1.15;
       margin: 0;
       color: var(--sg-ink);
-      text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--sg-teal);
+      text-shadow: none;
     }
 
     .sg-subtitle {
@@ -115,22 +117,22 @@
   }
 
   .sg-card {
-    background: #fff;
-    border: 2px solid #e1e7e7;
-    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid rgba(141, 62, 46, 0.14);
+    border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0 4px 0 #d0dcdc;
+    box-shadow: 0 4px 18px rgba(42, 26, 18, 0.05);
     outline: none;
 
     @media (hover: hover) and (pointer: fine) and (min-width: 769px) {
-      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s;
+      transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.22s cubic-bezier(0.2, 0, 0, 1), border-color 0.22s;
 
       &:hover,
       &:focus-visible {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 0 #c2d0d0;
-        border-color: var(--sg-teal);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(141, 62, 46, 0.12);
+        border-color: #e5a63b;
 
         .sg-card-overlay {
           opacity: 1;
@@ -143,7 +145,7 @@
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px var(--sg-teal), 0 4px 0 #d0dcdc;
+      box-shadow: 0 0 0 3px rgba(229, 166, 59, 0.5), 0 8px 24px rgba(141, 62, 46, 0.12);
     }
   }
 
@@ -230,14 +232,15 @@
     }
 
     .sg-card-category {
-      font-size: 0.66rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #b4235f;
-      background: rgba(255, 0, 127, 0.12);
-      padding: 0.18rem 0.45rem;
-      border-radius: 5px;
+      letter-spacing: 0.06em;
+      color: #8d3e2e;
+      background: rgba(224, 122, 111, 0.14);
+      border: 1px solid rgba(141, 62, 46, 0.18);
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
       white-space: nowrap;
     }
   }
@@ -256,26 +259,26 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    background: var(--sg-coral);
-    color: #fff;
+    padding: 0.55rem 1.15rem;
+    border-radius: 12px;
+    background: #8d3e2e;
+    color: #ffffff;
     font-weight: 800;
     font-size: 0.86rem;
     border: none;
     cursor: pointer;
-    box-shadow: 0 3px 0 var(--sg-coral-deep);
-    transition: transform 0.1s, box-shadow 0.1s, background 0.15s, opacity 0.2s;
+    box-shadow: 0 4px 14px rgba(141, 62, 46, 0.22);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, opacity 0.2s ease;
 
     &:hover:not(:disabled) {
-      background: #f05e47;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 0 var(--sg-coral-deep);
+      background: #733124;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(141, 62, 46, 0.32);
     }
 
     &:active:not(:disabled) {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 var(--sg-coral-deep);
+      transform: translateY(1px);
+      box-shadow: 0 2px 8px rgba(141, 62, 46, 0.2);
     }
 
     &:disabled {
@@ -295,7 +298,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: rgba(42, 26, 18, 0.25);
+    background: rgba(42, 26, 18, 0.22);
     border: none;
     cursor: pointer;
     padding: 0;
@@ -306,18 +309,19 @@
     }
 
     &.is-active {
-      background: var(--sg-coral);
-      transform: scale(1.3);
+      background: #8d3e2e;
+      box-shadow: 0 0 0 2px rgba(229, 166, 59, 0.6);
+      transform: scale(1.25);
     }
   }
 
   /* --- Bottom CTA card --- */
   .sg-cta-card {
-    background: #fff;
-    border: 2px solid var(--sg-teal);
-    border-radius: 16px;
-    padding: 1.15rem 1.75rem;
-    box-shadow: 0 6px 0 rgba(31, 157, 138, 0.35);
+    background: #ffffff;
+    border: 1px solid rgba(141, 62, 46, 0.14);
+    border-radius: 18px;
+    padding: 1.25rem 1.85rem;
+    box-shadow: 0 6px 24px rgba(42, 26, 18, 0.06);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -337,24 +341,26 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1.6rem;
       border-radius: 12px;
-      background: var(--sg-coral);
+      background: #8d3e2e;
       color: #fff;
       font-weight: 800;
       font-size: 0.95rem;
       text-decoration: none;
-      box-shadow: 0 3px 0 var(--sg-coral-deep);
-      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+      box-shadow: 0 4px 16px rgba(141, 62, 46, 0.25);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
       &:hover {
-        background: #f05e47;
+        background: #733124;
         color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(141, 62, 46, 0.35);
       }
 
       &:active {
-        transform: translateY(2px);
-        box-shadow: 0 1px 0 var(--sg-coral-deep);
+        transform: translateY(1px);
+        box-shadow: 0 2px 8px rgba(141, 62, 46, 0.2);
       }
     }
   }
@@ -448,10 +454,11 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #b4235f;
-      background: rgba(255, 0, 127, 0.12);
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
+      color: #8d3e2e;
+      background: rgba(224, 122, 111, 0.14);
+      border: 1px solid rgba(224, 122, 111, 0.3);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
     }
   }
 
@@ -495,7 +502,8 @@
 
   /* --- Night theme overrides --- */
   &[data-theme='night'] {
-    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%);
+    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%) !important;
+    background-attachment: fixed !important;
     color: #f1ece0;
 
     .sg-topbar .lvx-brand-logo {
@@ -505,7 +513,7 @@
     .sg-hero {
       h1 {
         color: #f1ece0;
-        text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45), 5px 5px 0 var(--sg-teal-deep);
+        text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
       }
 
       .sg-subtitle {
@@ -522,7 +530,7 @@
         &:hover,
         &:focus-visible {
           box-shadow: 0 7px 0 #181422;
-          border-color: #34c9ec;
+          border-color: #e07a6f;
         }
       }
 
@@ -536,8 +544,9 @@
         }
 
         .sg-card-category {
-          color: #ff7ab8;
-          background: rgba(255, 0, 127, 0.18);
+          color: #ff9d8f;
+          background: rgba(224, 122, 111, 0.18);
+          border: 1px solid rgba(224, 122, 111, 0.3);
         }
       }
     }
@@ -554,7 +563,7 @@
     }
 
     .sg-nav-btn {
-      box-shadow: 0 3px 0 #aa3f2f;
+      box-shadow: 0 3px 0 #6e2a1d;
 
       &:disabled {
         box-shadow: none;
@@ -569,14 +578,14 @@
       }
 
       &.is-active {
-        background: #34c9ec;
+        background: #e07a6f;
       }
     }
 
     .sg-cta-card {
       background: #241f30;
-      border-color: #34c9ec;
-      box-shadow: 0 6px 0 rgba(24, 94, 114, 0.5);
+      border-color: #46415a;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 
       .sg-cta-body {
         h3 {
@@ -585,7 +594,7 @@
       }
 
       .sg-cta-btn {
-        box-shadow: 0 3px 0 #aa3f2f;
+        box-shadow: 0 3px 0 #6e2a1d;
       }
     }
 
@@ -601,8 +610,9 @@
         }
 
         .sg-modal-category {
-          color: #ff7ab8;
-          background: rgba(255, 0, 127, 0.18);
+          color: #ff9d8f;
+          background: rgba(224, 122, 111, 0.18);
+          border: 1px solid rgba(224, 122, 111, 0.3);
         }
       }
     }

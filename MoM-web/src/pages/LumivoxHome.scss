@@ -20,12 +20,14 @@
     --cta-bg: #ffe500;
     --cta-ink: #0c0b16;
 
-    background: var(--bg); // flat dark overrides the day cream gradient
+    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%) !important;
+    background-attachment: fixed !important;
   }
 
   min-height: 100vh;
-  // Warm cream gradient (with depth) instead of a flat near-white.
-  background: radial-gradient(circle at 50% -8%, #fdf6e9 0%, #f2ead6 52%, #e9ddc8 100%);
+  // Warm cream gradient with depth
+  background: radial-gradient(circle at 50% -8%, #fbf5ea 0%, #f4ece0 50%, #eadcc8 100%);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-sans);
   padding: 28px clamp(16px, 4vw, 40px) 64px;

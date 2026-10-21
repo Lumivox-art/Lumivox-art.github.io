@@ -1,10 +1,10 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.scss';
 import { PageTransition } from './components/PageTransition';
-import { ThemeProvider } from './components/ThemeContext';
+import { ThemeProvider, useTheme } from './components/ThemeContext';
 import { LanguageProvider } from './i18n';
 import { LumivoxHomePage } from './pages/LumivoxHomePage';
 import { ArtistsPage } from './pages/ArtistsPage';
@@ -13,11 +13,21 @@ import { SpeckuCommissionsPage } from './pages/SpeckuCommissionsPage';
 import { SpeckuTermsPage } from './pages/SpeckuTermsPage';
 import { SpeckuGalleryPage } from './pages/SpeckuGalleryPage';
 
+function AppThemeSync() {
+  const { theme } = useTheme();
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.setAttribute('data-theme', theme);
+  }, [theme]);
+  return null;
+}
+
 // Root layout: mounts the page-transition overlay above every route.
 function RootLayout() {
   return (
     <LanguageProvider>
       <ThemeProvider>
+        <AppThemeSync />
         <PageTransition />
         <Outlet />
       </ThemeProvider>

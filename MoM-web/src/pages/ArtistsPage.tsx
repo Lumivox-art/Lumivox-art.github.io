@@ -4,6 +4,8 @@ import { ArtistShowcase } from '../components/lumivox/ArtistShowcase';
 import { LumivoxMark } from '../components/lumivox/LumivoxMark';
 import { RosterStrip } from '../components/lumivox/RosterStrip';
 import { LanguageToggle } from '../components/LanguageToggle';
+import { ThemeToggle } from '../components/ThemeToggle';
+import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import { artists, type Artist } from '../data/artists';
 import { ArtistMediaService } from '../services/ArtistMediaService';
@@ -14,6 +16,7 @@ const tabIdFor = (handle: string) => `roster-tab-${handle}`;
 const panelIdFor = (handle: string) => `showcase-${handle}`;
 
 export function ArtistsPage() {
+  const { theme } = useTheme();
   const { t } = useLang();
   const { handle } = useParams();
   const [artistList, setArtistList] = useState<Artist[]>(() =>
@@ -49,16 +52,19 @@ export function ArtistsPage() {
   }, []);
 
   return (
-    <div className="lumivox-shell">
+    <div className="lumivox-shell" data-theme={theme}>
       <div className="lumivox-topbar">
         <div className="lumivox-topbar-left">
           <Link className="lumivox-back" to="/home">
             ← {t('artists.back')}
           </Link>
           <LumivoxMark />
-          <LanguageToggle />
         </div>
-        <span className="lumivox-tagline-top">{t('artists.tagline')}</span>
+        <div className="lumivox-topbar-actions">
+          <span className="lumivox-tagline-top">{t('artists.tagline')}</span>
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
       </div>
 
       {activeArtist ? (
