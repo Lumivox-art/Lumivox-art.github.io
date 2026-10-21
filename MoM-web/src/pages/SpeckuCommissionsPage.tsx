@@ -11,15 +11,17 @@ import {
 import './SpeckuCommissions.scss';
 
 // Functional commission quote builder for Specku.
-// Pick one option per step (style + size + look); the total updates live.
+// Pick one option per mandatory step (style + size + look);
+// optional sections (backgrounds, objects of interest, additional people)
+// can be toggled on/off to reflect whether the drawing contains them.
 // Total is shown in USD and in MXN at a fixed 1 USD = 19 MXN rate.
-// Labels are localized via the i18n layer (size/look names live in the dictionary
-// keyed by id; style names are proper names and stay as-is).
 
 type StyleOption = { id: string; name: string; days: string; price: number };
 type SizeCrop = 'shoulders' | 'half' | 'full';
 type CropOption = { id: SizeCrop; price: number };
 type LookOption = { id: string; price: number };
+type BackgroundOption = { id: 'simple' | 'detailed'; price: number };
+type ObjectOption = { id: 'small' | 'medium' | 'big'; price: number };
 
 const STYLES: StyleOption[] = [
   { id: 'cutsey', name: 'Cutsey', days: '3–5', price: 4 },
@@ -41,6 +43,17 @@ const LOOKS: LookOption[] = [
   { id: 'lineart', price: 6 },
   { id: 'clean', price: 9 },
   { id: 'rendered', price: 12 },
+];
+
+const BACKGROUNDS: BackgroundOption[] = [
+  { id: 'simple', price: 3 },
+  { id: 'detailed', price: 10 },
+];
+
+const OBJECTS_OF_INTEREST: ObjectOption[] = [
+  { id: 'small', price: 2 },
+  { id: 'medium', price: 4 },
+  { id: 'big', price: 8 },
 ];
 
 const USD_TO_MXN = 19;
@@ -82,9 +95,23 @@ function SizeFigure({ crop }: { crop: SizeCrop }) {
 export function SpeckuCommissionsPage() {
   const { theme } = useTheme();
   const { t } = useLang();
+
+  // Mandatory steps
   const [styleId, setStyleId] = useState<string | null>(null);
   const [sizeId, setSizeId] = useState<string | null>(null);
   const [lookId, setLookId] = useState<string | null>(null);
+
+  // Optional sections (toggled)
+  const [hasBackground, setHasBackground] = useState(false);
+  const [backgroundId, setBackgroundId] = useState<'simple' | 'detailed'>('simple');
+
+  const [hasObjects, setHasObjects] = useState(false);
+  const [objectId, setObjectId] = useState<'small' | 'medium' | 'big'>('small');
+
+  const [hasAdditionalPeople, setHasAdditionalPeople] = useState(false);
+  const [additionalPeopleCount, setAdditionalPeopleCount] = useState(1);
+
+  // Clipboard & preview state
   const [copied, setCopied] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
   const [recopied, setRecopied] = useState(false);
@@ -93,7 +120,20 @@ export function SpeckuCommissionsPage() {
   const size = SIZES.find((s) => s.id === sizeId) ?? null;
   const look = LOOKS.find((l) => l.id === lookId) ?? null;
 
-  const total = (style?.price ?? 0) + (size?.price ?? 0) + (look?.price ?? 0);
+  const background = BACKGROUNDS.find((b) => b.id === backgroundId) ?? null;
+  const objectOption = OBJECTS_OF_INTEREST.find((o) => o.id === objectId) ?? null;
+
+  // Pricing calculations
+  const baseCost = (style?.price ?? 0) + (size?.price ?? 0) + (look?.price ?? 0);
+  const backgroundCost = hasBackground && background ? background.price : 0;
+  const objectCost = hasObjects && objectOption ? objectOption.price : 0;
+
+  // 40% of base cost per additional person
+  const additionalPersonUnit = Math.round(baseCost * 0.4);
+  const additionalPeopleCost =
+    hasAdditionalPeople && additionalPeopleCount > 0 ? additionalPersonUnit * additionalPeopleCount : 0;
+
+  const total = baseCost + backgroundCost + objectCost + additionalPeopleCost;
   const complete = !!style && !!size && !!look;
 
   const handleGenerateQuote = (e: React.MouseEvent) => {
@@ -102,13 +142,42 @@ export function SpeckuCommissionsPage() {
       return;
     }
 
+    const items: { category: string; label: string; price: number }[] = [
+      { category: t('specku.line.style'), label: style.name, price: style.price },
+      { category: t('specku.line.size'), label: t(`specku.size.${size.id}`), price: size.price },
+      { category: t('specku.line.look'), label: t(`specku.look.${look.id}`), price: look.price },
+    ];
+
+    if (hasBackground && background) {
+      items.push({
+        category: t('specku.line.bg'),
+        label: t(`specku.bg.${background.id}`),
+        price: background.price,
+      });
+    }
+
+    if (hasObjects && objectOption) {
+      items.push({
+        category: t('specku.line.obj'),
+        label: t(`specku.obj.${objectOption.id}`),
+        price: objectOption.price,
+      });
+    }
+
+    if (hasAdditionalPeople && additionalPeopleCount > 0) {
+      const labelText = `${additionalPeopleCount} ${
+        additionalPeopleCount === 1 ? t('specku.people.singular') : t('specku.people.plural')
+      } (+40%)`;
+      items.push({
+        category: t('specku.line.people'),
+        label: labelText,
+        price: additionalPeopleCost,
+      });
+    }
+
     const message = buildDiscordCommissionMessage({
       greeting: t('specku.discord.msg.greeting'),
-      items: [
-        { category: t('specku.line.style'), label: style.name, price: style.price },
-        { category: t('specku.line.size'), label: t(`specku.size.${size.id}`), price: size.price },
-        { category: t('specku.line.look'), label: t(`specku.look.${look.id}`), price: look.price },
-      ],
+      items,
       totalUsd: total,
       totalMxn: total * USD_TO_MXN,
     });
@@ -251,6 +320,178 @@ export function SpeckuCommissionsPage() {
         </div>
       </section>
 
+      {/* Optional Extras (Toggleable sections) */}
+      <section className="jc-step jc-extras-step">
+        <h2>
+          <span className="jc-num">+</span> {t('specku.extras.title')}
+        </h2>
+        <p className="jc-step-desc">{t('specku.extras.subtitle')}</p>
+
+        <div className="jc-extras-grid">
+          {/* Backgrounds */}
+          <div className={`jc-extra-card${hasBackground ? ' is-active' : ''}`}>
+            <div className="jc-extra-header">
+              <div className="jc-extra-title-group">
+                <span className="jc-extra-badge">🎨 {t('specku.bg.title')}</span>
+                <label htmlFor="toggle-bg" className="jc-extra-question">
+                  {t('specku.bg.question')}
+                </label>
+              </div>
+              <label className="jc-switch" aria-label={t('specku.bg.question')}>
+                <input
+                  id="toggle-bg"
+                  type="checkbox"
+                  checked={hasBackground}
+                  onChange={(e) => {
+                    setHasBackground(e.target.checked);
+                    setCopied(false);
+                  }}
+                />
+                <span className="jc-slider" />
+              </label>
+            </div>
+
+            {hasBackground && (
+              <div className="jc-extra-options jc-bg-options">
+                {BACKGROUNDS.map((bg) => (
+                  <button
+                    key={bg.id}
+                    type="button"
+                    className={`jc-card jc-extra-option-btn${backgroundId === bg.id ? ' selected' : ''}`}
+                    aria-pressed={backgroundId === bg.id}
+                    onClick={() => {
+                      setBackgroundId(bg.id);
+                      setCopied(false);
+                    }}
+                  >
+                    <span className="jc-extra-opt-name">{t(`specku.bg.${bg.id}`)}</span>
+                    <span className="jc-extra-opt-desc">{t(`specku.bg.${bg.id}.desc`)}</span>
+                    <span className="jc-price">{usd(bg.price)}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Objects of interest */}
+          <div className={`jc-extra-card${hasObjects ? ' is-active' : ''}`}>
+            <div className="jc-extra-header">
+              <div className="jc-extra-title-group">
+                <span className="jc-extra-badge">✨ {t('specku.obj.title')}</span>
+                <label htmlFor="toggle-obj" className="jc-extra-question">
+                  {t('specku.obj.question')}
+                </label>
+              </div>
+              <label className="jc-switch" aria-label={t('specku.obj.question')}>
+                <input
+                  id="toggle-obj"
+                  type="checkbox"
+                  checked={hasObjects}
+                  onChange={(e) => {
+                    setHasObjects(e.target.checked);
+                    setCopied(false);
+                  }}
+                />
+                <span className="jc-slider" />
+              </label>
+            </div>
+
+            {hasObjects && (
+              <div className="jc-extra-options jc-obj-options">
+                {OBJECTS_OF_INTEREST.map((obj) => (
+                  <button
+                    key={obj.id}
+                    type="button"
+                    className={`jc-card jc-extra-option-btn${objectId === obj.id ? ' selected' : ''}`}
+                    aria-pressed={objectId === obj.id}
+                    onClick={() => {
+                      setObjectId(obj.id);
+                      setCopied(false);
+                    }}
+                  >
+                    <span className="jc-extra-opt-name">{t(`specku.obj.${obj.id}`)}</span>
+                    <span className="jc-extra-opt-desc">{t(`specku.obj.${obj.id}.desc`)}</span>
+                    <span className="jc-price">{usd(obj.price)}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Additional people */}
+          <div className={`jc-extra-card${hasAdditionalPeople ? ' is-active' : ''}`}>
+            <div className="jc-extra-header">
+              <div className="jc-extra-title-group">
+                <span className="jc-extra-badge">👥 {t('specku.people.title')}</span>
+                <label htmlFor="toggle-people" className="jc-extra-question">
+                  {t('specku.people.question')}
+                </label>
+              </div>
+              <label className="jc-switch" aria-label={t('specku.people.question')}>
+                <input
+                  id="toggle-people"
+                  type="checkbox"
+                  checked={hasAdditionalPeople}
+                  onChange={(e) => {
+                    setHasAdditionalPeople(e.target.checked);
+                    setCopied(false);
+                  }}
+                />
+                <span className="jc-slider" />
+              </label>
+            </div>
+
+            {hasAdditionalPeople && (
+              <div className="jc-extra-people-body">
+                <p className="jc-extra-people-note">{t('specku.people.desc')}</p>
+                <div className="jc-people-stepper">
+                  <span className="jc-people-stepper-label">{t('specku.people.count')}:</span>
+                  <div className="jc-stepper-controls">
+                    <button
+                      type="button"
+                      className="jc-stepper-btn"
+                      onClick={() => {
+                        if (additionalPeopleCount > 1) {
+                          setAdditionalPeopleCount(additionalPeopleCount - 1);
+                          setCopied(false);
+                        }
+                      }}
+                      disabled={additionalPeopleCount <= 1}
+                      aria-label="Decrease additional people"
+                    >
+                      −
+                    </button>
+                    <span className="jc-stepper-value">{additionalPeopleCount}</span>
+                    <button
+                      type="button"
+                      className="jc-stepper-btn"
+                      onClick={() => {
+                        if (additionalPeopleCount < 10) {
+                          setAdditionalPeopleCount(additionalPeopleCount + 1);
+                          setCopied(false);
+                        }
+                      }}
+                      disabled={additionalPeopleCount >= 10}
+                      aria-label="Increase additional people"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="jc-people-stepper-price">
+                    <span className="jc-price">+{usd(additionalPeopleCost)}</span>
+                    {complete && (
+                      <span className="jc-people-unit-hint">
+                        ({usd(additionalPersonUnit)} / {t('specku.people.singular')})
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Summary */}
       <section className="jc-summary" aria-live="polite">
         <h2>{t('specku.summary')}</h2>
@@ -270,6 +511,30 @@ export function SpeckuCommissionsPage() {
             <span className="jc-line-pick">{look ? t(`specku.look.${look.id}`) : '—'}</span>
             <span className="jc-line-price">{look ? usd(look.price) : '$0'}</span>
           </li>
+          {hasBackground && background && (
+            <li className="jc-line-extra">
+              <span className="jc-line-step">{t('specku.line.bg')}</span>
+              <span className="jc-line-pick">{t(`specku.bg.${background.id}`)}</span>
+              <span className="jc-line-price">{usd(background.price)}</span>
+            </li>
+          )}
+          {hasObjects && objectOption && (
+            <li className="jc-line-extra">
+              <span className="jc-line-step">{t('specku.line.obj')}</span>
+              <span className="jc-line-pick">{t(`specku.obj.${objectOption.id}`)}</span>
+              <span className="jc-line-price">{usd(objectOption.price)}</span>
+            </li>
+          )}
+          {hasAdditionalPeople && additionalPeopleCount > 0 && (
+            <li className="jc-line-extra">
+              <span className="jc-line-step">{t('specku.line.people')}</span>
+              <span className="jc-line-pick">
+                {additionalPeopleCount}{' '}
+                {additionalPeopleCount === 1 ? t('specku.people.singular') : t('specku.people.plural')} (+40%)
+              </span>
+              <span className="jc-line-price">{usd(additionalPeopleCost)}</span>
+            </li>
+          )}
         </ul>
 
         <div className="jc-total">
@@ -301,7 +566,7 @@ export function SpeckuCommissionsPage() {
               fill="currentColor"
               aria-hidden="true"
             >
-              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.078.078 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
             </svg>
             <span>{t('specku.discord.action')}</span>
           </button>
@@ -325,7 +590,8 @@ export function SpeckuCommissionsPage() {
                     className="jc-discord-recopy-btn"
                     onClick={handleRecopy}
                   >
-                    {recopied ? '✓' : '📋'} {recopied ? t('specku.discord.copied.copied') : t('specku.discord.copied.recopy')}
+                    {recopied ? '✓' : '📋'}{' '}
+                    {recopied ? t('specku.discord.copied.copied') : t('specku.discord.copied.recopy')}
                   </button>
 
                   <a
