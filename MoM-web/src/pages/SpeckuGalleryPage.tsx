@@ -204,7 +204,6 @@ export function SpeckuGalleryPage() {
       </div>
 
       <header className="sg-hero">
-        <span className="sg-badge">{t('specku.gallery.badge')}</span>
         <h1>{t('specku.gallery.title')}</h1>
         <p className="sg-subtitle">{t('specku.gallery.subtitle')}</p>
       </header>

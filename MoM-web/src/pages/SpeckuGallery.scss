@@ -39,39 +39,26 @@
 
   .sg-hero {
     max-width: 860px;
-    margin: 0 auto 1.15rem;
+    margin: 0 auto 1.25rem;
     text-align: center;
-
-    .sg-badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 999px;
-      background: rgba(255, 111, 89, 0.12);
-      color: var(--sg-coral);
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.35rem;
-    }
 
     h1 {
       font-family: 'Fraunces', 'Manrope', serif;
-      font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+      font-size: clamp(2.4rem, 6.5vw, 3.6rem);
       font-weight: 900;
       line-height: 1.15;
-      margin: 0 0 0.35rem;
+      margin: 0;
       color: var(--sg-ink);
-      text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.8);
+      text-shadow: 3px 3px 0 #fff, 5px 5px 0 var(--sg-teal);
     }
 
     .sg-subtitle {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 600;
-      opacity: 0.8;
+      opacity: 0.85;
       max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.35;
+      margin: 0.45rem auto 0;
+      line-height: 1.4;
     }
   }
 
@@ -477,20 +464,15 @@
     }
 
     .sg-hero {
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
 
       h1 {
-        font-size: 1.75rem;
+        font-size: clamp(2rem, 5vw, 2.7rem);
         margin-bottom: 0.2rem;
-      }
-
-      .sg-badge {
-        margin-bottom: 0.2rem;
-        padding: 0.18rem 0.6rem;
       }
 
       .sg-subtitle {
-        font-size: 0.88rem;
+        font-size: 0.92rem;
       }
     }
 
@@ -523,7 +505,7 @@
     .sg-hero {
       h1 {
         color: #f1ece0;
-        text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+        text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45), 5px 5px 0 var(--sg-teal-deep);
       }
 
       .sg-subtitle {
