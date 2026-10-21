@@ -13,12 +13,7 @@ export function SpeckuTermsPage() {
   return (
     <div className="specku-terms" data-theme={theme}>
       <div className="st-topbar">
-        <div className="st-topbar-left">
-          <Link className="st-back" to="/home/specku/comisiones">
-            ← {t('specku.terms.back')}
-          </Link>
-          <LumivoxBrand />
-        </div>
+        <LumivoxBrand />
         <div className="st-topbar-actions">
           <LanguageToggle />
           <ThemeToggle />
