@@ -24,11 +24,16 @@ The system SHALL format all active commission selections into an itemized bullet
 - **THEN** the quote compiles each selected item into bullet format `• Category: Selection ($Price USD)`
 - **AND** the computed total equals $38 USD
 
-### Requirement: Direct Discord profile dispatch and clipboard integration
-The system SHALL automatically copy the assembled quote message to the client's clipboard and open artist Specku's Discord profile (`https://discord.com/users/984706414914187284`) in a new tab when the action button is triggered.
+### Requirement: Direct Discord profile dispatch and preview confirmation
+The system SHALL copy the assembled quote message to the client's clipboard and display an in-place preview upon clicking the prepare button, providing redundant "Copiar" and "Mandar" (with send icon) action controls where "Mandar" navigates to artist Specku's Discord profile (`https://discord.com/users/984706414914187284`).
 
-#### Scenario: Triggering direct Discord action
-- **WHEN** the client clicks the Discord action button with complete selections
+#### Scenario: Preparing quote preview
+- **WHEN** the client clicks the prepare Discord message action button with complete selections
 - **THEN** the formatted message is copied to the user's clipboard
-- **AND** a new browser tab navigates to `https://discord.com/users/984706414914187284`
-- **AND** visual confirmation informs the client that the quote is copied and ready to paste into Specku's chat
+- **AND** the preview box reveals the exact message with feedback instructions
+- **AND** redundant controls for "Copiar" and "Mandar" are presented side-by-side
+
+#### Scenario: Dispatching via Mandar
+- **WHEN** the client clicks the "Mandar" button in the preview
+- **THEN** a new browser tab navigates directly to `https://discord.com/users/984706414914187284`
+- **AND** the formatted message is re-verified in clipboard for immediate pasting into chat
