@@ -69,17 +69,17 @@ export function ArtistsPage() {
 
       {activeArtist ? (
         <>
-          <ArtistShowcase
-            artist={activeArtist}
-            panelId={panelIdFor(activeArtist.handle)}
-            labelledBy={tabIdFor(activeArtist.handle)}
-          />
           <RosterStrip
             artists={artistList}
             activeHandle={activeArtist.handle}
             onSelect={setActiveHandle}
             tabIdFor={tabIdFor}
             panelIdFor={panelIdFor}
+          />
+          <ArtistShowcase
+            artist={activeArtist}
+            panelId={panelIdFor(activeArtist.handle)}
+            labelledBy={tabIdFor(activeArtist.handle)}
           />
         </>
       ) : (
