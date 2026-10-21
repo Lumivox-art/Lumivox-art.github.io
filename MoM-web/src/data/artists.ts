@@ -68,14 +68,14 @@ export const artists: Artist[] = [
     ],
   },
   {
-    handle: 'joz',
-    // TODO confirm with Joz
-    displayName: 'Joz',
+    handle: 'specku',
+    // TODO confirm with Specku
+    displayName: 'Specku',
     tagline: 'Lorem ipsum dolor sit amet, consectetur',
     discipline: 'Lorem Ipsum Dolor',
     bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-    splash: '/lumivox-media/joz.svg',
-    icon: '/lumivox-media/joz.svg',
+    splash: '/lumivox-media/specku.svg',
+    icon: '/lumivox-media/specku.svg',
     accentColor: '#D17865',
     modules: [
       {
@@ -84,18 +84,18 @@ export const artists: Artist[] = [
       },
       {
         kind: 'socials',
-        // TODO confirm with Joz — placeholders
+        // TODO confirm with Specku — placeholders
         entries: [
-          { platform: 'twitter', url: 'https://twitter.com/joz' },
-          { platform: 'instagram', url: 'https://instagram.com/joz' },
+          { platform: 'twitter', url: 'https://twitter.com/specku' },
+          { platform: 'instagram', url: 'https://instagram.com/specku' },
         ],
       },
-      // TODO confirm with Joz — placeholder website URL
-      { kind: 'website', url: 'https://joz.example', label: 'Portfolio' },
+      // TODO confirm with Specku — placeholder website URL
+      { kind: 'website', url: 'https://specku.example', label: 'Portfolio' },
       {
         kind: 'portal',
         label: 'cta.commissions',
-        route: '/home/joz/comisiones',
+        route: '/home/specku/comisiones',
       },
     ],
   },

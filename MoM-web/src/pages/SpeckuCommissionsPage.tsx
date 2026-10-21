@@ -5,12 +5,12 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import {
-  JOPH_DISCORD_PROFILE_URL,
+  SPECKU_DISCORD_PROFILE_URL,
   buildDiscordCommissionMessage,
 } from '../utils/discordMessage';
-import './JozCommissions.scss';
+import './SpeckuCommissions.scss';
 
-// Functional commission quote builder for Joz.
+// Functional commission quote builder for Specku.
 // Pick one option per step (style + size + look); the total updates live.
 // Total is shown in USD and in MXN at a fixed 1 USD = 19 MXN rate.
 // Labels are localized via the i18n layer (size/look names live in the dictionary
@@ -79,7 +79,7 @@ function SizeFigure({ crop }: { crop: SizeCrop }) {
   );
 }
 
-export function JozCommissionsPage() {
+export function SpeckuCommissionsPage() {
   const { theme } = useTheme();
   const { t } = useLang();
   const [styleId, setStyleId] = useState<string | null>(null);
@@ -103,11 +103,11 @@ export function JozCommissionsPage() {
     }
 
     const message = buildDiscordCommissionMessage({
-      greeting: t('joz.discord.msg.greeting'),
+      greeting: t('specku.discord.msg.greeting'),
       items: [
-        { category: t('joz.line.style'), label: style.name, price: style.price },
-        { category: t('joz.line.size'), label: t(`joz.size.${size.id}`), price: size.price },
-        { category: t('joz.line.look'), label: t(`joz.look.${look.id}`), price: look.price },
+        { category: t('specku.line.style'), label: style.name, price: style.price },
+        { category: t('specku.line.size'), label: t(`specku.size.${size.id}`), price: size.price },
+        { category: t('specku.line.look'), label: t(`specku.look.${look.id}`), price: look.price },
       ],
       totalUsd: total,
       totalMxn: total * USD_TO_MXN,
@@ -135,7 +135,7 @@ export function JozCommissionsPage() {
   };
 
   return (
-    <div className="joz-comm" data-theme={theme}>
+    <div className="specku-comm" data-theme={theme}>
       <div className="jc-topbar">
         <LumivoxBrand />
         <div className="jc-topbar-actions">
@@ -145,14 +145,14 @@ export function JozCommissionsPage() {
       </div>
 
       <header className="jc-hero">
-        <h1>{t('joz.title')}</h1>
-        <p>{t('joz.subtitle')}</p>
+        <h1>{t('specku.title')}</h1>
+        <p>{t('specku.subtitle')}</p>
       </header>
 
       {/* Step 1 — style */}
       <section className="jc-step">
         <h2>
-          <span className="jc-num">1</span> {t('joz.step.style')}
+          <span className="jc-num">1</span> {t('specku.step.style')}
         </h2>
         <div className="jc-style-grid">
           {STYLES.map((s) => (
@@ -197,7 +197,7 @@ export function JozCommissionsPage() {
       {/* Step 2 — size */}
       <section className="jc-step">
         <h2>
-          <span className="jc-num">2</span> {t('joz.step.size')}
+          <span className="jc-num">2</span> {t('specku.step.size')}
         </h2>
         <div className="jc-size-row">
           {SIZES.map((s) => (
@@ -212,8 +212,8 @@ export function JozCommissionsPage() {
               }}
             >
               <SizeFigure crop={s.id} />
-              <span className="jc-size-name">{t(`joz.size.${s.id}`)}</span>
-              <span className="jc-size-desc">{t(`joz.size.${s.id}.desc`)}</span>
+              <span className="jc-size-name">{t(`specku.size.${s.id}`)}</span>
+              <span className="jc-size-desc">{t(`specku.size.${s.id}.desc`)}</span>
               <span className="jc-price">{usd(s.price)}</span>
             </button>
           ))}
@@ -223,7 +223,7 @@ export function JozCommissionsPage() {
       {/* Step 3 — look */}
       <section className="jc-step">
         <h2>
-          <span className="jc-num">3</span> {t('joz.step.look')}
+          <span className="jc-num">3</span> {t('specku.step.look')}
         </h2>
         <div className="jc-look-row">
           {LOOKS.map((l) => (
@@ -237,8 +237,8 @@ export function JozCommissionsPage() {
                 setCopied(false);
               }}
             >
-              <span className="jc-look-name">{t(`joz.look.${l.id}`)}</span>
-              <span className="jc-look-desc">{t(`joz.look.${l.id}.desc`)}</span>
+              <span className="jc-look-name">{t(`specku.look.${l.id}`)}</span>
+              <span className="jc-look-desc">{t(`specku.look.${l.id}.desc`)}</span>
               <span className="jc-price">{usd(l.price)}</span>
             </button>
           ))}
@@ -247,41 +247,41 @@ export function JozCommissionsPage() {
 
       {/* Summary */}
       <section className="jc-summary" aria-live="polite">
-        <h2>{t('joz.summary')}</h2>
+        <h2>{t('specku.summary')}</h2>
         <ul className="jc-lines">
           <li>
-            <span className="jc-line-step">{t('joz.line.style')}</span>
+            <span className="jc-line-step">{t('specku.line.style')}</span>
             <span className="jc-line-pick">{style ? style.name : '—'}</span>
             <span className="jc-line-price">{style ? usd(style.price) : '$0'}</span>
           </li>
           <li>
-            <span className="jc-line-step">{t('joz.line.size')}</span>
-            <span className="jc-line-pick">{size ? t(`joz.size.${size.id}`) : '—'}</span>
+            <span className="jc-line-step">{t('specku.line.size')}</span>
+            <span className="jc-line-pick">{size ? t(`specku.size.${size.id}`) : '—'}</span>
             <span className="jc-line-price">{size ? usd(size.price) : '$0'}</span>
           </li>
           <li>
-            <span className="jc-line-step">{t('joz.line.look')}</span>
-            <span className="jc-line-pick">{look ? t(`joz.look.${look.id}`) : '—'}</span>
+            <span className="jc-line-step">{t('specku.line.look')}</span>
+            <span className="jc-line-pick">{look ? t(`specku.look.${look.id}`) : '—'}</span>
             <span className="jc-line-price">{look ? usd(look.price) : '$0'}</span>
           </li>
         </ul>
 
         <div className="jc-total">
           <div className="jc-total-usd">
-            <span>{t('joz.total')}</span>
+            <span>{t('specku.total')}</span>
             <strong>{usd(total)} USD</strong>
           </div>
           <div className="jc-total-mxn">
-            <span>{t('joz.mxn')}</span>
+            <span>{t('specku.mxn')}</span>
             <strong>{mxn(total)} MXN</strong>
           </div>
         </div>
 
-        {!complete && <p className="jc-hint">{t('joz.hint')}</p>}
+        {!complete && <p className="jc-hint">{t('specku.hint')}</p>}
 
         <div className="jc-discord-action">
           <a
-            href={complete ? JOPH_DISCORD_PROFILE_URL : undefined}
+            href={complete ? SPECKU_DISCORD_PROFILE_URL : undefined}
             target="_blank"
             rel="noopener noreferrer"
             className={`jc-discord-btn${!complete ? ' is-disabled' : ''}`}
@@ -298,7 +298,7 @@ export function JozCommissionsPage() {
             >
               <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.893.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
             </svg>
-            <span>{t('joz.discord.action')}</span>
+            <span>{t('specku.discord.action')}</span>
           </a>
 
           {copied && copiedMessage && (
@@ -306,20 +306,20 @@ export function JozCommissionsPage() {
               <div className="jc-discord-feedback-main">
                 <span className="jc-discord-feedback-check">✓</span>
                 <div className="jc-discord-feedback-text">
-                  <strong>{t('joz.discord.copied.title')}</strong>
-                  <p>{t('joz.discord.copied.desc')}</p>
+                  <strong>{t('specku.discord.copied.title')}</strong>
+                  <p>{t('specku.discord.copied.desc')}</p>
                 </div>
               </div>
 
               <div className="jc-discord-preview">
-                <span className="jc-discord-preview-label">{t('joz.discord.copied.preview')}</span>
+                <span className="jc-discord-preview-label">{t('specku.discord.copied.preview')}</span>
                 <pre className="jc-discord-preview-box">{copiedMessage}</pre>
                 <button
                   type="button"
                   className="jc-discord-recopy-btn"
                   onClick={handleRecopy}
                 >
-                  {recopied ? '✓' : '📋'} {t('joz.discord.copied.recopy')}
+                  {recopied ? '✓' : '📋'} {t('specku.discord.copied.recopy')}
                 </button>
               </div>
             </div>
@@ -329,3 +329,6 @@ export function JozCommissionsPage() {
     </div>
   );
 }
+
+// Backward compatibility export
+export { SpeckuCommissionsPage as JozCommissionsPage };
