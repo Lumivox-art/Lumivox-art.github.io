@@ -217,7 +217,7 @@ export function SpeckuGalleryPage() {
                             circleSize={48}
                           />
                           <div className="sg-card-overlay">
-                            <span className="sg-view-hint">🔍 Zoom in</span>
+                            <span className="sg-view-hint">+ Zoom in</span>
                           </div>
                         </div>
                         <div className="sg-card-meta">
