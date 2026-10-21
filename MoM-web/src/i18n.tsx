@@ -31,7 +31,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'artist.luis.brief':
       "We live in a time when digitalization makes spreading a digital brand remarkably easy. If you're looking to grow your brand through digital solutions, reach out!",
     // specku commissions
-    'specku.title': 'Commissions!',
+    'specku.title': "Specku's Commissions!",
     'specku.subtitle': 'Build your quote — pick one option per step and watch your total live.',
     'specku.step.style': 'Choose a style',
     'specku.step.size': 'Choose a size',
@@ -91,7 +91,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       'Hola, soy Luis.M y he diseñado esta página para ayudar a mis compañeros artistas a tener un espacio único para sus necesidades comerciales.',
     'artist.luis.brief':
       'Estamos en un tiempo donde la facilidad que trae la digitalización a la propagación de una marca digital es bastante evidente. Si estás buscando impulsar tu marca mediante soluciones digitales, ¡puedes contactarme!',
-    'specku.title': '¡Comisiones!',
+    'specku.title': '¡Comisiones de Specku!',
     'specku.subtitle': 'Arma tu cotización — elige una opción en cada paso y mira tu total en vivo.',
     'specku.step.style': 'Elige un estilo',
     'specku.step.size': 'Elige un tamaño',
