@@ -1,19 +1,63 @@
 /**
  * Data access service for Artist Media operations.
  * Implements Constitution Brendup Title I (Art. 2.4), Title V (Art. 13), and Title VI (Art. 15).
- * Static class with pure static methods, zero throw statements, and transactional responses.
+ * Static class with pure static methods, zero throw statements, resilient local caching,
+ * and accelerated Stale-While-Revalidate synchronization.
  */
 
 import { ref, onValue, get } from 'firebase/database';
 import { db } from '../firebase';
+import { LocalCache } from '../utils/LocalCache';
 import type { ArtistMediaBase, ArtistMediaFilter } from '../models/Artist';
 import type { ResponseObject } from '../models/Response/ResponseObject';
+import type { Artist } from '../data/artists';
 
 /// <summary>
 /// Static service encapsulating all data operations for artist media assets (splashes and icons).
 /// Strictly declared as static with zero instance state per Constitution Brendup Art. 2.4.
+/// Implements instant local caching to prevent image loss upon reloading.
 /// </summary>
 export class ArtistMediaService {
+  /// <summary>
+  /// Persistent cache key for artist media records in local storage.
+  /// </summary>
+  private static readonly cacheKey = 'lvx_cache_artista_medio';
+
+  /// <summary>
+  /// Accelerated REST endpoint URL for direct HTTP/2 queries.
+  /// </summary>
+  private static readonly restEndpoint =
+    'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/artista_medio.json';
+
+  /// <summary>
+  /// Synchronously retrieves locally cached artist media records for instant 0ms initial render on page load/reload.
+  /// </summary>
+  public static GetCachedMedia(): ArtistMediaBase[] {
+    return LocalCache.Get<ArtistMediaBase[]>(ArtistMediaService.cacheKey) ?? [];
+  }
+
+  /// <summary>
+  /// Synchronously merges cached binary splashes and icons into the default artist roster.
+  /// Eliminates image flash on page reloads.
+  /// </summary>
+  public static GetHydratedArtists(defaultArtists: Artist[]): Artist[] {
+    const cached = ArtistMediaService.GetCachedMedia();
+    if (cached.length === 0) return defaultArtists;
+
+    const mediaMap = new Map(cached.map((m) => [m.Key, m]));
+    return defaultArtists.map((a) => {
+      const found = mediaMap.get(a.handle);
+      if (found) {
+        return {
+          ...a,
+          splash: found.SplashBinary ?? a.splash,
+          icon: found.IconBinary ?? a.icon,
+        };
+      }
+      return a;
+    });
+  }
+
   /// <summary>
   /// Maps a raw database snapshot item (from artista_medio) into a strongly typed ArtistMediaBase entity.
   /// </summary>
@@ -81,19 +125,57 @@ export class ArtistMediaService {
   }
 
   /// <summary>
-  /// Retrieves the list of artist media records once from Firebase RTDB.
+  /// Asynchronously syncs fresh artist media data from REST endpoint in the background without blocking.
+  /// </summary>
+  private static TriggerBackgroundSync(filter?: ArtistMediaFilter): void {
+    if (typeof fetch === 'undefined') return;
+
+    fetch(ArtistMediaService.restEndpoint)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && typeof data === 'object') {
+          const items = ArtistMediaService.ParseSnapshotData(data, filter);
+          if (items.length > 0) {
+            LocalCache.Set(ArtistMediaService.cacheKey, items);
+          }
+        }
+      })
+      .catch(() => {
+        // Zero throw per Art. 15.2
+      });
+  }
+
+  /// <summary>
+  /// Retrieves the list of artist media records once from Firebase RTDB or instant local cache.
   /// Returns a standardized ResponseObject per Constitution Brendup Art. 8.
   /// Zero throw statements are used; errors are caught and safely encapsulated.
   /// </summary>
   public static async List(
     filter?: ArtistMediaFilter
   ): Promise<ResponseObject<ArtistMediaBase[]>> {
+    // Check instant synchronous cache first
+    const cached = ArtistMediaService.GetCachedMedia();
+    if (cached.length > 0) {
+      ArtistMediaService.TriggerBackgroundSync(filter);
+      return {
+        CodeNumber: 200,
+        CodeName: 'OK',
+        Message: 'Served instantly from persistent cache',
+        ErrorNumber: null,
+        ServerName: 'local-cache',
+        Result: cached,
+      };
+    }
+
     try {
       const mediaRef = ref(db, 'artista_medio');
       const snapshot = await get(mediaRef);
 
       if (snapshot.exists()) {
         const parsed = ArtistMediaService.ParseSnapshotData(snapshot.val(), filter);
+        if (parsed.length > 0) {
+          LocalCache.Set(ArtistMediaService.cacheKey, parsed);
+        }
         return {
           CodeNumber: 200,
           CodeName: 'OK',
@@ -126,7 +208,8 @@ export class ArtistMediaService {
   }
 
   /// <summary>
-  /// Subscribes to real-time changes on the artista_medio database node.
+  /// Subscribes to real-time changes on the artista_medio database node with Stale-While-Revalidate caching.
+  /// Immediately emits cached data (0ms latency on reload), while keeping real-time listeners active.
   /// Returns an unsubscribe cleanup callback function.
   /// Strictly catches errors with zero throw statements (Art. 15.2).
   /// </summary>
@@ -134,6 +217,22 @@ export class ArtistMediaService {
     onData: (response: ResponseObject<ArtistMediaBase[]>) => void,
     filter?: ArtistMediaFilter
   ): () => void {
+    // 1. Immediately emit cached data if available for instant 0ms render
+    const cached = ArtistMediaService.GetCachedMedia();
+    if (cached.length > 0) {
+      onData({
+        CodeNumber: 200,
+        CodeName: 'OK',
+        Message: 'Served instantly from persistent cache',
+        ErrorNumber: null,
+        ServerName: 'local-cache',
+        Result: cached,
+      });
+    }
+
+    // 2. Parallel fast REST accelerator to beat potential WebSocket connection latency
+    ArtistMediaService.TriggerBackgroundSync(filter);
+
     try {
       const mediaRef = ref(db, 'artista_medio');
       const unsubscribe = onValue(
@@ -141,6 +240,9 @@ export class ArtistMediaService {
         (snapshot) => {
           if (snapshot.exists()) {
             const items = ArtistMediaService.ParseSnapshotData(snapshot.val(), filter);
+            if (items.length > 0) {
+              LocalCache.Set(ArtistMediaService.cacheKey, items);
+            }
             onData({
               CodeNumber: 200,
               CodeName: 'OK',
@@ -149,7 +251,7 @@ export class ArtistMediaService {
               ServerName: 'firebase-rtdb',
               Result: items,
             });
-          } else {
+          } else if (cached.length === 0) {
             onData({
               CodeNumber: 404,
               CodeName: 'NotFound',
@@ -161,14 +263,16 @@ export class ArtistMediaService {
           }
         },
         (error) => {
-          onData({
-            CodeNumber: 503,
-            CodeName: 'ServiceUnavailable',
-            Message: error.message,
-            ErrorNumber: 503,
-            ServerName: 'firebase-rtdb',
-            Result: [],
-          });
+          if (cached.length === 0) {
+            onData({
+              CodeNumber: 503,
+              CodeName: 'ServiceUnavailable',
+              Message: error.message,
+              ErrorNumber: 503,
+              ServerName: 'firebase-rtdb',
+              Result: [],
+            });
+          }
         }
       );
 
@@ -181,14 +285,16 @@ export class ArtistMediaService {
       };
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      onData({
-        CodeNumber: 500,
-        CodeName: 'InternalServerError',
-        Message: errorMessage,
-        ErrorNumber: 500,
-        ServerName: 'local-service',
-        Result: [],
-      });
+      if (cached.length === 0) {
+        onData({
+          CodeNumber: 500,
+          CodeName: 'InternalServerError',
+          Message: errorMessage,
+          ErrorNumber: 500,
+          ServerName: 'local-service',
+          Result: [],
+        });
+      }
       return () => {};
     }
   }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { DayMark, NightMark } from '../components/LumivoxLogo';
 import { ThemeToggle } from '../components/ThemeToggle';
@@ -7,7 +7,8 @@ import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import { ArtistShowcase } from '../components/lumivox/ArtistShowcase';
 import { RosterStrip } from '../components/lumivox/RosterStrip';
-import { artists } from '../data/artists';
+import { artists, type Artist } from '../data/artists';
+import { ArtistMediaService } from '../services/ArtistMediaService';
 import './LumivoxHome.scss';
 
 // Lumivox homepage — brand landing (day/night logo) with the artist roster
@@ -20,8 +21,39 @@ const panelIdFor = (handle: string) => `showcase-${handle}`;
 export function LumivoxHomePage() {
   const { theme } = useTheme();
   const { t } = useLang();
-  const [activeHandle, setActiveHandle] = useState<string>(artists[0]?.handle ?? '');
-  const activeArtist = artists.find((a) => a.handle === activeHandle) ?? artists[0];
+  const [artistList, setArtistList] = useState<Artist[]>(() =>
+    ArtistMediaService.GetHydratedArtists(artists)
+  );
+  const [activeHandle, setActiveHandle] = useState<string>(
+    () => artistList[0]?.handle ?? ''
+  );
+  const activeArtist =
+    artistList.find((a) => a.handle === activeHandle) ?? artistList[0];
+
+  useEffect(() => {
+    const unsubscribe = ArtistMediaService.Subscribe((response) => {
+      if (response.Result && response.Result.length > 0) {
+        const mediaMap = new Map(response.Result.map((m) => [m.Key, m]));
+        setArtistList((prev) =>
+          prev.map((a) => {
+            const found = mediaMap.get(a.handle);
+            if (found) {
+              return {
+                ...a,
+                splash: found.SplashBinary ?? a.splash,
+                icon: found.IconBinary ?? a.icon,
+              };
+            }
+            return a;
+          })
+        );
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <div className="lumivox-site" data-theme={theme}>
@@ -60,7 +92,7 @@ export function LumivoxHomePage() {
         {activeArtist && (
           <div className="lvx-roster">
             <RosterStrip
-              artists={artists}
+              artists={artistList}
               activeHandle={activeArtist.handle}
               onSelect={setActiveHandle}
               tabIdFor={tabIdFor}

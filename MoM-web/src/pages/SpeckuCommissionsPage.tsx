@@ -109,8 +109,10 @@ export function SpeckuCommissionsPage() {
   const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
   const [recopied, setRecopied] = useState(false);
 
-  // Binary style sample artworks retrieved dynamically from Firebase RTDB
-  const [styleSamples, setStyleSamples] = useState<Record<string, string>>({});
+  // Binary style sample artworks retrieved dynamically from Firebase RTDB with instant synchronous cache hydration
+  const [styleSamples, setStyleSamples] = useState<Record<string, string>>(() =>
+    SpeckuGalleryService.GetCachedSampleMap()
+  );
 
   useEffect(() => {
     const unsubscribe = SpeckuGalleryService.Subscribe((response) => {

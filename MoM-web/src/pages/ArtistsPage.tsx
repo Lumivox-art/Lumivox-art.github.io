@@ -16,7 +16,9 @@ const panelIdFor = (handle: string) => `showcase-${handle}`;
 export function ArtistsPage() {
   const { t } = useLang();
   const { handle } = useParams();
-  const [artistList, setArtistList] = useState<Artist[]>(artists);
+  const [artistList, setArtistList] = useState<Artist[]>(() =>
+    ArtistMediaService.GetHydratedArtists(artists)
+  );
   const initial = artistList.find((a) => a.handle === handle)?.handle ?? artistList[0]?.handle ?? '';
   const [activeHandle, setActiveHandle] = useState<string>(initial);
   const activeArtist = artistList.find((a) => a.handle === activeHandle) ?? artistList[0];

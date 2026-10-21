@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { LumivoxLoadingCircle } from './LumivoxLoadingCircle';
 import { ConnectionFailurePlaceholder } from './ConnectionFailurePlaceholder';
 import './LumivoxDbImage.scss';
@@ -24,16 +24,23 @@ export function LumivoxDbImage({
 }: LumivoxDbImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    // Reset state on src change
     setHasError(false);
-    setIsLoaded(false);
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      setIsLoaded(true);
+    } else {
+      setIsLoaded(false);
+    }
   }, [src]);
 
   if (hasError) {
     return <ConnectionFailurePlaceholder compact={compactError} />;
   }
+
+  // Data URLs are already local in memory; use eager decoding to eliminate layout flash
+  const effectiveLoading = src?.startsWith('data:') ? 'eager' : loading;
 
   return (
     <div className={`lvx-db-image-container ${className}`.trim()} style={style}>
@@ -44,9 +51,10 @@ export function LumivoxDbImage({
       )}
       {src && (
         <img
+          ref={imgRef}
           src={src}
           alt={alt}
-          loading={loading}
+          loading={effectiveLoading}
           className={`lvx-db-img ${isLoaded ? 'is-loaded' : 'is-loading'}`}
           onLoad={() => setIsLoaded(true)}
           onError={() => setHasError(true)}

@@ -29,11 +29,11 @@ export function SpeckuGalleryPage() {
   const { theme } = useTheme();
   const { t } = useLang();
 
-  // Reactive state properties
-  const [items, setItems] = useState<GalleryItemBase[]>([]);
+  // Reactive state properties with instant synchronous cache hydration
+  const [items, setItems] = useState<GalleryItemBase[]>(() => SpeckuGalleryService.GetCachedItems());
   const [selectedItem, setSelectedItem] = useState<GalleryItemBase | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(() => SpeckuGalleryService.GetCachedItems().length === 0);
   const [isError, setIsError] = useState<boolean>(false);
 
   // Private touch gesture tracking refs for mobile swipe navigation
