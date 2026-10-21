@@ -60,7 +60,10 @@ const DICT: Record<Lang, Record<string, string>> = {
     // joz discord direct message action
     'joz.discord.action': 'Message Joph on Discord',
     'joz.discord.copied.title': 'Quote copied to clipboard!',
-    'joz.discord.copied.desc': 'Opening Joph profile. Paste (Ctrl+V) into the chat to send your quote!',
+    'joz.discord.copied.desc':
+      "Joph's Discord profile opened! In the chat, tap & hold to 'Paste' (or Ctrl+V on PC) to send your commission request.",
+    'joz.discord.copied.preview': 'Copied message:',
+    'joz.discord.copied.recopy': 'Copy again',
     'joz.discord.msg.greeting': 'Hi Joph! I would like to request a commission quote:',
     // sam commissions (mockup)
     'sam.tag': 'commissions',
@@ -115,7 +118,10 @@ const DICT: Record<Lang, Record<string, string>> = {
     // joz discord direct message action
     'joz.discord.action': 'Enviar mensaje a Joph en Discord',
     'joz.discord.copied.title': '¡Cotización copiada al portapapeles!',
-    'joz.discord.copied.desc': 'Abriendo el perfil de Joph. ¡Pega (Ctrl+V) en el chat para enviarle tu cotización!',
+    'joz.discord.copied.desc':
+      '¡Se abrió el perfil de Joph! En el chat, mantén presionado y selecciona "Pegar" (o Ctrl+V en PC) para enviarle tu pedido.',
+    'joz.discord.copied.preview': 'Mensaje copiado:',
+    'joz.discord.copied.recopy': 'Volver a copiar',
     'joz.discord.msg.greeting': '¡Hola Joph! Me gustaría solicitar una cotización de comisión:',
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',

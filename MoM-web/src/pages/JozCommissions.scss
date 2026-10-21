@@ -442,14 +442,20 @@
 
   .jc-discord-feedback {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
     gap: 0.75rem;
-    padding: 0.85rem 1rem;
-    border-radius: 12px;
-    background: rgba(88, 101, 242, 0.1);
+    padding: 0.95rem 1.1rem;
+    border-radius: 14px;
+    background: rgba(88, 101, 242, 0.08);
     border: 2px solid #5865f2;
     color: var(--jc-ink);
     font-size: 0.88rem;
+
+    .jc-discord-feedback-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
 
     .jc-discord-feedback-check {
       display: inline-grid;
@@ -467,14 +473,66 @@
     strong {
       display: block;
       color: #5865f2;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       margin-bottom: 0.15rem;
     }
 
     p {
       margin: 0;
-      opacity: 0.85;
+      opacity: 0.9;
       line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .jc-discord-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 0.65rem 0.75rem;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 10px;
+    }
+
+    .jc-discord-preview-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+    }
+
+    .jc-discord-preview-box {
+      margin: 0;
+      padding: 0.5rem;
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: var(--jc-ink);
+    }
+
+    .jc-discord-recopy-btn {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      border: 1.5px solid #5865f2;
+      background: #5865f2;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.15s;
+
+      &:hover {
+        background: #4752c4;
+      }
     }
   }
 
@@ -549,12 +607,22 @@
     }
 
     .jc-discord-feedback {
-      background: rgba(88, 101, 242, 0.2);
+      background: rgba(88, 101, 242, 0.16);
       border-color: #5865f2;
       color: #f1ece0;
 
       strong {
-        color: #7289da;
+        color: #8295ed;
+      }
+
+      .jc-discord-preview {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .jc-discord-preview-box {
+        background: #1c1827;
+        border-color: #46415a;
+        color: #f1ece0;
       }
     }
 
