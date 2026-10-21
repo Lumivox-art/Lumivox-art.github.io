@@ -55,3 +55,11 @@ The system SHALL copy the assembled quote message to the client's clipboard and 
 - **WHEN** the client clicks the "Mandar" button in the preview
 - **THEN** a new browser tab navigates directly to `https://discord.com/users/984706414914187284`
 - **AND** the formatted message is re-verified in clipboard for immediate pasting into chat
+
+### Requirement: Terms of service disclosure and navigation
+The system SHALL surface a disclosure in the commissions page footer stating that sending a commission request implies agreeing to the Terms of Service, featuring an underlined link to a dedicated terms of service page (`/home/specku/terminos`).
+
+#### Scenario: Navigating to Terms of Service
+- **WHEN** the user views the footer of Specku's commission page
+- **THEN** a disclosure is visible with an underlined link to `/home/specku/terminos`
+- **AND** clicking the link displays Specku's full terms covering delivery times, sketch review, payment options (PayPal), post-delivery revisions, streaming permissions, and client rights

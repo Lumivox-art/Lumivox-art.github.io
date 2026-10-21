@@ -97,6 +97,59 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.line.bg': 'Background',
     'specku.line.obj': 'Object of interest',
     'specku.line.people': 'Additional people',
+    // specku footer terms
+    'specku.footer.prefix': 'Sending a commission request implies agreeing to the',
+    'specku.footer.termsLink': 'Terms of Service',
+    'specku.footer.suffix': '.',
+
+    // specku terms of service page
+    'specku.terms.back': 'Back to commissions',
+    'specku.terms.badge': 'Terms of Service',
+    'specku.terms.title': "Specku's Commission Terms",
+    'specku.terms.subtitle': 'Clear guidelines on delivery times, sketch reviews, payment options, permissions, and copyright.',
+
+    // Section 1: Process & Delivery
+    'specku.terms.s1.title': 'Work Process & Delivery',
+    'specku.terms.s1.delivery.title': 'Delivery Timeframe',
+    'specku.terms.s1.delivery.text':
+      'Commissions for each style have an estimated delivery time (shown in the builder, ranging from 3 to 20 days depending on the selected style).',
+    'specku.terms.s1.sketch.title': 'Sketch Review',
+    'specku.terms.s1.sketch.text':
+      'In all commissions I offer a sketch review, which is basically me sending you 1 to 4 sketches once I have them, and you have the chance to select one and request beforehand every change you can think of, from hair to pose, or even ask for a remake from scratch if you do not like any (once), no money added guarantee. Once it has a pass, I get to making the piece.',
+    'specku.terms.s1.payment.title': 'Payment Methods & Options',
+    'specku.terms.s1.payment.text':
+      'You can choose to either pay upfront, or you can pay half of the cost after the sketch review and the other half in the end. I accept payment through PayPal.',
+    'specku.terms.s1.revisions.title': 'Revisions After Delivery',
+    'specku.terms.s1.revisions.text':
+      'Finally, after delivery of the piece, I allow for 2 changes to be asked, as long as they are possible and within reason. At this point I cannot change the whole pose or an arm, but I could do changes like eye shape, eye color and stuff like that. These 2 are also free of charge.',
+
+    // Section 2: Permissions
+    'specku.terms.s2.title': 'Permissions & Comfort',
+    'specku.terms.s2.intro': 'I need to know if I have permissions for the following:',
+    'specku.terms.s2.stream.title': 'Live Streaming',
+    'specku.terms.s2.stream.text': 'Can I and are you comfortable with me doing the piece while I stream?',
+    'specku.terms.s2.socials.title': 'Social Media Sharing',
+    'specku.terms.s2.socials.text':
+      'In the case you do not publicly publish the piece, am I able to share it on my art profiles, such as Tumblr and Twitter/X?',
+    'specku.terms.s2.portfolio.title': 'Exhibition & Portfolio',
+    'specku.terms.s2.portfolio.text':
+      'Am I able to expose this piece in other locations, such as art examples for other commissions or portfolios?',
+
+    // Section 3: Client Rights
+    'specku.terms.s3.title': 'Rights Respected for Each Client',
+    'specku.terms.s3.intro': 'These are the rights I respect for each of my clients:',
+    'specku.terms.s3.ownership.title': 'Client Ownership',
+    'specku.terms.s3.ownership.text':
+      'The art piece is yours to use as you please, and I lose control over the rights of using it for my own commercial means.',
+    'specku.terms.s3.permission.title': 'Prior Permission',
+    'specku.terms.s3.permission.text':
+      'I ask for permission to post speedpaints, use the artwork for examples/portfolio, or post it publicly.',
+    'specku.terms.s3.authorship.title': 'Authorship & Attribution',
+    'specku.terms.s3.authorship.text':
+      'You gain the ownership of the art piece; however, I remain having the right of being the artist/creator and to be recognized as such.',
+
+    'specku.terms.ctaBack': 'Back to Commission Builder',
+
     // sam commissions (mockup)
     'sam.tag': 'commissions',
     'sam.note': 'Sample design — to be reworked later.',
@@ -187,6 +240,59 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.line.bg': 'Fondo',
     'specku.line.obj': 'Objeto de interés',
     'specku.line.people': 'Personas adicionales',
+    // specku footer terms
+    'specku.footer.prefix': 'Enviar una solicitud de comisión implica acceder a los',
+    'specku.footer.termsLink': 'Términos de Servicio',
+    'specku.footer.suffix': '.',
+
+    // specku terms of service page
+    'specku.terms.back': 'Volver a comisiones',
+    'specku.terms.badge': 'Términos de Servicio',
+    'specku.terms.title': 'Términos de Comisión de Specku',
+    'specku.terms.subtitle': 'Pautas claras sobre tiempos de entrega, revisión de bocetos, métodos de pago, permisos y derechos de autor.',
+
+    // Section 1: Process & Delivery
+    'specku.terms.s1.title': 'Proceso de Trabajo y Entregas',
+    'specku.terms.s1.delivery.title': 'Tiempos de Entrega',
+    'specku.terms.s1.delivery.text':
+      'Las comisiones para cada estilo tienen un tiempo estimado de entrega (mostrado en el selector de estilos, variando de 3 a 20 días según la complejidad).',
+    'specku.terms.s1.sketch.title': 'Revisión de Bocetos',
+    'specku.terms.s1.sketch.text':
+      'En todas las comisiones ofrezco una revisión de boceto, lo que básicamente consiste en enviarte de 1 a 4 bocetos una vez listos. Tienes la oportunidad de elegir uno y solicitar de antemano todos los cambios que consideres necesarios, desde el cabello hasta la pose, o incluso pedir que se rehaga desde cero si ninguno te convence (una sola vez), garantizado sin costo adicional. Una vez aprobado, comienzo a elaborar la pieza final.',
+    'specku.terms.s1.payment.title': 'Formas de Pago',
+    'specku.terms.s1.payment.text':
+      'Puedes elegir pagar por adelantado, o bien pagar la mitad del costo tras la revisión del boceto y la otra mitad al finalizar. Acepto pagos mediante PayPal.',
+    'specku.terms.s1.revisions.title': 'Revisiones tras la Entrega',
+    'specku.terms.s1.revisions.text':
+      'Finalmente, tras la entrega de la pieza, permito solicitar hasta 2 cambios, siempre que sean posibles y razonables. En este punto no es posible cambiar la pose completa o un brazo, pero sí ajustes como forma de los ojos, color de ojos y detalles similares. Estos 2 cambios también son completamente gratuitos.',
+
+    // Section 2: Permissions
+    'specku.terms.s2.title': 'Permisos y Comodidad',
+    'specku.terms.s2.intro': 'Necesito consultar si cuento con tus permisos para lo siguiente:',
+    'specku.terms.s2.stream.title': 'Transmisiones en Vivo (Streams)',
+    'specku.terms.s2.stream.text': '¿Puedo y te sientes cómodo/a con que elabore la pieza en vivo mientras transmito?',
+    'specku.terms.s2.socials.title': 'Difusión en Redes',
+    'specku.terms.s2.socials.text':
+      'En caso de que no publiques la pieza públicamente, ¿puedo compartirla en mis perfiles de arte, como Tumblr y Twitter/X?',
+    'specku.terms.s2.portfolio.title': 'Muestras y Portafolio',
+    'specku.terms.s2.portfolio.text':
+      '¿Puedo exhibir esta pieza en otros espacios, como ejemplos para futuras comisiones o en mi portafolio?',
+
+    // Section 3: Client Rights
+    'specku.terms.s3.title': 'Derechos que Respeto para Cada Cliente',
+    'specku.terms.s3.intro': 'Estos son los derechos que garantizo a cada uno de mis clientes:',
+    'specku.terms.s3.ownership.title': 'Propiedad del Cliente',
+    'specku.terms.s3.ownership.text':
+      'La pieza de arte es tuya para usarla como gustes, y yo renuncio al control sobre usarla para fines comerciales propios.',
+    'specku.terms.s3.permission.title': 'Consentimiento Previo',
+    'specku.terms.s3.permission.text':
+      'Siempre te pediré autorización antes de publicar speedpaints, usar las obras como ejemplos de portafolio o postearlas.',
+    'specku.terms.s3.authorship.title': 'Autoría y Reconocimiento',
+    'specku.terms.s3.authorship.text':
+      'Obtienes la propiedad de la pieza; sin embargo, conservo el derecho moral como artista/creador de ser reconocido y acreditado como autor.',
+
+    'specku.terms.ctaBack': 'Volver al Cotizador de Comisiones',
+
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',
   },

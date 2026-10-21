@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
@@ -619,6 +620,15 @@ export function SpeckuCommissionsPage() {
           )}
         </div>
       </section>
+      <footer className="jc-footer">
+        <p className="jc-footer-terms">
+          {t('specku.footer.prefix')}{' '}
+          <Link to="/home/specku/terminos" className="jc-terms-link">
+            {t('specku.footer.termsLink')}
+          </Link>
+          {t('specku.footer.suffix')}
+        </p>
+      </footer>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { LumivoxHomePage } from './pages/LumivoxHomePage';
 import { ArtistsPage } from './pages/ArtistsPage';
 import { SamCommissionsPage } from './pages/SamCommissionsPage';
 import { SpeckuCommissionsPage } from './pages/SpeckuCommissionsPage';
+import { SpeckuTermsPage } from './pages/SpeckuTermsPage';
 
 // Root layout: mounts the page-transition overlay above every route.
 function RootLayout() {
@@ -36,6 +37,9 @@ const router = createBrowserRouter([
       { path: '/artistas/:handle', element: <ArtistsPage /> },
       { path: '/home/sam/comisiones', element: <SamCommissionsPage /> },
       { path: '/home/specku/comisiones', element: <SpeckuCommissionsPage /> },
+      { path: '/home/specku/terminos', element: <SpeckuTermsPage /> },
+      { path: '/home/specku/tos', element: <Navigate to="/home/specku/terminos" replace /> },
+      { path: '/home/specku/terms', element: <Navigate to="/home/specku/terminos" replace /> },
       { path: '/home/joz/comisiones', element: <Navigate to="/home/specku/comisiones" replace /> },
       { path: '*', element: <Navigate to="/home" replace /> },
     ],

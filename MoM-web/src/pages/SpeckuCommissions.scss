@@ -826,6 +826,35 @@
     }
   }
 
+
+  .jc-footer {
+    max-width: 920px;
+    margin: 2.5rem auto 0;
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px dashed rgba(0, 0, 0, 0.15);
+
+    .jc-footer-terms {
+      font-size: 0.9rem;
+      font-weight: 600;
+      opacity: 0.85;
+      margin: 0;
+      line-height: 1.45;
+
+      .jc-terms-link {
+        color: var(--jc-coral);
+        font-weight: 800;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: opacity 0.15s;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
   // --- Night theme (toggled via data-theme on the root) ---
   &[data-theme='night'] {
     --jc-card: #241f30;
@@ -974,6 +1003,18 @@
       background: #393448;
       color: #7d7890;
       box-shadow: 0 4px 0 #282434;
+    }
+
+    .jc-footer {
+      border-top-color: rgba(255, 255, 255, 0.12);
+
+      .jc-footer-terms {
+        color: #f1ece0;
+
+        .jc-terms-link {
+          color: #34c9ec;
+        }
+      }
     }
   }
 }
