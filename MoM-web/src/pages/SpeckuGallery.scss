@@ -25,32 +25,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .sg-topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    .sg-back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: var(--sg-ink);
-      text-decoration: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.05);
-      transition: background 0.15s, transform 0.1s;
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-        transform: translateX(-2px);
-      }
-    }
 
     .lvx-brand-logo {
       color: var(--sg-ink);
@@ -65,7 +39,7 @@
 
   .sg-hero {
     max-width: 1040px;
-    margin: 0 auto 2.25rem;
+    margin: 0 auto 2rem;
     text-align: center;
 
     .sg-badge {
@@ -106,7 +80,54 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
+  }
+
+  .sg-cta-card {
+    background: #fff;
+    border: 3px solid var(--sg-teal);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 0 rgba(31, 157, 138, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+    .sg-cta-body {
+      h3 {
+        font-family: 'Fraunces', serif;
+        font-size: 1.4rem;
+        margin: 0;
+        color: var(--sg-ink);
+      }
+    }
+
+    .sg-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.85rem;
+      border-radius: 14px;
+      background: var(--sg-coral);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      text-decoration: none;
+      box-shadow: 0 4px 0 var(--sg-coral-deep);
+      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+
+      &:hover {
+        background: #f05e47;
+        color: #fff;
+      }
+
+      &:active {
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 var(--sg-coral-deep);
+      }
+    }
   }
 
   .sg-grid {
@@ -206,59 +227,6 @@
       background: rgba(47, 191, 168, 0.12);
       padding: 0.25rem 0.6rem;
       border-radius: 6px;
-    }
-  }
-
-  .sg-cta-card {
-    background: #fff;
-    border: 3px solid var(--sg-teal);
-    border-radius: 20px;
-    padding: 1.75rem 2rem;
-    box-shadow: 0 8px 0 rgba(31, 157, 138, 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-
-    .sg-cta-body {
-      h3 {
-        font-family: 'Fraunces', serif;
-        font-size: 1.45rem;
-        margin: 0 0 0.35rem;
-        color: var(--sg-ink);
-      }
-
-      p {
-        margin: 0;
-        font-weight: 600;
-        opacity: 0.8;
-      }
-    }
-
-    .sg-cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1.85rem;
-      border-radius: 14px;
-      background: var(--sg-coral);
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.05rem;
-      text-decoration: none;
-      box-shadow: 0 4px 0 var(--sg-coral-deep);
-      transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
-
-      &:hover {
-        background: #f05e47;
-        color: #fff;
-      }
-
-      &:active {
-        transform: translateY(2px);
-        box-shadow: 0 2px 0 var(--sg-coral-deep);
-      }
     }
   }
 
@@ -363,19 +331,8 @@
     background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%);
     color: #f1ece0;
 
-    .sg-topbar-left {
-      .sg-back-link {
-        color: #f1ece0;
-        background: rgba(255, 255, 255, 0.08);
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.14);
-        }
-      }
-
-      .lvx-brand-logo {
-        color: #f1ece0;
-      }
+    .sg-topbar .lvx-brand-logo {
+      color: #f1ece0;
     }
 
     .sg-hero {
@@ -424,10 +381,6 @@
       .sg-cta-body {
         h3 {
           color: #f1ece0;
-        }
-
-        p {
-          color: #cfc8de;
         }
       }
 

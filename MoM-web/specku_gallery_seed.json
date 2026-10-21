@@ -1,0 +1,52 @@
+{
+  "Specku_Gallery": {
+    "anima": {
+      "id": "anima",
+      "title": "Anima",
+      "src": "/lumivox-media/joph-anima.webp",
+      "alt": "Specku - Anima style artwork",
+      "category": "Illustration",
+      "order": 1
+    },
+    "semi-real": {
+      "id": "semi-real",
+      "title": "Semi-Real",
+      "src": "/lumivox-media/joph-semi-real.webp",
+      "alt": "Specku - Semi-Real style artwork",
+      "category": "Illustration",
+      "order": 2
+    },
+    "cutsey": {
+      "id": "cutsey",
+      "title": "Cutsey",
+      "src": "/lumivox-media/joph-cutsey.webp",
+      "alt": "Specku - Cutsey style artwork",
+      "category": "Style Sample",
+      "order": 3
+    },
+    "chibi": {
+      "id": "chibi",
+      "title": "Chibi+",
+      "src": "/lumivox-media/joph-chibi.webp",
+      "alt": "Specku - Chibi+ style artwork",
+      "category": "Style Sample",
+      "order": 4
+    },
+    "dull-eyes": {
+      "id": "dull-eyes",
+      "title": "Dull-Eyes",
+      "src": "/lumivox-media/joph-dull-eyes.webp",
+      "alt": "Specku - Dull-Eyes style artwork",
+      "category": "Style Sample",
+      "order": 5
+    },
+    "noodle": {
+      "id": "noodle",
+      "title": "Noodle",
+      "src": "/lumivox-media/joph-noodle.webp",
+      "alt": "Specku - Noodle style artwork",
+      "category": "Style Sample",
+      "order": 6
+    }
+  }
+}
