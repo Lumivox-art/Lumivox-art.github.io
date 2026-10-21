@@ -242,12 +242,12 @@ export function SpeckuGalleryPage() {
                           setSelectedItem(item);
                         }
                       }}
-                      aria-label={`${item.title} - ${t('specku.gallery.view')}`}
+                      aria-label={`${item.title} - Zoom in`}
                     >
                       <div className="sg-card-media">
                         <img src={item.src} alt={item.alt} loading="lazy" />
                         <div className="sg-card-overlay">
-                          <span className="sg-view-hint">🔍 {t('specku.gallery.view')}</span>
+                          <span className="sg-view-hint">🔍 Zoom in</span>
                         </div>
                       </div>
                       <div className="sg-card-meta">

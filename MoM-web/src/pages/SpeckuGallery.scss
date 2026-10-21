@@ -134,26 +134,55 @@
     overflow: hidden;
     cursor: pointer;
     box-shadow: 0 4px 0 #d0dcdc;
-    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s;
     outline: none;
 
-    &:hover,
-    &:focus-visible {
-      transform: translateY(-3px);
-      box-shadow: 0 7px 0 #c2d0d0;
-      border-color: var(--sg-teal);
+    @media (hover: hover) and (pointer: fine) and (min-width: 769px) {
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s;
 
-      .sg-card-overlay {
-        opacity: 1;
-      }
+      &:hover,
+      &:focus-visible {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 0 #c2d0d0;
+        border-color: var(--sg-teal);
 
-      .sg-card-media img {
-        transform: scale(1.04);
+        .sg-card-overlay {
+          opacity: 1;
+        }
+
+        .sg-card-media img {
+          transform: scale(1.04);
+        }
       }
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px var(--sg-teal), 0 7px 0 #c2d0d0;
+      box-shadow: 0 0 0 3px var(--sg-teal), 0 4px 0 #d0dcdc;
+    }
+  }
+
+  /* El hover y overlay no existen en teléfonos móviles */
+  @media (hover: none), (max-width: 768px) {
+    .sg-card-overlay {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    .sg-card {
+      transition: none !important;
+
+      &:hover,
+      &:active,
+      &:focus {
+        transform: none !important;
+        box-shadow: 0 4px 0 #d0dcdc !important;
+        border-color: #e1e7e7 !important;
+
+        .sg-card-media img {
+          transform: none !important;
+        }
+      }
     }
   }
 
@@ -507,10 +536,12 @@
       border-color: #46415a;
       box-shadow: 0 4px 0 #181422;
 
-      &:hover,
-      &:focus-visible {
-        box-shadow: 0 7px 0 #181422;
-        border-color: #34c9ec;
+      @media (hover: hover) and (pointer: fine) and (min-width: 769px) {
+        &:hover,
+        &:focus-visible {
+          box-shadow: 0 7px 0 #181422;
+          border-color: #34c9ec;
+        }
       }
 
       .sg-card-media {
@@ -525,6 +556,17 @@
         .sg-card-category {
           color: #34c9ec;
           background: rgba(52, 201, 236, 0.15);
+        }
+      }
+    }
+
+    @media (hover: none), (max-width: 768px) {
+      .sg-card {
+        &:hover,
+        &:active,
+        &:focus {
+          box-shadow: 0 4px 0 #181422 !important;
+          border-color: #46415a !important;
         }
       }
     }

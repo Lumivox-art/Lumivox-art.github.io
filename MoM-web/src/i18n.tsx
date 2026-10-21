@@ -163,6 +163,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.gallery.prev': 'Previous sheet',
     'specku.gallery.next': 'Next sheet',
     'specku.gallery.sheet': 'Sheet',
+    'specku.gallery.view': 'Zoom in',
 
     // sam commissions (mockup)
     'sam.tag': 'commissions',
@@ -320,6 +321,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.gallery.prev': 'Hoja anterior',
     'specku.gallery.next': 'Siguiente hoja',
     'specku.gallery.sheet': 'Hoja',
+    'specku.gallery.view': 'Zoom in',
 
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',
