@@ -6,7 +6,7 @@
     "dev": "vite --open",
     "start": "vite --open",
     "build": "tsc --project tsconfig.json --noEmit && vite build",
-    "build:gh-pages": "npm run build && node generate-404.js && node scripts/seed-firebase.js",
+    "build:gh-pages": "npm run build && node generate-404.js",
     "seed:gallery": "node scripts/seed-firebase.js",
     "preview": "vite preview --host",
     "clean": "rimraf dist"

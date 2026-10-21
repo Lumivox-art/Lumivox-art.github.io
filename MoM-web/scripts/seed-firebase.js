@@ -76,14 +76,11 @@ const speckuGalleryLegacy = {};
 
 itemsConfig.forEach((item) => {
   const filePath = path.join(mediaDir, item.fileName);
-  let binaryData = '';
-  if (fs.existsSync(filePath)) {
-    const fileBuffer = fs.readFileSync(filePath);
-    binaryData = `data:image/webp;base64,${fileBuffer.toString('base64')}`;
-  } else {
-    console.warn(`⚠️ Media file not found: ${filePath}`);
-    binaryData = `/lumivox-media/${item.fileName}`;
+  if (!fs.existsSync(filePath)) {
+    return;
   }
+  const fileBuffer = fs.readFileSync(filePath);
+  const binaryData = `data:image/webp;base64,${fileBuffer.toString('base64')}`;
 
   // Schema: objeto_contenido (specku_galeria) & tabla_propiedad per Constitution Brendup Art. 22
   speckuGaleria[item.key] = {
@@ -108,6 +105,11 @@ itemsConfig.forEach((item) => {
     order: item.orden,
   };
 });
+
+if (Object.keys(speckuGaleria).length === 0) {
+  console.log('ℹ️ No local image files to upload; Firebase RTDB already maintains persistent cloud binary data.');
+  process.exit(0);
+}
 
 function putNode(nodePath, data) {
   return new Promise((resolve, reject) => {

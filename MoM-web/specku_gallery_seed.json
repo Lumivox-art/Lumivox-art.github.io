@@ -71,7 +71,7 @@
     "anima": {
       "id": "anima",
       "title": "Anima",
-      "src": "/lumivox-media/joph-anima.webp",
+      "src": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
       "alt": "Specku - Anima style artwork",
       "category": "Illustration",
       "order": 1
@@ -79,7 +79,7 @@
     "semi-real": {
       "id": "semi-real",
       "title": "Semi-Real",
-      "src": "/lumivox-media/joph-semi-real.webp",
+      "src": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
       "alt": "Specku - Semi-Real style artwork",
       "category": "Illustration",
       "order": 2
@@ -87,7 +87,7 @@
     "cutsey": {
       "id": "cutsey",
       "title": "Cutsey",
-      "src": "/lumivox-media/joph-cutsey.webp",
+      "src": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
       "alt": "Specku - Cutsey style artwork",
       "category": "Style Sample",
       "order": 3
@@ -95,7 +95,7 @@
     "chibi": {
       "id": "chibi",
       "title": "Chibi+",
-      "src": "/lumivox-media/joph-chibi.webp",
+      "src": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
       "alt": "Specku - Chibi+ style artwork",
       "category": "Style Sample",
       "order": 4
@@ -103,7 +103,7 @@
     "dull-eyes": {
       "id": "dull-eyes",
       "title": "Dull-Eyes",
-      "src": "/lumivox-media/joph-dull-eyes.webp",
+      "src": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
       "alt": "Specku - Dull-Eyes style artwork",
       "category": "Style Sample",
       "order": 5
@@ -111,7 +111,7 @@
     "noodle": {
       "id": "noodle",
       "title": "Noodle",
-      "src": "/lumivox-media/joph-noodle.webp",
+      "src": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
       "alt": "Specku - Noodle style artwork",
       "category": "Style Sample",
       "order": 6

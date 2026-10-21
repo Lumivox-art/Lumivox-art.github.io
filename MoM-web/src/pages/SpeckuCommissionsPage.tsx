@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
+import { SpeckuGalleryService } from '../services/SpeckuGalleryService';
 import {
   SPECKU_DISCORD_PROFILE_URL,
   buildDiscordCommissionMessage,
@@ -61,16 +62,6 @@ const USD_TO_MXN = 17;
 const usd = (n: number): string => `$${n}`;
 const mxn = (n: number): string => `$${n * USD_TO_MXN}`;
 
-/** Style sample art — keyed by STYLES[].id when a figure file exists. */
-const STYLE_SAMPLE_IMAGES: Partial<Record<string, string>> = {
-  cutsey: '/lumivox-media/joph-cutsey.webp',
-  chibi: '/lumivox-media/joph-chibi.webp',
-  noodle: '/lumivox-media/joph-noodle.webp',
-  'dull-eyes': '/lumivox-media/joph-dull-eyes.webp',
-  anima: '/lumivox-media/joph-anima.webp',
-  'semi-real': '/lumivox-media/joph-semi-real.webp',
-};
-
 // The included region of a full figure, as a fraction of its height, per crop.
 const CROP_FRACTION: Record<SizeCrop, number> = { shoulders: 0.34, half: 0.62, full: 1 };
 
@@ -116,6 +107,27 @@ export function SpeckuCommissionsPage() {
   const [copied, setCopied] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
   const [recopied, setRecopied] = useState(false);
+
+  // Binary style sample artworks retrieved dynamically from Firebase RTDB
+  const [styleSamples, setStyleSamples] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const unsubscribe = SpeckuGalleryService.Subscribe((response) => {
+      if (response.Result && response.Result.length > 0) {
+        const sampleMap: Record<string, string> = {};
+        response.Result.forEach((item) => {
+          if (item.Key && item.ImageBinary) {
+            sampleMap[item.Key] = item.ImageBinary;
+          }
+        });
+        setStyleSamples(sampleMap);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const style = STYLES.find((s) => s.id === styleId) ?? null;
   const size = SIZES.find((s) => s.id === sizeId) ?? null;
@@ -255,20 +267,20 @@ export function SpeckuCommissionsPage() {
                 <span className="jc-price">{usd(s.price)}</span>
               </div>
               <div
-                className={`jc-style-art${STYLE_SAMPLE_IMAGES[s.id] ? ' jc-style-art--sample' : ''}`}
+                className={`jc-style-art${styleSamples[s.id] ? ' jc-style-art--sample' : ''}`}
                 style={
-                  STYLE_SAMPLE_IMAGES[s.id]
-                    ? { ['--jc-style-sample' as string]: `url(${STYLE_SAMPLE_IMAGES[s.id]})` }
+                  styleSamples[s.id]
+                    ? { ['--jc-style-sample' as string]: `url(${styleSamples[s.id]})` }
                     : undefined
                 }
-                {...(STYLE_SAMPLE_IMAGES[s.id]
+                {...(styleSamples[s.id]
                   ? {
                       role: 'img' as const,
                       'aria-label': `${s.name} — commission style example`,
                     }
                   : {})}
               >
-                {!STYLE_SAMPLE_IMAGES[s.id] ? <span>{t('common.example')}</span> : null}
+                {!styleSamples[s.id] ? <span>{t('common.example')}</span> : null}
               </div>
             </button>
           ))}
