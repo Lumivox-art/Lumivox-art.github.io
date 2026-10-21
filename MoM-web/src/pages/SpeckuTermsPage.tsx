@@ -13,16 +13,7 @@ export function SpeckuTermsPage() {
   return (
     <div className="specku-terms" data-theme={theme}>
       <div className="st-topbar">
-        <div className="st-topbar-brand-wrap">
-          <Link
-            className="st-back-arrow"
-            to="/home/specku/comisiones"
-            aria-label={t('specku.terms.back')}
-          >
-            ←
-          </Link>
-          <LumivoxBrand />
-        </div>
+        <LumivoxBrand />
         <div className="st-topbar-actions">
           <LanguageToggle />
           <ThemeToggle />
@@ -115,7 +106,7 @@ export function SpeckuTermsPage() {
         {/* Bottom CTA to return */}
         <div className="st-cta-wrap">
           <Link to="/home/specku/comisiones" className="st-cta-btn">
-            ← {t('specku.terms.ctaBack')}
+            {t('specku.terms.ctaBack')}
           </Link>
         </div>
       </main>
