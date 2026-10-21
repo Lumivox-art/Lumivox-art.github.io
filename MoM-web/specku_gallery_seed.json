@@ -1,4 +1,72 @@
 {
+  "specku_galeria": {
+    "anima": {
+      "specku_galeria_id": 1,
+      "specku_galeria_key": "anima",
+      "specku_galeria_titulo": "Anima",
+      "specku_galeria_binario": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
+      "specku_galeria_texto_alt": "Specku - Anima style artwork",
+      "specku_galeria_categoria": "Illustration",
+      "specku_galeria_orden": 1,
+      "specku_galeria_activo": true,
+      "specku_galeria_borrado": false
+    },
+    "semi-real": {
+      "specku_galeria_id": 2,
+      "specku_galeria_key": "semi-real",
+      "specku_galeria_titulo": "Semi-Real",
+      "specku_galeria_binario": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
+      "specku_galeria_texto_alt": "Specku - Semi-Real style artwork",
+      "specku_galeria_categoria": "Illustration",
+      "specku_galeria_orden": 2,
+      "specku_galeria_activo": true,
+      "specku_galeria_borrado": false
+    },
+    "cutsey": {
+      "specku_galeria_id": 3,
+      "specku_galeria_key": "cutsey",
+      "specku_galeria_titulo": "Cutsey",
+      "specku_galeria_binario": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
+      "specku_galeria_texto_alt": "Specku - Cutsey style artwork",
+      "specku_galeria_categoria": "Style Sample",
+      "specku_galeria_orden": 3,
+      "specku_galeria_activo": true,
+      "specku_galeria_borrado": false
+    },
+    "chibi": {
+      "specku_galeria_id": 4,
+      "specku_galeria_key": "chibi",
+      "specku_galeria_titulo": "Chibi+",
+      "specku_galeria_binario": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
+      "specku_galeria_texto_alt": "Specku - Chibi+ style artwork",
+      "specku_galeria_categoria": "Style Sample",
+      "specku_galeria_orden": 4,
+      "specku_galeria_activo": true,
+      "specku_galeria_borrado": false
+    },
+    "dull-eyes": {
+      "specku_galeria_id": 5,
+      "specku_galeria_key": "dull-eyes",
+      "specku_galeria_titulo": "Dull-Eyes",
+      "specku_galeria_binario": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
+      "specku_galeria_texto_alt": "Specku - Dull-Eyes style artwork",
+      "specku_galeria_categoria": "Style Sample",
+      "specku_galeria_orden": 5,
+      "specku_galeria_activo": true,
+      "specku_galeria_borrado": false
+    },
+    "noodle": {
+      "specku_galeria_id": 6,
+      "specku_galeria_key": "noodle",
+      "specku_galeria_titulo": "Noodle",
+      "specku_galeria_binario": "data:image/webp;base64,[BINARY_DATA_PAYLOAD]",
+      "specku_galeria_texto_alt": "Specku - Noodle style artwork",
+      "specku_galeria_categoria": "Style Sample",
+      "specku_galeria_orden": 6,
+      "specku_galeria_activo": true,
+      "specku_galeria_borrado": false
+    }
+  },
   "Specku_Gallery": {
     "anima": {
       "id": "anima",

@@ -1,136 +1,59 @@
+/**
+ * Specku Gallery Page (View / ViewModel presentation layer).
+ * Implements Constitution Brendup Title VII (MVVM architecture).
+ * Delegates all data access to SpeckuGalleryService; contains zero raw HTTP or database calls.
+ */
+
 import { useState, useEffect, useRef } from 'react';
+import type { TouchEvent, KeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { ref, onValue } from 'firebase/database';
-import { db } from '../firebase';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
+import { SpeckuGalleryService } from '../services/SpeckuGalleryService';
+import type { GalleryItemBase } from '../models/Gallery';
 import './SpeckuGallery.scss';
-
-export interface GalleryItem {
-  id: string;
-  title: string;
-  src: string;
-  alt: string;
-  category?: string;
-  order?: number;
-}
-
-export const SPECKU_GALLERY_IMAGES: GalleryItem[] = [
-  {
-    id: 'anima',
-    title: 'Anima',
-    src: '/lumivox-media/joph-anima.webp',
-    alt: 'Specku - Anima style artwork',
-    category: 'Illustration',
-    order: 1,
-  },
-  {
-    id: 'semi-real',
-    title: 'Semi-Real',
-    src: '/lumivox-media/joph-semi-real.webp',
-    alt: 'Specku - Semi-Real style artwork',
-    category: 'Illustration',
-    order: 2,
-  },
-  {
-    id: 'cutsey',
-    title: 'Cutsey',
-    src: '/lumivox-media/joph-cutsey.webp',
-    alt: 'Specku - Cutsey style artwork',
-    category: 'Style Sample',
-    order: 3,
-  },
-  {
-    id: 'chibi',
-    title: 'Chibi+',
-    src: '/lumivox-media/joph-chibi.webp',
-    alt: 'Specku - Chibi+ style artwork',
-    category: 'Style Sample',
-    order: 4,
-  },
-  {
-    id: 'dull-eyes',
-    title: 'Dull-Eyes',
-    src: '/lumivox-media/joph-dull-eyes.webp',
-    alt: 'Specku - Dull-Eyes style artwork',
-    category: 'Style Sample',
-    order: 5,
-  },
-  {
-    id: 'noodle',
-    title: 'Noodle',
-    src: '/lumivox-media/joph-noodle.webp',
-    alt: 'Specku - Noodle style artwork',
-    category: 'Style Sample',
-    order: 6,
-  },
-];
 
 const ITEMS_PER_SHEET = 6;
 
+/// <summary>
+/// SpeckuGalleryPage component representing the presentation layer for Specku's art gallery.
+/// Manages view state, sheet pagination, touch gestures, and lightbox modal interactions.
+/// </summary>
 export function SpeckuGalleryPage() {
   const { theme } = useTheme();
   const { t } = useLang();
-  const [items, setItems] = useState<GalleryItem[]>(SPECKU_GALLERY_IMAGES);
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+
+  // Reactive state properties
+  const [items, setItems] = useState<GalleryItemBase[]>([]);
+  const [selectedItem, setSelectedItem] = useState<GalleryItemBase | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-  // Touch gesture refs for mobile swipe
+  // Private touch gesture tracking refs for mobile swipe navigation
   const touchStartX = useRef<number | null>(null);
   const touchStartY = useRef<number | null>(null);
   const touchDeltaX = useRef<number>(0);
 
-  // Listen for real-time updates from Firebase RTDB Specku_Gallery
+  /// <summary>
+  /// Subscribes to real-time updates from SpeckuGalleryService upon mounting.
+  /// </summary>
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-    try {
-      const galleryRef = ref(db, 'Specku_Gallery');
-      unsubscribe = onValue(
-        galleryRef,
-        (snapshot) => {
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-            let parsedItems: GalleryItem[] = [];
-            if (Array.isArray(data)) {
-              parsedItems = data.filter(Boolean);
-            } else if (typeof data === 'object' && data !== null) {
-              parsedItems = Object.entries(data).map(([key, val]: [string, any]) => ({
-                id: val?.id || key,
-                title: val?.title || key,
-                src: val?.src || val?.url || '',
-                alt: val?.alt || val?.title || 'Specku artwork',
-                category: val?.category || 'Artwork',
-                order: val?.order ?? 999,
-              }));
-              parsedItems.sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
-            }
-            if (parsedItems.length > 0) {
-              setItems(parsedItems);
-            }
-          }
-        },
-        (error) => {
-          // If locked by security rules or connection fails, default images remain active
-          console.warn('Specku_Gallery Firebase sync info:', error.message);
-        }
-      );
-    } catch (err) {
-      console.warn('Firebase RTDB error:', err);
-    }
+    const unsubscribe = SpeckuGalleryService.Subscribe((response) => {
+      if (response.Result && response.Result.length > 0) {
+        setItems(response.Result);
+      }
+    });
 
     return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
+      unsubscribe();
     };
   }, []);
 
   // Split gallery items into binder sheets of strictly 6 items (3 columns x 2 rows)
   const totalSheets = Math.ceil(items.length / ITEMS_PER_SHEET) || 1;
-  const sheets: GalleryItem[][] = [];
+  const sheets: GalleryItemBase[][] = [];
   for (let i = 0; i < items.length; i += ITEMS_PER_SHEET) {
     sheets.push(items.slice(i, i + ITEMS_PER_SHEET));
   }
@@ -145,21 +68,21 @@ export function SpeckuGalleryPage() {
     setCurrentPage((prev) => Math.max(prev - 1, 0));
   };
 
-  // Touch / Swipe listeners for mobile devices
-  const handleTouchStart = (e: React.TouchEvent) => {
+  // Touch gesture handlers for mobile swipe navigation
+  const handleTouchStart = (e: TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
     touchDeltaX.current = 0;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
+  const handleTouchMove = (e: TouchEvent) => {
     if (touchStartX.current === null || touchStartY.current === null) return;
     const currentX = e.touches[0].clientX;
     const currentY = e.touches[0].clientY;
     const diffX = currentX - touchStartX.current;
     const diffY = currentY - touchStartY.current;
 
-    // Only consider horizontal swipes
+    // Only register horizontal swipes
     if (Math.abs(diffX) > Math.abs(diffY)) {
       touchDeltaX.current = diffX;
     }
@@ -178,9 +101,9 @@ export function SpeckuGalleryPage() {
     touchDeltaX.current = 0;
   };
 
-  // Close modal on Escape key press
+  // Lightbox modal keyboard dismissal (Escape key)
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
         setSelectedItem(null);
       }
@@ -195,6 +118,7 @@ export function SpeckuGalleryPage() {
 
   return (
     <div className="specku-gallery" data-theme={theme}>
+      {/* Top navigation bar */}
       <div className="sg-topbar">
         <LumivoxBrand />
         <div className="sg-topbar-actions">
@@ -203,13 +127,15 @@ export function SpeckuGalleryPage() {
         </div>
       </div>
 
+      {/* Hero header */}
       <header className="sg-hero">
         <h1>{t('specku.gallery.title')}</h1>
         <p className="sg-subtitle">{t('specku.gallery.subtitle')}</p>
       </header>
 
+      {/* Main presentation area */}
       <main className="sg-content">
-        {/* Card sheet slider (3 columns x 2 rows per sheet) */}
+        {/* Binder sheet carousel: strictly 3 columns x 2 rows per sheet */}
         <section
           className="sg-carousel"
           aria-label={t('specku.gallery.title')}
@@ -230,29 +156,33 @@ export function SpeckuGalleryPage() {
                 >
                   {sheet.map((item) => (
                     <article
-                      key={item.id}
+                      key={item.Key ?? item.GalleryItemID ?? Math.random()}
                       className="sg-card"
                       onClick={() => setSelectedItem(item)}
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e) => {
+                      onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
                           setSelectedItem(item);
                         }
                       }}
-                      aria-label={`${item.title} - Zoom in`}
+                      aria-label={`${item.Title ?? 'Artwork'} - Zoom in`}
                     >
                       <div className="sg-card-media">
-                        <img src={item.src} alt={item.alt} loading="lazy" />
+                        <img
+                          src={item.ImageBinary ?? ''}
+                          alt={item.AltText ?? item.Title ?? 'Specku artwork'}
+                          loading="lazy"
+                        />
                         <div className="sg-card-overlay">
                           <span className="sg-view-hint">🔍 Zoom in</span>
                         </div>
                       </div>
                       <div className="sg-card-meta">
-                        <h2 className="sg-card-title">{item.title}</h2>
-                        {item.category && (
-                          <span className="sg-card-category">{item.category}</span>
+                        <h2 className="sg-card-title">{item.Title}</h2>
+                        {item.Category && (
+                          <span className="sg-card-category">{item.Category}</span>
                         )}
                       </div>
                     </article>
@@ -262,7 +192,7 @@ export function SpeckuGalleryPage() {
             </div>
           </div>
 
-          {/* Navigation controls activated when there is more than 1 sheet */}
+          {/* Navigation controls rendered when more than 1 sheet exists */}
           {totalSheets > 1 && (
             <div className="sg-nav-bar">
               <button
@@ -302,7 +232,7 @@ export function SpeckuGalleryPage() {
           )}
         </section>
 
-        {/* Bottom CTA card */}
+        {/* Bottom CTA card pointing back to commissions */}
         <section className="sg-cta-card">
           <div className="sg-cta-body">
             <h3>{t('specku.gallery.ctaCard')}</h3>
@@ -313,14 +243,14 @@ export function SpeckuGalleryPage() {
         </section>
       </main>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox modal for enlarged artwork inspection */}
       {selectedItem && (
         <div
           className="sg-modal-backdrop"
           onClick={() => setSelectedItem(null)}
           role="dialog"
           aria-modal="true"
-          aria-label={selectedItem.title}
+          aria-label={selectedItem.Title ?? 'Artwork'}
         >
           <div className="sg-modal-container" onClick={(e) => e.stopPropagation()}>
             <button
@@ -332,12 +262,15 @@ export function SpeckuGalleryPage() {
               ✕
             </button>
             <div className="sg-modal-image-wrapper">
-              <img src={selectedItem.src} alt={selectedItem.alt} />
+              <img
+                src={selectedItem.ImageBinary ?? ''}
+                alt={selectedItem.AltText ?? selectedItem.Title ?? 'Artwork'}
+              />
             </div>
             <div className="sg-modal-footer">
-              <h3>{selectedItem.title}</h3>
-              {selectedItem.category && (
-                <span className="sg-modal-category">{selectedItem.category}</span>
+              <h3>{selectedItem.Title}</h3>
+              {selectedItem.Category && (
+                <span className="sg-modal-category">{selectedItem.Category}</span>
               )}
             </div>
           </div>
