@@ -15,7 +15,7 @@ import './SpeckuCommissions.scss';
 // Pick one option per mandatory step (style + size + look);
 // optional sections (backgrounds, objects of interest, additional people)
 // can be toggled on/off to reflect whether the drawing contains them.
-// Total is shown in USD and in MXN at a fixed 1 USD = 19 MXN rate.
+// Total is shown in USD and in MXN at a fixed 1 USD = 17 MXN rate.
 
 type StyleOption = { id: string; name: string; days: string; price: number };
 type SizeCrop = 'shoulders' | 'half' | 'full';
@@ -57,7 +57,7 @@ const OBJECTS_OF_INTEREST: ObjectOption[] = [
   { id: 'big', price: 8 },
 ];
 
-const USD_TO_MXN = 19;
+const USD_TO_MXN = 17;
 const usd = (n: number): string => `$${n}`;
 const mxn = (n: number): string => `$${n * USD_TO_MXN}`;
 
