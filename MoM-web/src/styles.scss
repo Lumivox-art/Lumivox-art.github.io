@@ -583,6 +583,12 @@ img {
       color: #f1ece0;
     }
 
+    .lumivox-splash {
+      box-shadow:
+        0 20px 48px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+
     .lumivox-tagline,
     .lumivox-brief {
       color: #cfc8de;
@@ -706,25 +712,28 @@ img {
 /* central stage: splash + identity side-by-side */
 .lumivox-stage {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
   gap: 3rem;
   align-items: center;
   flex: 1 1 auto;
-  max-width: 1280px;
+  max-width: 980px;
   width: 100%;
   margin-inline: auto;
-  padding: 1rem 2rem 2.5rem;
+  padding: 1.5rem 2rem 2.5rem;
 }
 
 .lumivox-splash {
   position: relative;
-  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 280px;
+  border-radius: 1.25rem;
   overflow: hidden;
   aspect-ratio: 4 / 5;
   background: var(--accent-color, var(--lvx-canvas-deep));
   box-shadow:
-    0 24px 56px rgba(46, 72, 88, 0.18),
+    0 16px 38px rgba(46, 72, 88, 0.15),
     inset 0 0 0 1px rgba(46, 72, 88, 0.1);
+  justify-self: center;
 }
 
 .lumivox-splash::after {
@@ -1030,12 +1039,12 @@ img {
 @media (max-width: 1023.98px) {
   .lumivox-stage {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.75rem;
     padding: 0.5rem 1.5rem 2rem;
   }
 
   .lumivox-splash {
-    max-width: 22rem;
+    max-width: 15rem;
     margin-inline: auto;
     aspect-ratio: 4 / 5;
   }
@@ -1060,11 +1069,11 @@ img {
 
   .lumivox-stage {
     padding: 0.5rem 1.25rem 1.5rem;
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
   .lumivox-splash {
-    max-width: 18rem;
+    max-width: 13rem;
   }
 
   .lumivox-roster {
