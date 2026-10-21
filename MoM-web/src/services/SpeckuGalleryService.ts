@@ -37,7 +37,7 @@ export class SpeckuGalleryService {
       Title: 'Anima',
       ImageBinary: null,
       AltText: 'Specku - Anima style artwork',
-      Category: 'Illustration',
+      Category: 'Style Example',
       Order: 1,
       IsActive: true,
       IsDeleted: false,
@@ -48,7 +48,7 @@ export class SpeckuGalleryService {
       Title: 'Semi-Real',
       ImageBinary: null,
       AltText: 'Specku - Semi-Real style artwork',
-      Category: 'Illustration',
+      Category: 'Style Example',
       Order: 2,
       IsActive: true,
       IsDeleted: false,
@@ -59,7 +59,7 @@ export class SpeckuGalleryService {
       Title: 'Cutsey',
       ImageBinary: null,
       AltText: 'Specku - Cutsey style artwork',
-      Category: 'Style Sample',
+      Category: 'Style Example',
       Order: 3,
       IsActive: true,
       IsDeleted: false,
@@ -70,7 +70,7 @@ export class SpeckuGalleryService {
       Title: 'Chibi+',
       ImageBinary: null,
       AltText: 'Specku - Chibi+ style artwork',
-      Category: 'Style Sample',
+      Category: 'Style Example',
       Order: 4,
       IsActive: true,
       IsDeleted: false,
@@ -81,7 +81,7 @@ export class SpeckuGalleryService {
       Title: 'Dull-Eyes',
       ImageBinary: null,
       AltText: 'Specku - Dull-Eyes style artwork',
-      Category: 'Style Sample',
+      Category: 'Style Example',
       Order: 5,
       IsActive: true,
       IsDeleted: false,
@@ -92,7 +92,7 @@ export class SpeckuGalleryService {
       Title: 'Noodle',
       ImageBinary: null,
       AltText: 'Specku - Noodle style artwork',
-      Category: 'Style Sample',
+      Category: 'Style Example',
       Order: 6,
       IsActive: true,
       IsDeleted: false,
@@ -103,7 +103,9 @@ export class SpeckuGalleryService {
   /// Synchronously retrieves locally cached gallery items for instant 0ms initial render on page load/reload.
   /// </summary>
   public static GetCachedItems(): GalleryItemBase[] {
-    return LocalCache.Get<GalleryItemBase[]>(SpeckuGalleryService.cacheKey) ?? [];
+    const items = LocalCache.Get<GalleryItemBase[]>(SpeckuGalleryService.cacheKey) ?? [];
+    // Normalizes labels cached before the unified "Style Example" category existed.
+    return items.map((item) => ({ ...item, Category: 'Style Example' }));
   }
 
   /// <summary>
