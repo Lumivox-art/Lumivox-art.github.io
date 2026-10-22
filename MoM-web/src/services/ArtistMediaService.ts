@@ -41,11 +41,12 @@ export class ArtistMediaService {
   /// Eliminates image flash on page reloads.
   /// </summary>
   public static GetHydratedArtists(defaultArtists: Artist[]): Artist[] {
+    const visibleArtists = defaultArtists.filter((a) => !a.hidden);
     const cached = ArtistMediaService.GetCachedMedia();
-    if (cached.length === 0) return defaultArtists;
+    if (cached.length === 0) return visibleArtists;
 
     const mediaMap = new Map(cached.map((m) => [m.Key, m]));
-    return defaultArtists.map((a) => {
+    return visibleArtists.map((a) => {
       const found = mediaMap.get(a.handle);
       if (found) {
         return {

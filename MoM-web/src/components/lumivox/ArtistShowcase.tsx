@@ -19,10 +19,10 @@ export function ArtistShowcase({ artist, panelId, labelledBy }: ArtistShowcasePr
     (m): m is Extract<ArtistModule, { kind: 'brief' }> => m.kind === 'brief',
   );
   const socialsModule = artist.modules.find(
-    (m): m is Extract<ArtistModule, { kind: 'socials' }> => m.kind === 'socials',
+    (m): m is Extract<ArtistModule, { kind: 'socials' }> => m.kind === 'socials' && !m.hidden,
   );
   const actionModules = artist.modules.filter(
-    (m) => m.kind !== 'brief' && m.kind !== 'socials',
+    (m) => m.kind !== 'brief' && m.kind !== 'socials' && !m.hidden,
   );
 
   return (

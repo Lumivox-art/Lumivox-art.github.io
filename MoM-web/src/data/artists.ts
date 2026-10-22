@@ -19,12 +19,14 @@ export type SocialEntry = {
   label?: string;
 };
 
-export type ArtistModule =
+export type BaseArtistModule = { hidden?: boolean };
+export type ArtistModule = BaseArtistModule & (
   | { kind: 'brief'; body: string }
   | { kind: 'socials'; entries: SocialEntry[] }
   | { kind: 'website'; url: string; label?: string }
   | { kind: 'portal'; label: string; route: string }
-  | { kind: 'email'; address: string; label?: string };
+  | { kind: 'email'; address: string; label?: string }
+);
 
 export type Artist = {
   handle: string;
@@ -36,6 +38,7 @@ export type Artist = {
   icon?: string | null;
   accentColor: string;
   modules: ArtistModule[];
+  hidden?: boolean;
 };
 
 export const artists: Artist[] = [
@@ -84,6 +87,7 @@ export const artists: Artist[] = [
       },
       {
         kind: 'socials',
+        hidden: true,
         // TODO confirm with Specku — placeholders
         entries: [
           { platform: 'twitter', url: 'https://twitter.com/specku' },
@@ -101,6 +105,7 @@ export const artists: Artist[] = [
   },
   {
     handle: 'sam',
+    hidden: true,
     // TODO confirm with Sam — placeholder
     displayName: 'Sam',
     tagline: 'Lorem ipsum dolor sit amet, consectetur adipiscing',
