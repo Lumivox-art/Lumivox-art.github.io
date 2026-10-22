@@ -65,7 +65,13 @@ export const artists: Artist[] = [
         ],
       },
       {
+        kind: 'website',
+        url: 'https://discord.com/users/322903795908739074',
+        label: 'Discord',
+      },
+      {
         kind: 'email',
+        hidden: true,
         address: 'luis.mm91836@gmail.com',
       },
     ],
