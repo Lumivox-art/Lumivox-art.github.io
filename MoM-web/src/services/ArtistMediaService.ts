@@ -71,6 +71,10 @@ export class ArtistMediaService {
       rawCardHome ??
       null;
     const rawIcon = record['artista_medio_icono_binario'] ?? null;
+    const rawLogo =
+      record['artista_medio_logo_binario'] ??
+      record['artista_medio_emblema_binario'] ??
+      null;
     const rawActive = record['artista_medio_activo'] ?? true;
     const rawDeleted = record['artista_medio_borrado'] ?? false;
 
@@ -86,6 +90,7 @@ export class ArtistMediaService {
             ? rawSplash
             : null,
       IconBinary: typeof rawIcon === 'string' ? rawIcon : null,
+      LogoBinary: typeof rawLogo === 'string' ? rawLogo : null,
       IsActive: typeof rawActive === 'boolean' ? rawActive : Boolean(rawActive),
       IsDeleted: typeof rawDeleted === 'boolean' ? rawDeleted : Boolean(rawDeleted),
     };

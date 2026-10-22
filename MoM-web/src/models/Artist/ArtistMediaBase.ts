@@ -40,6 +40,11 @@ export interface ArtistMediaBase {
   IconBinary: string | null;
 
   /// <summary>
+  /// Binary artist logo or emblem encoded as Base64 data URL.
+  /// </summary>
+  LogoBinary?: string | null;
+
+  /// <summary>
   /// Flag indicating whether the artist record is currently active.
   /// </summary>
   IsActive: boolean | null;
