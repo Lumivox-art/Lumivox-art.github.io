@@ -712,14 +712,16 @@ img {
 /* central stage: splash + identity side-by-side */
 .lumivox-stage {
   display: grid;
-  grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
-  gap: 2.75rem;
+  grid-template-columns: 280px minmax(0, 540px);
+  justify-content: center;
+  align-content: center;
   align-items: center;
+  gap: 3rem;
   flex: 1 1 auto;
   max-width: 980px;
   width: 100%;
   margin-inline: auto;
-  padding: 0.5rem 1.5rem 2.5rem;
+  padding: 0.75rem 1.5rem 2.5rem;
 }
 
 .lumivox-splash {
@@ -734,6 +736,7 @@ img {
     0 16px 38px rgba(46, 72, 88, 0.15),
     inset 0 0 0 1px rgba(46, 72, 88, 0.1);
   justify-self: center;
+  align-self: center;
 }
 
 .lumivox-splash::after {
@@ -755,6 +758,8 @@ img {
 .lumivox-identity {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-self: center;
   gap: 1.1rem;
 }
 
@@ -933,6 +938,7 @@ img {
 .lumivox-roster {
   position: relative;
   display: flex;
+  justify-content: safe center;
   gap: 1.15rem;
   padding: 0.5rem 1.5rem 0.5rem;
   max-width: 980px;
