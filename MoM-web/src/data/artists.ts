@@ -95,7 +95,7 @@ export const artists: Artist[] = [
         ],
       },
       // TODO confirm with Specku — placeholder website URL
-      { kind: 'website', url: 'https://specku.example', label: 'Portfolio' },
+      { kind: 'website', hidden: true, url: 'https://specku.example', label: 'Portfolio' },
       {
         kind: 'portal',
         label: 'cta.commissions',
