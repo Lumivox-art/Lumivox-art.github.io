@@ -222,9 +222,6 @@ export function SpeckuGalleryPage() {
                         </div>
                         <div className="sg-card-meta">
                           <h2 className="sg-card-title">{item.Title}</h2>
-                          {item.Category && (
-                            <span className="sg-card-category">{item.Category}</span>
-                          )}
                         </div>
                       </article>
                     ))}

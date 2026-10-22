@@ -214,34 +214,26 @@
   }
 
   .sg-card-meta {
-    padding: 0.55rem 0.85rem;
+    padding: 0.65rem 0.85rem;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
+    justify-content: center;
+    text-align: center;
+    min-height: 3.2rem;
 
     .sg-card-title {
       margin: 0;
-      font-size: 0.96rem;
+      font-size: 0.92rem;
       font-weight: 800;
       font-family: 'Fraunces', serif;
       color: var(--sg-ink);
-      white-space: nowrap;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    .sg-card-category {
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #8d3e2e;
-      background: rgba(224, 122, 111, 0.14);
-      border: 1px solid rgba(141, 62, 46, 0.18);
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
-      white-space: nowrap;
+      width: 100%;
     }
   }
 

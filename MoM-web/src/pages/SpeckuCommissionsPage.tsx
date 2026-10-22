@@ -28,7 +28,7 @@ type ObjectOption = { id: 'small' | 'medium' | 'big'; price: number };
 
 const STYLES: StyleOption[] = [
   { id: 'cutsey', name: 'Cutsey', days: '3–5', price: 4 },
-  { id: 'chibi', name: 'Chibi+', days: '5–7', price: 7 },
+  { id: 'chibi', name: 'Chibi', days: '5–7', price: 7 },
   { id: 'noodle', name: 'Noodle', days: '3–5', price: 7 },
   { id: 'dull-eyes', name: 'Dull-Eyes', days: '3–7', price: 13 },
   { id: 'anima', name: 'Anima', days: '7–15', price: 21 },

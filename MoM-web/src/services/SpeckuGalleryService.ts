@@ -67,9 +67,9 @@ export class SpeckuGalleryService {
     {
       GalleryItemID: 4,
       Key: 'chibi',
-      Title: 'Chibi+',
+      Title: 'Chibi',
       ImageBinary: null,
-      AltText: 'Specku - Chibi+ style artwork',
+      AltText: 'Specku - Chibi style artwork',
       Category: 'Style Example',
       Order: 4,
       IsActive: true,
@@ -104,8 +104,7 @@ export class SpeckuGalleryService {
   /// </summary>
   public static GetCachedItems(): GalleryItemBase[] {
     const items = LocalCache.Get<GalleryItemBase[]>(SpeckuGalleryService.cacheKey) ?? [];
-    // Normalizes labels cached before the unified "Style Example" category existed.
-    return items.map((item) => ({ ...item, Category: 'Style Example' }));
+    return items.map((item) => ({ ...item, Category: item.Category ?? null }));
   }
 
   /// <summary>
