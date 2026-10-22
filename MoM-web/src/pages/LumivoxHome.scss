@@ -242,15 +242,62 @@
       color: var(--ink);
     }
     .lumivox-social {
-      color: var(--ink);
-      border-color: rgba(244, 239, 230, 0.22);
+      color: #f1ece0;
+      border-color: rgba(244, 239, 230, 0.2);
       background: rgba(244, 239, 230, 0.08);
+
+      &:hover,
+      &:focus-visible {
+        color: #0c0b16;
+        background: #ffe500;
+        border-color: #ffe500;
+      }
     }
-    .lumivox-social:hover,
-    .lumivox-social:focus-visible {
-      color: var(--bg);
-      background: var(--ink);
-      border-color: var(--ink);
+
+    .lumivox-website {
+      background: rgba(255, 229, 0, 0.1);
+      color: #ffe500;
+      border: 1px solid rgba(255, 229, 0, 0.4);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+
+      &:hover,
+      &:focus-visible {
+        background: #ffe500;
+        color: #0c0b16;
+        border-color: #ffe500;
+        box-shadow: 0 4px 16px rgba(255, 229, 0, 0.35);
+      }
+    }
+
+    .lumivox-portal {
+      background: #ffe500;
+      color: #0c0b16;
+      border: 1px solid #ffe500;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(255, 229, 0, 0.28);
+
+      &:hover,
+      &:focus-visible {
+        background: #fff066;
+        color: #0c0b16;
+        border-color: #fff066;
+        box-shadow: 0 6px 22px rgba(255, 229, 0, 0.42);
+      }
+    }
+
+    .lumivox-email {
+      background: rgba(255, 229, 0, 0.1);
+      color: #ffe500;
+      border: 1px solid rgba(255, 229, 0, 0.4);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+
+      &:hover,
+      &:focus-visible {
+        background: #ffe500;
+        color: #0c0b16;
+        border-color: #ffe500;
+        box-shadow: 0 4px 16px rgba(255, 229, 0, 0.35);
+      }
     }
   }
 

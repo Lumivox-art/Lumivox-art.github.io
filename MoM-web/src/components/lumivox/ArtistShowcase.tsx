@@ -18,7 +18,12 @@ export function ArtistShowcase({ artist, panelId, labelledBy }: ArtistShowcasePr
   const briefModule = artist.modules.find(
     (m): m is Extract<ArtistModule, { kind: 'brief' }> => m.kind === 'brief',
   );
-  const otherModules = artist.modules.filter((m) => m.kind !== 'brief');
+  const socialsModule = artist.modules.find(
+    (m): m is Extract<ArtistModule, { kind: 'socials' }> => m.kind === 'socials',
+  );
+  const actionModules = artist.modules.filter(
+    (m) => m.kind !== 'brief' && m.kind !== 'socials',
+  );
 
   return (
     <section
@@ -47,9 +52,14 @@ export function ArtistShowcase({ artist, panelId, labelledBy }: ArtistShowcasePr
         {briefModule ? <BriefModule body={briefModule.body} /> : null}
 
         <div className="lumivox-module-stack">
-          {otherModules.map((module, idx) => (
-            <ModuleRenderer key={moduleKey(module, idx)} module={module} />
-          ))}
+          {socialsModule ? <SocialsModule entries={socialsModule.entries} /> : null}
+          {actionModules.length > 0 && (
+            <div className="lumivox-actions-row">
+              {actionModules.map((module, idx) => (
+                <ModuleRenderer key={moduleKey(module, idx)} module={module} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
