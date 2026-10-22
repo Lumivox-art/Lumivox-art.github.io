@@ -30,6 +30,11 @@ export interface ArtistMediaBase {
   SplashBinary: string | null;
 
   /// <summary>
+  /// Binary home card artwork encoded as Base64 data URL (e.g. data:image/webp;base64,...).
+  /// </summary>
+  CardHomeBinary?: string | null;
+
+  /// <summary>
   /// Binary roster icon encoded as Base64 data URL (e.g. data:image/svg+xml;base64,...).
   /// </summary>
   IconBinary: string | null;

@@ -65,7 +65,11 @@ export class ArtistMediaService {
     const rawId = record['artista_medio_id'];
     const rawKey = record['artista_medio_key'] ?? key;
     const rawName = record['artista_medio_nombre'] ?? key;
-    const rawSplash = record['artista_medio_splash_binario'] ?? null;
+    const rawCardHome = record['artista_medio_card_home_binario'] ?? null;
+    const rawSplash =
+      record['artista_medio_splash_binario'] ??
+      rawCardHome ??
+      null;
     const rawIcon = record['artista_medio_icono_binario'] ?? null;
     const rawActive = record['artista_medio_activo'] ?? true;
     const rawDeleted = record['artista_medio_borrado'] ?? false;
@@ -75,6 +79,12 @@ export class ArtistMediaService {
       Key: typeof rawKey === 'string' ? rawKey : String(rawKey),
       Name: typeof rawName === 'string' ? rawName : String(rawName),
       SplashBinary: typeof rawSplash === 'string' ? rawSplash : null,
+      CardHomeBinary:
+        typeof rawCardHome === 'string'
+          ? rawCardHome
+          : typeof rawSplash === 'string'
+            ? rawSplash
+            : null,
       IconBinary: typeof rawIcon === 'string' ? rawIcon : null,
       IsActive: typeof rawActive === 'boolean' ? rawActive : Boolean(rawActive),
       IsDeleted: typeof rawDeleted === 'boolean' ? rawDeleted : Boolean(rawDeleted),
