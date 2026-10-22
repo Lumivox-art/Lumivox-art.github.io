@@ -59,6 +59,7 @@ export const artists: Artist[] = [
       },
       {
         kind: 'socials',
+        hidden: true,
         // TODO confirm with Luis.M — placeholders
         entries: [
           { platform: 'github', url: 'https://github.com/LuisMiguelMedina' },
