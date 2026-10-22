@@ -98,7 +98,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
+    grid-auto-rows: max-content;
+    align-content: start;
     gap: 1rem;
   }
 
@@ -124,6 +125,9 @@
     cursor: pointer;
     box-shadow: 0 4px 18px rgba(42, 26, 18, 0.05);
     outline: none;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     @media (hover: hover) and (pointer: fine) and (min-width: 769px) {
       transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.22s cubic-bezier(0.2, 0, 0, 1), border-color 0.22s;
@@ -219,7 +223,8 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 3.2rem;
+    min-height: 3.4rem;
+    flex: 1;
 
     .sg-card-title {
       margin: 0;
