@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DayMark, NightMark } from './LumivoxLogo';
 import { useTheme } from './ThemeContext';
@@ -15,6 +15,19 @@ export function PageTransition() {
   const [phase, setPhase] = useState<Phase>('idle');
   const first = useRef(true);
 
+  // If tab was backgrounded or sleeping during navigation, ensure overlay is dismissed on wake
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        setPhase('idle');
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     if (first.current) {
       first.current = false; // no transition on initial load
@@ -23,9 +36,12 @@ export function PageTransition() {
     setPhase('cover');
     const toReveal = setTimeout(() => setPhase('reveal'), 430);
     const toIdle = setTimeout(() => setPhase('idle'), 850);
+    // Hard fallback timeout ensures overlay can never freeze the screen even under extreme CPU throttling
+    const maxSafety = setTimeout(() => setPhase('idle'), 1600);
     return () => {
       clearTimeout(toReveal);
       clearTimeout(toIdle);
+      clearTimeout(maxSafety);
     };
   }, [location.pathname]);
 

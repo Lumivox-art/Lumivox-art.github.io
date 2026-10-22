@@ -329,7 +329,12 @@ const DICT: Record<Lang, Record<string, string>> = {
 };
 
 function readLang(): Lang {
-  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(LANG_KEY) : null;
+  let saved: string | null = null;
+  try {
+    saved = typeof localStorage !== 'undefined' ? localStorage.getItem(LANG_KEY) : null;
+  } catch {
+    // safe fallback
+  }
   return saved === 'es' ? 'es' : 'en'; // default English
 }
 
@@ -342,7 +347,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const toggle = (): void =>
     setLang((l) => {
       const next: Lang = l === 'es' ? 'en' : 'es';
-      localStorage.setItem(LANG_KEY, next);
+      try {
+        localStorage.setItem(LANG_KEY, next);
+      } catch {
+        // Safe against storage quota or security restrictions
+      }
       return next;
     });
 

@@ -1,0 +1,96 @@
+.lvx-boundary-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: var(--lvx-canvas, #f4ece0);
+  color: var(--lvx-ink, #2a201c);
+  transition: background-color 0.25s ease, color 0.25s ease;
+
+  &[data-theme='night'] {
+    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%) fixed;
+    color: #f1ece0;
+  }
+}
+
+.lvx-boundary-card {
+  max-width: 440px;
+  width: 100%;
+  text-align: center;
+  padding: 2.25rem 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(141, 62, 46, 0.16);
+  box-shadow: 0 10px 30px rgba(141, 62, 46, 0.08);
+
+  [data-theme='night'] & {
+    background: rgba(36, 31, 48, 0.85);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  }
+}
+
+.lvx-boundary-mark {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+.lvx-boundary-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.55rem;
+  margin: 0 0 0.65rem;
+  color: inherit;
+}
+
+.lvx-boundary-message {
+  font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 1.75rem;
+  opacity: 0.85;
+}
+
+.lvx-boundary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.65rem;
+  border-radius: 999px;
+  font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  background: var(--lvx-sun, #8d3e2e);
+  color: #ffffff;
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 14px rgba(141, 62, 46, 0.25);
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(141, 62, 46, 0.35);
+  }
+
+  [data-theme='night'] & {
+    background: #ffe500;
+    color: #0c0b16;
+    box-shadow: 0 4px 16px rgba(255, 229, 0, 0.3);
+
+    &:hover,
+    &:focus-visible {
+      background: #fff066;
+      box-shadow: 0 6px 22px rgba(255, 229, 0, 0.45);
+    }
+  }
+}

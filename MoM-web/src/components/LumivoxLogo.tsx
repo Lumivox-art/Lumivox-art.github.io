@@ -5,9 +5,13 @@ export const THEME_KEY = 'lumivox-theme';
 
 /** Read the persisted theme, falling back to the OS preference. */
 export function readTheme(): Theme {
-  const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(THEME_KEY) : null;
-  if (saved === 'day' || saved === 'night') return saved;
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+  try {
+    const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(THEME_KEY) : null;
+    if (saved === 'day' || saved === 'night') return saved;
+  } catch {
+    // Safe fallback
+  }
+  return typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
 }
 
 // Sun rays: 30° apart; outer ring deep red, inner ring coral. (From the brand guide.)

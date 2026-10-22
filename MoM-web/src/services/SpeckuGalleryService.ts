@@ -342,66 +342,71 @@ export class SpeckuGalleryService {
       const unsubscribePrimary = onValue(
         primaryRef,
         (snapshot) => {
-          if (snapshot.exists()) {
-            const items = SpeckuGalleryService.ParseSnapshotData(snapshot.val(), filter);
-            if (items.length > 0) {
-              LocalCache.Set(SpeckuGalleryService.cacheKey, items);
-            }
-            onData({
-              CodeNumber: 200,
-              CodeName: 'OK',
-              Message: null,
-              ErrorNumber: null,
-              ServerName: 'firebase-rtdb',
-              Result: items,
-            });
-          } else {
-            // Check legacy node if primary node is absent
-            const legacyRef = ref(db, 'Specku_Gallery');
-            get(legacyRef)
-              .then((legacySnap) => {
-                if (legacySnap.exists()) {
-                  const items = SpeckuGalleryService.ParseSnapshotData(
-                    legacySnap.val(),
-                    filter
-                  );
-                  if (items.length > 0) {
-                    LocalCache.Set(SpeckuGalleryService.cacheKey, items);
-                  }
-                  onData({
-                    CodeNumber: 302,
-                    CodeName: 'Found',
-                    Message: 'Retrieved from legacy node',
-                    ErrorNumber: null,
-                    ServerName: 'firebase-rtdb',
-                    Result: items,
-                  });
-                } else if (cached.length === 0) {
-                  onData({
-                    CodeNumber: 200,
-                    CodeName: 'OK',
-                    Message: 'Serving fallback items',
-                    ErrorNumber: null,
-                    ServerName: 'local-fallback',
-                    Result: [...SpeckuGalleryService.fallbackItems],
-                  });
-                }
-              })
-              .catch(() => {
-                if (cached.length === 0) {
-                  onData({
-                    CodeNumber: 503,
-                    CodeName: 'ServiceUnavailable',
-                    Message: 'Database read failed',
-                    ErrorNumber: 503,
-                    ServerName: 'local-fallback',
-                    Result: [...SpeckuGalleryService.fallbackItems],
-                  });
-                }
+          try {
+            if (snapshot.exists()) {
+              const items = SpeckuGalleryService.ParseSnapshotData(snapshot.val(), filter);
+              if (items.length > 0) {
+                LocalCache.Set(SpeckuGalleryService.cacheKey, items);
+              }
+              onData({
+                CodeNumber: 200,
+                CodeName: 'OK',
+                Message: null,
+                ErrorNumber: null,
+                ServerName: 'firebase-rtdb',
+                Result: items,
               });
+            } else {
+              // Check legacy node if primary node is absent
+              const legacyRef = ref(db, 'Specku_Gallery');
+              get(legacyRef)
+                .then((legacySnap) => {
+                  if (legacySnap.exists()) {
+                    const items = SpeckuGalleryService.ParseSnapshotData(
+                      legacySnap.val(),
+                      filter
+                    );
+                    if (items.length > 0) {
+                      LocalCache.Set(SpeckuGalleryService.cacheKey, items);
+                    }
+                    onData({
+                      CodeNumber: 302,
+                      CodeName: 'Found',
+                      Message: 'Retrieved from legacy node',
+                      ErrorNumber: null,
+                      ServerName: 'firebase-rtdb',
+                      Result: items,
+                    });
+                  } else if (cached.length === 0) {
+                    onData({
+                      CodeNumber: 200,
+                      CodeName: 'OK',
+                      Message: 'Serving fallback items',
+                      ErrorNumber: null,
+                      ServerName: 'local-fallback',
+                      Result: [...SpeckuGalleryService.fallbackItems],
+                    });
+                  }
+                })
+                .catch(() => {
+                  if (cached.length === 0) {
+                    onData({
+                      CodeNumber: 503,
+                      CodeName: 'ServiceUnavailable',
+                      Message: 'Database read failed',
+                      ErrorNumber: 503,
+                      ServerName: 'local-fallback',
+                      Result: [...SpeckuGalleryService.fallbackItems],
+                    });
+                  }
+                });
+            }
+          } catch (callbackErr) {
+            console.warn('[SpeckuGalleryService] Snapshot processing handled error:', callbackErr);
           }
         },
         (error) => {
+          console.warn('[SpeckuGalleryService] RTDB listener notice:', error);
           if (cached.length === 0) {
             onData({
               CodeNumber: 503,

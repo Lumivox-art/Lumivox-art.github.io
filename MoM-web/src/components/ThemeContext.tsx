@@ -14,7 +14,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const toggle = (): void =>
     setTheme((t) => {
       const next: Theme = t === 'night' ? 'day' : 'night';
-      localStorage.setItem(THEME_KEY, next);
+      try {
+        localStorage.setItem(THEME_KEY, next);
+      } catch {
+        // Safe against storage quota or security restrictions
+      }
       return next;
     });
 

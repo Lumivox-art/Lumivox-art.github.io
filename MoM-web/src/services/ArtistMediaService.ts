@@ -254,31 +254,36 @@ export class ArtistMediaService {
       const unsubscribe = onValue(
         mediaRef,
         (snapshot) => {
-          if (snapshot.exists()) {
-            const items = ArtistMediaService.ParseSnapshotData(snapshot.val(), filter);
-            if (items.length > 0) {
-              LocalCache.Set(ArtistMediaService.cacheKey, items);
+          try {
+            if (snapshot.exists()) {
+              const items = ArtistMediaService.ParseSnapshotData(snapshot.val(), filter);
+              if (items.length > 0) {
+                LocalCache.Set(ArtistMediaService.cacheKey, items);
+              }
+              onData({
+                CodeNumber: 200,
+                CodeName: 'OK',
+                Message: null,
+                ErrorNumber: null,
+                ServerName: 'firebase-rtdb',
+                Result: items,
+              });
+            } else if (cached.length === 0) {
+              onData({
+                CodeNumber: 404,
+                CodeName: 'NotFound',
+                Message: 'No artist media found in database',
+                ErrorNumber: 404,
+                ServerName: 'firebase-rtdb',
+                Result: [],
+              });
             }
-            onData({
-              CodeNumber: 200,
-              CodeName: 'OK',
-              Message: null,
-              ErrorNumber: null,
-              ServerName: 'firebase-rtdb',
-              Result: items,
-            });
-          } else if (cached.length === 0) {
-            onData({
-              CodeNumber: 404,
-              CodeName: 'NotFound',
-              Message: 'No artist media found in database',
-              ErrorNumber: 404,
-              ServerName: 'firebase-rtdb',
-              Result: [],
-            });
+          } catch (callbackErr) {
+            console.warn('[ArtistMediaService] Snapshot processing handled error:', callbackErr);
           }
         },
         (error) => {
+          console.warn('[ArtistMediaService] RTDB listener notice:', error);
           if (cached.length === 0) {
             onData({
               CodeNumber: 503,

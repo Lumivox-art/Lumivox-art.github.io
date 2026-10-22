@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.scss';
+import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { PageTransition } from './components/PageTransition';
 import { ThemeProvider, useTheme } from './components/ThemeContext';
 import { LanguageProvider } from './i18n';
@@ -12,6 +13,10 @@ import { SamCommissionsPage } from './pages/SamCommissionsPage';
 import { SpeckuCommissionsPage } from './pages/SpeckuCommissionsPage';
 import { SpeckuTermsPage } from './pages/SpeckuTermsPage';
 import { SpeckuGalleryPage } from './pages/SpeckuGalleryPage';
+import { setupWakeupSync } from './utils/wakeupSync';
+
+// Initialize tab visibility change and network wake-up listeners to prevent frozen/zombie connections
+setupWakeupSync();
 
 function AppThemeSync() {
   const { theme } = useTheme();
@@ -22,25 +27,32 @@ function AppThemeSync() {
   return null;
 }
 
-// Root layout: mounts the page-transition overlay above every route.
+// Root layout: mounts the page-transition overlay above every route within a global error boundary.
 function RootLayout() {
   return (
-    <LanguageProvider>
-      <ThemeProvider>
-        <AppThemeSync />
-        <PageTransition />
-        <Outlet />
-      </ThemeProvider>
-    </LanguageProvider>
+    <AppErrorBoundary>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AppThemeSync />
+          <PageTransition />
+          <AppErrorBoundary>
+            <Outlet />
+          </AppErrorBoundary>
+        </ThemeProvider>
+      </LanguageProvider>
+    </AppErrorBoundary>
   );
 }
 
 // Route convention: /home/{artist}/{page} — see docs/arc42 (ADR-0001).
-// The Multiverse of Madness portal now lives at its own site
-// (multiverseofmadness.me); Luis.M's card links out to it.
 const router = createBrowserRouter([
   {
     element: <RootLayout />,
+    errorElement: (
+      <AppErrorBoundary>
+        <Navigate to="/home" replace />
+      </AppErrorBoundary>
+    ),
     children: [
       { path: '/', element: <Navigate to="/home" replace /> },
       { path: '/home', element: <LumivoxHomePage /> },
@@ -61,6 +73,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AppErrorBoundary>
+      <RouterProvider router={router} />
+    </AppErrorBoundary>
   </StrictMode>,
 );
