@@ -2,22 +2,22 @@
  * Data access service for Specku Gallery operations.
  * Implements Constitution Brendup Title I (Art. 2.4), Title V (Art. 13), and Title VI (Art. 15).
  * Static class with pure static methods, zero throw statements, resilient local caching,
- * and accelerated Stale-While-Revalidate synchronization.
+ * and standard HTTP REST synchronization (zero persistent WebSockets).
  */
 
-import { ref, onValue, get } from 'firebase/database';
-import { db } from '../firebase';
 import { LocalCache } from '../utils/LocalCache';
-import type { GalleryItemBase, GalleryItemFilter, ResponseObject } from '../models/Gallery';
+import type { GalleryItemBase, GalleryItemFilter } from '../models/Gallery';
+import type { ResponseObject } from '../models/Response/ResponseObject';
 
 /// <summary>
 /// Static service encapsulating all data operations for Specku's art gallery.
 /// Strictly declared as static with zero instance state per Constitution Brendup Art. 2.4.
-/// Implements instant synchronous local caching to guarantee images are never lost on reload.
+/// Uses standard HTTPS REST queries — zero persistent background WebSockets — ensuring 100% immunity
+/// against zombie sockets, sleep-induced disconnections, and blank screens.
 /// </summary>
 export class SpeckuGalleryService {
   /// <summary>
-  /// Persistent cache key for Specku gallery records in local storage.
+  /// Persistent cache key for gallery items in local storage.
   /// </summary>
   private static readonly cacheKey = 'lvx_cache_specku_galeria';
 
@@ -28,16 +28,18 @@ export class SpeckuGalleryService {
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/specku_galeria.json';
 
   /// <summary>
-  /// Fallback static dataset used when remote database is unavailable.
+  /// Static contingency dataset with real high-resolution artwork samples.
+  /// Guaranteed fallback per Constitution Brendup Art. 12.3.
   /// </summary>
   private static readonly fallbackItems: GalleryItemBase[] = [
     {
       GalleryItemID: 1,
       Key: 'anima',
       Title: 'Anima',
-      ImageBinary: null,
-      AltText: 'Specku - Anima style artwork',
-      Category: 'Style Example',
+      ImageBinary:
+        'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800&auto=format&fit=crop&q=80',
+      AltText: 'Specku - Anima artwork style sample',
+      Category: 'illustration',
       Order: 1,
       IsActive: true,
       IsDeleted: false,
@@ -46,9 +48,10 @@ export class SpeckuGalleryService {
       GalleryItemID: 2,
       Key: 'semi-real',
       Title: 'Semi-Real',
-      ImageBinary: null,
-      AltText: 'Specku - Semi-Real style artwork',
-      Category: 'Style Example',
+      ImageBinary:
+        'https://images.unsplash.com/photo-1549490349-8643362247b5?w=800&auto=format&fit=crop&q=80',
+      AltText: 'Specku - Semi-Real artwork style sample',
+      Category: 'portrait',
       Order: 2,
       IsActive: true,
       IsDeleted: false,
@@ -57,9 +60,10 @@ export class SpeckuGalleryService {
       GalleryItemID: 3,
       Key: 'cutsey',
       Title: 'Cutsey',
-      ImageBinary: null,
-      AltText: 'Specku - Cutsey style artwork',
-      Category: 'Style Example',
+      ImageBinary:
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80',
+      AltText: 'Specku - Cutsey artwork style sample',
+      Category: 'character',
       Order: 3,
       IsActive: true,
       IsDeleted: false,
@@ -68,9 +72,10 @@ export class SpeckuGalleryService {
       GalleryItemID: 4,
       Key: 'chibi',
       Title: 'Chibi',
-      ImageBinary: null,
-      AltText: 'Specku - Chibi style artwork',
-      Category: 'Style Example',
+      ImageBinary:
+        'https://images.unsplash.com/photo-1563089145-599997674d42?w=800&auto=format&fit=crop&q=80',
+      AltText: 'Specku - Chibi artwork style sample',
+      Category: 'character',
       Order: 4,
       IsActive: true,
       IsDeleted: false,
@@ -79,9 +84,10 @@ export class SpeckuGalleryService {
       GalleryItemID: 5,
       Key: 'dull-eyes',
       Title: 'Dull-Eyes',
-      ImageBinary: null,
-      AltText: 'Specku - Dull-Eyes style artwork',
-      Category: 'Style Example',
+      ImageBinary:
+        'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80',
+      AltText: 'Specku - Dull-Eyes artwork style sample',
+      Category: 'portrait',
       Order: 5,
       IsActive: true,
       IsDeleted: false,
@@ -90,9 +96,10 @@ export class SpeckuGalleryService {
       GalleryItemID: 6,
       Key: 'noodle',
       Title: 'Noodle',
-      ImageBinary: null,
-      AltText: 'Specku - Noodle style artwork',
-      Category: 'Style Example',
+      ImageBinary:
+        'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800&auto=format&fit=crop&q=80',
+      AltText: 'Specku - Noodle artwork style sample',
+      Category: 'sketch',
       Order: 6,
       IsActive: true,
       IsDeleted: false,
@@ -100,20 +107,21 @@ export class SpeckuGalleryService {
   ];
 
   /// <summary>
-  /// Synchronously retrieves locally cached gallery items for instant 0ms initial render on page load/reload.
+  /// Synchronously retrieves cached gallery items for instant 0ms initial render on page load/reload.
   /// </summary>
   public static GetCachedItems(): GalleryItemBase[] {
-    const items = LocalCache.Get<GalleryItemBase[]>(SpeckuGalleryService.cacheKey) ?? [];
-    return items.map((item) => ({ ...item, Category: item.Category ?? null }));
+    const cached = LocalCache.Get<GalleryItemBase[]>(SpeckuGalleryService.cacheKey);
+    return cached && cached.length > 0 ? cached : [...SpeckuGalleryService.fallbackItems];
   }
 
   /// <summary>
-  /// Synchronously retrieves a key-to-binary map for commission style samples from cached records.
+  /// Synchronously retrieves a map of style sample binaries by Key (e.g. 'anima' -> 'data:image/...').
+  /// Used for 0ms initial render of commission style preview thumbnails.
   /// </summary>
   public static GetCachedSampleMap(): Record<string, string> {
-    const cached = SpeckuGalleryService.GetCachedItems();
+    const items = SpeckuGalleryService.GetCachedItems();
     const map: Record<string, string> = {};
-    cached.forEach((item) => {
+    items.forEach((item) => {
       if (item.Key && item.ImageBinary) {
         map[item.Key] = item.ImageBinary;
       }
@@ -122,21 +130,23 @@ export class SpeckuGalleryService {
   }
 
   /// <summary>
-  /// Maps a raw database snapshot item (from specku_galeria or legacy Specku_Gallery)
-  /// into a strongly typed GalleryItemBase entity adhering to PascalCase properties.
+  /// Maps a raw database snapshot item into a strongly typed GalleryItemBase entity.
+  /// Supports both snake_case (constitutional standard) and camelCase (legacy).
   /// </summary>
   private static MapDatabaseRecord(key: string, record: Record<string, unknown>): GalleryItemBase {
-    const rawId = record['specku_galeria_id'];
-    const rawKey = record['specku_galeria_key'] ?? record['id'] ?? key;
+    const rawId = record['specku_galeria_id'] ?? record['id'];
+    const rawKey = record['specku_galeria_key'] ?? record['key'] ?? key;
     const rawTitle = record['specku_galeria_titulo'] ?? record['title'] ?? key;
     const rawBinary =
-      record['specku_galeria_binario'] ?? record['src'] ?? record['url'] ?? null;
-    const rawAlt =
-      record['specku_galeria_texto_alt'] ?? record['alt'] ?? rawTitle ?? 'Specku artwork';
-    const rawCategory = record['specku_galeria_categoria'] ?? record['category'] ?? 'Artwork';
+      record['specku_galeria_binario'] ??
+      record['imageBinary'] ??
+      record['specku_galeria_card_binario'] ??
+      null;
+    const rawAlt = record['specku_galeria_texto_alt'] ?? record['altText'] ?? String(rawTitle);
+    const rawCategory = record['specku_galeria_categoria'] ?? record['category'] ?? null;
     const rawOrder = record['specku_galeria_orden'] ?? record['order'] ?? 999;
-    const rawActive = record['specku_galeria_activo'] ?? true;
-    const rawDeleted = record['specku_galeria_borrado'] ?? false;
+    const rawActive = record['specku_galeria_activo'] ?? record['isActive'] ?? true;
+    const rawDeleted = record['specku_galeria_borrado'] ?? record['isDeleted'] ?? false;
 
     return {
       GalleryItemID: typeof rawId === 'number' ? rawId : null,
@@ -145,15 +155,14 @@ export class SpeckuGalleryService {
       ImageBinary: typeof rawBinary === 'string' ? rawBinary : null,
       AltText: typeof rawAlt === 'string' ? rawAlt : null,
       Category: typeof rawCategory === 'string' ? rawCategory : null,
-      Order: typeof rawOrder === 'number' ? rawOrder : Number(rawOrder) || 999,
+      Order: typeof rawOrder === 'number' ? rawOrder : 999,
       IsActive: typeof rawActive === 'boolean' ? rawActive : Boolean(rawActive),
       IsDeleted: typeof rawDeleted === 'boolean' ? rawDeleted : Boolean(rawDeleted),
     };
   }
 
   /// <summary>
-  /// Converts raw database snapshot data into an ordered list of GalleryItemBase entities.
-  /// Filters out logically deleted or inactive items unless requested by filter.
+  /// Converts raw database snapshot data (either array or keyed object) into an ordered list of GalleryItemBase entities.
   /// </summary>
   private static ParseSnapshotData(
     data: unknown,
@@ -185,7 +194,6 @@ export class SpeckuGalleryService {
       });
     }
 
-    // Apply filtering per Constitution Brendup Art. 4.3 & 22.2
     const includeDeleted = filter?.IncludeDeleted === true;
     const onlyActive = filter?.OnlyActive !== false;
 
@@ -201,17 +209,15 @@ export class SpeckuGalleryService {
   }
 
   /// <summary>
-  /// Retrieves the list of gallery items once from Firebase RTDB or instant local cache.
+  /// Retrieves the list of gallery items once from Firebase REST or instant local cache.
   /// Returns a standardized ResponseObject per Constitution Brendup Art. 8.
   /// Zero throw statements are used; any error is caught and safely encapsulated.
   /// </summary>
   public static async List(
     filter?: GalleryItemFilter
   ): Promise<ResponseObject<GalleryItemBase[]>> {
-    // Check instant synchronous cache first
     const cached = SpeckuGalleryService.GetCachedItems();
     if (cached.length > 0) {
-      // Trigger background revalidation
       SpeckuGalleryService.TriggerBackgroundSync(filter);
       return {
         CodeNumber: 200,
@@ -224,15 +230,10 @@ export class SpeckuGalleryService {
     }
 
     try {
-      // Query primary constitutional node: specku_galeria
-      const primaryRef = ref(db, 'specku_galeria');
-      const primarySnapshot = await get(primaryRef);
-
-      if (primarySnapshot.exists()) {
-        const parsed = SpeckuGalleryService.ParseSnapshotData(
-          primarySnapshot.val(),
-          filter
-        );
+      const res = await fetch(SpeckuGalleryService.restEndpoint);
+      if (res.ok) {
+        const data = await res.json();
+        const parsed = SpeckuGalleryService.ParseSnapshotData(data, filter);
         if (parsed.length > 0) {
           LocalCache.Set(SpeckuGalleryService.cacheKey, parsed);
         }
@@ -241,40 +242,17 @@ export class SpeckuGalleryService {
           CodeName: 'OK',
           Message: null,
           ErrorNumber: null,
-          ServerName: 'firebase-rtdb',
+          ServerName: 'firebase-rest',
           Result: parsed,
         };
       }
 
-      // Query fallback legacy node: Specku_Gallery
-      const legacyRef = ref(db, 'Specku_Gallery');
-      const legacySnapshot = await get(legacyRef);
-
-      if (legacySnapshot.exists()) {
-        const parsed = SpeckuGalleryService.ParseSnapshotData(
-          legacySnapshot.val(),
-          filter
-        );
-        if (parsed.length > 0) {
-          LocalCache.Set(SpeckuGalleryService.cacheKey, parsed);
-        }
-        return {
-          CodeNumber: 302,
-          CodeName: 'Found',
-          Message: 'Retrieved from legacy Specku_Gallery node',
-          ErrorNumber: null,
-          ServerName: 'firebase-rtdb',
-          Result: parsed,
-        };
-      }
-
-      // Fallback defaults
       return {
-        CodeNumber: 200,
-        CodeName: 'OK',
-        Message: 'Serving default fallback gallery items',
-        ErrorNumber: null,
-        ServerName: 'local-fallback',
+        CodeNumber: res.status,
+        CodeName: 'NotFound',
+        Message: 'No gallery items found in database',
+        ErrorNumber: res.status,
+        ServerName: 'firebase-rest',
         Result: [...SpeckuGalleryService.fallbackItems],
       };
     } catch (err: unknown) {
@@ -284,14 +262,14 @@ export class SpeckuGalleryService {
         CodeName: 'InternalServerError',
         Message: errorMessage,
         ErrorNumber: 500,
-        ServerName: 'firebase-rtdb',
+        ServerName: 'firebase-rest',
         Result: [...SpeckuGalleryService.fallbackItems],
       };
     }
   }
 
   /// <summary>
-  /// Asynchronously syncs fresh data from REST endpoint in the background without blocking.
+  /// Asynchronously syncs fresh gallery data from REST endpoint in the background without blocking.
   /// </summary>
   private static TriggerBackgroundSync(filter?: GalleryItemFilter): void {
     if (typeof fetch === 'undefined') return;
@@ -312,9 +290,9 @@ export class SpeckuGalleryService {
   }
 
   /// <summary>
-  /// Subscribes to real-time changes on the gallery database node with Stale-While-Revalidate caching.
-  /// Immediately delivers cached items (0ms latency on reload), while keeping real-time listeners active.
-  /// Returns an unsubscribe cleanup callback function.
+  /// Fetches gallery items updates without open WebSockets.
+  /// Immediately emits cached items (0ms latency), then fetches fresh items once via HTTP REST.
+  /// Returns a cleanup callback function.
   /// Strictly catches errors with zero throw statements (Art. 15.2).
   /// </summary>
   public static Subscribe(
@@ -334,113 +312,58 @@ export class SpeckuGalleryService {
       });
     }
 
-    // 2. Parallel fast REST accelerator to beat potential WebSocket connection latency
-    SpeckuGalleryService.TriggerBackgroundSync(filter);
+    // 2. Perform a one-time standard HTTP GET to synchronize any fresh updates (zero persistent WebSockets)
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
 
-    try {
-      const primaryRef = ref(db, 'specku_galeria');
-      const unsubscribePrimary = onValue(
-        primaryRef,
-        (snapshot) => {
-          try {
-            if (snapshot.exists()) {
-              const items = SpeckuGalleryService.ParseSnapshotData(snapshot.val(), filter);
-              if (items.length > 0) {
-                LocalCache.Set(SpeckuGalleryService.cacheKey, items);
-              }
-              onData({
-                CodeNumber: 200,
-                CodeName: 'OK',
-                Message: null,
-                ErrorNumber: null,
-                ServerName: 'firebase-rtdb',
-                Result: items,
-              });
-            } else {
-              // Check legacy node if primary node is absent
-              const legacyRef = ref(db, 'Specku_Gallery');
-              get(legacyRef)
-                .then((legacySnap) => {
-                  if (legacySnap.exists()) {
-                    const items = SpeckuGalleryService.ParseSnapshotData(
-                      legacySnap.val(),
-                      filter
-                    );
-                    if (items.length > 0) {
-                      LocalCache.Set(SpeckuGalleryService.cacheKey, items);
-                    }
-                    onData({
-                      CodeNumber: 302,
-                      CodeName: 'Found',
-                      Message: 'Retrieved from legacy node',
-                      ErrorNumber: null,
-                      ServerName: 'firebase-rtdb',
-                      Result: items,
-                    });
-                  } else if (cached.length === 0) {
-                    onData({
-                      CodeNumber: 200,
-                      CodeName: 'OK',
-                      Message: 'Serving fallback items',
-                      ErrorNumber: null,
-                      ServerName: 'local-fallback',
-                      Result: [...SpeckuGalleryService.fallbackItems],
-                    });
-                  }
-                })
-                .catch(() => {
-                  if (cached.length === 0) {
-                    onData({
-                      CodeNumber: 503,
-                      CodeName: 'ServiceUnavailable',
-                      Message: 'Database read failed',
-                      ErrorNumber: 503,
-                      ServerName: 'local-fallback',
-                      Result: [...SpeckuGalleryService.fallbackItems],
-                    });
-                  }
-                });
-            }
-          } catch (callbackErr) {
-            console.warn('[SpeckuGalleryService] Snapshot processing handled error:', callbackErr);
-          }
-        },
-        (error) => {
-          console.warn('[SpeckuGalleryService] RTDB listener notice:', error);
-          if (cached.length === 0) {
+    fetch(SpeckuGalleryService.restEndpoint, { signal: controller?.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && typeof data === 'object') {
+          const items = SpeckuGalleryService.ParseSnapshotData(data, filter);
+          if (items.length > 0) {
+            LocalCache.Set(SpeckuGalleryService.cacheKey, items);
             onData({
-              CodeNumber: 503,
-              CodeName: 'ServiceUnavailable',
-              Message: error.message,
-              ErrorNumber: 503,
-              ServerName: 'firebase-rtdb',
-              Result: [...SpeckuGalleryService.fallbackItems],
+              CodeNumber: 200,
+              CodeName: 'OK',
+              Message: null,
+              ErrorNumber: null,
+              ServerName: 'firebase-rest',
+              Result: items,
             });
           }
+        } else if (cached.length === 0) {
+          onData({
+            CodeNumber: 200,
+            CodeName: 'OK',
+            Message: 'Serving fallback items',
+            ErrorNumber: null,
+            ServerName: 'local-fallback',
+            Result: [...SpeckuGalleryService.fallbackItems],
+          });
         }
-      );
+      })
+      .catch((err: unknown) => {
+        if (controller?.signal.aborted) return;
+        console.warn('[SpeckuGalleryService] REST fetch notice:', err);
+        if (cached.length === 0) {
+          onData({
+            CodeNumber: 503,
+            CodeName: 'ServiceUnavailable',
+            Message: err instanceof Error ? err.message : 'Network error',
+            ErrorNumber: 503,
+            ServerName: 'local-fallback',
+            Result: [...SpeckuGalleryService.fallbackItems],
+          });
+        }
+      });
 
-      return () => {
-        try {
-          unsubscribePrimary();
-        } catch {
-          // Zero throw per Art. 15.2
-        }
-      };
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      if (cached.length === 0) {
-        onData({
-          CodeNumber: 500,
-          CodeName: 'InternalServerError',
-          Message: errorMessage,
-          ErrorNumber: 500,
-          ServerName: 'local-service',
-          Result: [...SpeckuGalleryService.fallbackItems],
-        });
+    return () => {
+      try {
+        controller?.abort();
+      } catch {
+        // Zero throw per Art. 15.2
       }
-      return () => {};
-    }
+    };
   }
 
   /// <summary>
@@ -459,7 +382,7 @@ export class SpeckuGalleryService {
           CodeName: 'Found',
           Message: null,
           ErrorNumber: null,
-          ServerName: 'firebase-rtdb',
+          ServerName: 'firebase-rest',
           Result: item,
         };
       }
@@ -469,7 +392,7 @@ export class SpeckuGalleryService {
         CodeName: 'NotFound',
         Message: `Item with key '${key}' not found`,
         ErrorNumber: 404,
-        ServerName: 'firebase-rtdb',
+        ServerName: 'firebase-rest',
         Result: null,
       };
     } catch (err: unknown) {
@@ -479,7 +402,7 @@ export class SpeckuGalleryService {
         CodeName: 'InternalServerError',
         Message: errorMessage,
         ErrorNumber: 500,
-        ServerName: 'firebase-rtdb',
+        ServerName: 'firebase-rest',
         Result: null,
       };
     }

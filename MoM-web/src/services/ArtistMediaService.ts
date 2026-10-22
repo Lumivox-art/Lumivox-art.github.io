@@ -2,11 +2,9 @@
  * Data access service for Artist Media operations.
  * Implements Constitution Brendup Title I (Art. 2.4), Title V (Art. 13), and Title VI (Art. 15).
  * Static class with pure static methods, zero throw statements, resilient local caching,
- * and accelerated Stale-While-Revalidate synchronization.
+ * and reliable standard HTTP REST synchronization (zero persistent WebSockets).
  */
 
-import { ref, onValue, get } from 'firebase/database';
-import { db } from '../firebase';
 import { LocalCache } from '../utils/LocalCache';
 import type { ArtistMediaBase, ArtistMediaFilter } from '../models/Artist';
 import type { ResponseObject } from '../models/Response/ResponseObject';
@@ -15,7 +13,8 @@ import type { Artist } from '../data/artists';
 /// <summary>
 /// Static service encapsulating all data operations for artist media assets (splashes and icons).
 /// Strictly declared as static with zero instance state per Constitution Brendup Art. 2.4.
-/// Implements instant local caching to prevent image loss upon reloading.
+/// Uses standard HTTPS REST queries — zero persistent background WebSockets — ensuring 100% immunity
+/// against zombie sockets, sleep-induced disconnections, and blank screens.
 /// </summary>
 export class ArtistMediaService {
   /// <summary>
@@ -162,14 +161,13 @@ export class ArtistMediaService {
   }
 
   /// <summary>
-  /// Retrieves the list of artist media records once from Firebase RTDB or instant local cache.
+  /// Retrieves the list of artist media records once from Firebase REST or instant local cache.
   /// Returns a standardized ResponseObject per Constitution Brendup Art. 8.
   /// Zero throw statements are used; errors are caught and safely encapsulated.
   /// </summary>
   public static async List(
     filter?: ArtistMediaFilter
   ): Promise<ResponseObject<ArtistMediaBase[]>> {
-    // Check instant synchronous cache first
     const cached = ArtistMediaService.GetCachedMedia();
     if (cached.length > 0) {
       ArtistMediaService.TriggerBackgroundSync(filter);
@@ -184,11 +182,10 @@ export class ArtistMediaService {
     }
 
     try {
-      const mediaRef = ref(db, 'artista_medio');
-      const snapshot = await get(mediaRef);
-
-      if (snapshot.exists()) {
-        const parsed = ArtistMediaService.ParseSnapshotData(snapshot.val(), filter);
+      const res = await fetch(ArtistMediaService.restEndpoint);
+      if (res.ok) {
+        const data = await res.json();
+        const parsed = ArtistMediaService.ParseSnapshotData(data, filter);
         if (parsed.length > 0) {
           LocalCache.Set(ArtistMediaService.cacheKey, parsed);
         }
@@ -197,17 +194,17 @@ export class ArtistMediaService {
           CodeName: 'OK',
           Message: null,
           ErrorNumber: null,
-          ServerName: 'firebase-rtdb',
+          ServerName: 'firebase-rest',
           Result: parsed,
         };
       }
 
       return {
-        CodeNumber: 404,
+        CodeNumber: res.status,
         CodeName: 'NotFound',
         Message: 'No artist media found in database',
-        ErrorNumber: 404,
-        ServerName: 'firebase-rtdb',
+        ErrorNumber: res.status,
+        ServerName: 'firebase-rest',
         Result: [],
       };
     } catch (err: unknown) {
@@ -217,16 +214,16 @@ export class ArtistMediaService {
         CodeName: 'InternalServerError',
         Message: errorMessage,
         ErrorNumber: 500,
-        ServerName: 'firebase-rtdb',
+        ServerName: 'firebase-rest',
         Result: [],
       };
     }
   }
 
   /// <summary>
-  /// Subscribes to real-time changes on the artista_medio database node with Stale-While-Revalidate caching.
-  /// Immediately emits cached data (0ms latency on reload), while keeping real-time listeners active.
-  /// Returns an unsubscribe cleanup callback function.
+  /// Fetches artist media updates without open WebSockets.
+  /// Immediately emits cached data (0ms latency), then fetches fresh data once via HTTP REST.
+  /// Returns a cleanup callback function.
   /// Strictly catches errors with zero throw statements (Art. 15.2).
   /// </summary>
   public static Subscribe(
@@ -246,78 +243,39 @@ export class ArtistMediaService {
       });
     }
 
-    // 2. Parallel fast REST accelerator to beat potential WebSocket connection latency
-    ArtistMediaService.TriggerBackgroundSync(filter);
+    // 2. Perform a one-time standard HTTP GET to synchronize any fresh updates (zero persistent WebSockets)
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
 
-    try {
-      const mediaRef = ref(db, 'artista_medio');
-      const unsubscribe = onValue(
-        mediaRef,
-        (snapshot) => {
-          try {
-            if (snapshot.exists()) {
-              const items = ArtistMediaService.ParseSnapshotData(snapshot.val(), filter);
-              if (items.length > 0) {
-                LocalCache.Set(ArtistMediaService.cacheKey, items);
-              }
-              onData({
-                CodeNumber: 200,
-                CodeName: 'OK',
-                Message: null,
-                ErrorNumber: null,
-                ServerName: 'firebase-rtdb',
-                Result: items,
-              });
-            } else if (cached.length === 0) {
-              onData({
-                CodeNumber: 404,
-                CodeName: 'NotFound',
-                Message: 'No artist media found in database',
-                ErrorNumber: 404,
-                ServerName: 'firebase-rtdb',
-                Result: [],
-              });
-            }
-          } catch (callbackErr) {
-            console.warn('[ArtistMediaService] Snapshot processing handled error:', callbackErr);
-          }
-        },
-        (error) => {
-          console.warn('[ArtistMediaService] RTDB listener notice:', error);
-          if (cached.length === 0) {
+    fetch(ArtistMediaService.restEndpoint, { signal: controller?.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && typeof data === 'object') {
+          const items = ArtistMediaService.ParseSnapshotData(data, filter);
+          if (items.length > 0) {
+            LocalCache.Set(ArtistMediaService.cacheKey, items);
             onData({
-              CodeNumber: 503,
-              CodeName: 'ServiceUnavailable',
-              Message: error.message,
-              ErrorNumber: 503,
-              ServerName: 'firebase-rtdb',
-              Result: [],
+              CodeNumber: 200,
+              CodeName: 'OK',
+              Message: null,
+              ErrorNumber: null,
+              ServerName: 'firebase-rest',
+              Result: items,
             });
           }
         }
-      );
+      })
+      .catch((err: unknown) => {
+        if (controller?.signal.aborted) return;
+        console.warn('[ArtistMediaService] REST fetch notice:', err);
+      });
 
-      return () => {
-        try {
-          unsubscribe();
-        } catch {
-          // Zero throw per Art. 15.2
-        }
-      };
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : String(err);
-      if (cached.length === 0) {
-        onData({
-          CodeNumber: 500,
-          CodeName: 'InternalServerError',
-          Message: errorMessage,
-          ErrorNumber: 500,
-          ServerName: 'local-service',
-          Result: [],
-        });
+    return () => {
+      try {
+        controller?.abort();
+      } catch {
+        // Zero throw per Art. 15.2
       }
-      return () => {};
-    }
+    };
   }
 
   /// <summary>
@@ -336,7 +294,7 @@ export class ArtistMediaService {
           CodeName: 'Found',
           Message: null,
           ErrorNumber: null,
-          ServerName: 'firebase-rtdb',
+          ServerName: 'firebase-rest',
           Result: item,
         };
       }
@@ -346,7 +304,7 @@ export class ArtistMediaService {
         CodeName: 'NotFound',
         Message: `Artist media with key '${key}' not found`,
         ErrorNumber: 404,
-        ServerName: 'firebase-rtdb',
+        ServerName: 'firebase-rest',
         Result: null,
       };
     } catch (err: unknown) {
@@ -356,7 +314,7 @@ export class ArtistMediaService {
         CodeName: 'InternalServerError',
         Message: errorMessage,
         ErrorNumber: 500,
-        ServerName: 'firebase-rtdb',
+        ServerName: 'firebase-rest',
         Result: null,
       };
     }
