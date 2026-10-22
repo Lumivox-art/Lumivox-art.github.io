@@ -27,7 +27,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'artist.luis.hook': 'Do you like this page?',
     'artist.luis.discipline': 'Software Engineer · Digital solutions',
     'artist.luis.bio':
-      "Hi, I'm Luis.M. I designed this page to give my fellow artists a unique space for their commercial needs.",
+      "Hi, I'm Nix. I designed this page to give my fellow artists a unique space for their commercial needs.",
     'artist.luis.brief':
       "We live in a time when digitalization makes spreading a digital brand remarkably easy. If you're looking to grow your brand through digital solutions, reach out!",
     // specku commissions
@@ -186,7 +186,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'artist.luis.hook': '¿Te gusta esta página?',
     'artist.luis.discipline': 'Ingeniero de Software · Soluciones digitales',
     'artist.luis.bio':
-      'Hola, soy Luis.M y he diseñado esta página para ayudar a mis compañeros artistas a tener un espacio único para sus necesidades comerciales.',
+      'Hola, soy Nix y he diseñado esta página para ayudar a mis compañeros artistas a tener un espacio único para sus necesidades comerciales.',
     'artist.luis.brief':
       'Estamos en un tiempo donde la facilidad que trae la digitalización a la propagación de una marca digital es bastante evidente. Si estás buscando impulsar tu marca mediante soluciones digitales, ¡puedes contactarme!',
     'specku.title': '¡Comisiones de Specku!',

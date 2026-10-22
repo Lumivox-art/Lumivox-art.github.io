@@ -25,7 +25,7 @@ const artistaMedio = {
   'luis-m': {
     artista_medio_id: 1,
     artista_medio_key: 'luis-m',
-    artista_medio_nombre: 'Luis.M',
+    artista_medio_nombre: 'Nix',
     artista_medio_splash_binario: fileToDataUrl(path.join(lumivoxMediaDir, 'luis-m.jpg'), 'image/jpeg'),
     artista_medio_icono_binario: fileToDataUrl(path.join(lumivoxMediaDir, 'luis-m.jpg'), 'image/jpeg'),
     artista_medio_activo: true,

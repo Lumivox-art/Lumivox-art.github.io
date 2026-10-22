@@ -44,7 +44,7 @@ export type Artist = {
 export const artists: Artist[] = [
   {
     handle: 'luis-m',
-    displayName: 'Luis.M',
+    displayName: 'Nix',
     // i18n keys (see i18n.tsx → artist.luis.*); rendered through t()
     tagline: 'artist.luis.hook',
     discipline: 'artist.luis.discipline',
