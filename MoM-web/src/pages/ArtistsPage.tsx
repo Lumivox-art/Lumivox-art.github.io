@@ -93,7 +93,7 @@ export function ArtistsPage() {
                 borderRadius: '8px',
               }}
             >
-              🛠️ Intranet ({artistHandle})
+              Intranet ({artistHandle})
             </Link>
           )}
           <LanguageToggle />

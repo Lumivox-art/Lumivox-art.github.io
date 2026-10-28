@@ -118,7 +118,7 @@ export function LumivoxHomePage() {
                 borderRadius: '8px',
               }}
             >
-              🛠️ Intranet ({artistHandle})
+              Intranet ({artistHandle})
             </Link>
           )}
           <LanguageToggle />

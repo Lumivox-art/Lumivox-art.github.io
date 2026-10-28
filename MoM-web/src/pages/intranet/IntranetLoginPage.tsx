@@ -32,7 +32,7 @@ export function IntranetLoginPage() {
     const trimmedId = identifier.trim();
     if (!trimmedId || !password) {
       setErrorMessage(
-        t('intranet.login.error.empty') || 'Por favor ingresa tu usuario o correo y tu contraseña.',
+        t('intranet.login.error.empty') || 'Por favor ingresa tu usuario y contraseña.',
       );
       return;
     }
@@ -60,15 +60,10 @@ export function IntranetLoginPage() {
               'Demasiados intentos fallidos. Por seguridad, espera unos momentos antes de reintentar.',
           );
           break;
-        case 'auth/operation-not-allowed':
-          setErrorMessage(
-            'El método de autenticación con contraseña no está habilitado en Firebase Console.',
-          );
-          break;
         default:
           setErrorMessage(
-            t('intranet.login.error.general') ||
-              'No se pudo conectar al servidor de autenticación. Intenta de nuevo.',
+            t('intranet.login.error.credentials') ||
+              'Credenciales no reconocidas. Verifica tu usuario y contraseña.',
           );
       }
     } finally {
@@ -93,27 +88,25 @@ export function IntranetLoginPage() {
       <main className="inl-container">
         <div className="inl-card">
           <header className="inl-header">
-            <div className="inl-emblem">🔒</div>
-            <span className="inl-badge">ACCESO PRIVADO</span>
             <h1 className="inl-title">
               {t('intranet.login.title') || 'Intranet de Artistas'}
             </h1>
             <p className="inl-subtitle">
               {t('intranet.login.subtitle') ||
-                'Portal exclusivo para que los creadores de Lumivox administren sus perfiles, enlaces y herramientas.'}
+                'Portal para que los creadores de Lumivox administren sus perfiles, enlaces y herramientas.'}
             </p>
           </header>
 
           {errorMessage && (
             <div className="inl-error-alert animate-shake">
-              <span>⚠️ {errorMessage}</span>
+              <span>{errorMessage}</span>
             </div>
           )}
 
           <form className="inl-form" onSubmit={handleSubmit}>
             <div className="inl-field-group">
               <label htmlFor="inl-identifier" className="inl-label">
-                Usuario o Correo Electrónico:
+                Usuario:
               </label>
               <input
                 id="inl-identifier"
@@ -122,7 +115,7 @@ export function IntranetLoginPage() {
                 autoComplete="username"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="Ej. specku o usuario@lumivox.art"
+                placeholder="Usuario"
                 disabled={loading}
                 required
               />
@@ -154,7 +147,7 @@ export function IntranetLoginPage() {
 
           <footer className="inl-footer">
             <p className="inl-closed-notice">
-              🛡️ <strong>Acceso cerrado:</strong> Este portal no admite registro público. Si eres
+              <strong>Acceso cerrado:</strong> Este portal no admite registro público. Si eres
               un artista miembro del colectivo, solicita tu cuenta al administrador.
             </p>
           </footer>

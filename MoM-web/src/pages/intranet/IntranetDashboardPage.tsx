@@ -153,7 +153,7 @@ export function IntranetDashboardPage() {
             </span>
           </div>
           <Link to={`/artistas/${artistHandle}`} className="ind-view-public-btn">
-            👁️ Ver mi tarjeta pública
+            Ver mi tarjeta pública
           </Link>
           <button type="button" className="ind-btn-logout" onClick={handleLogout}>
             Cerrar Sesión
@@ -181,7 +181,7 @@ export function IntranetDashboardPage() {
         )}
         {errorMessage && (
           <div className="ind-alert-error animate-fade-in">
-            <span>⚠️ {errorMessage}</span>
+            <span>{errorMessage}</span>
           </div>
         )}
 
@@ -189,12 +189,12 @@ export function IntranetDashboardPage() {
         {isSpecku && (
           <section className="ind-special-tools-card">
             <h2 className="ind-card-title">
-              <span className="ind-icon">⚡</span> Herramientas Exclusivas de Specku
+              Herramientas Exclusivas de Specku
             </h2>
             <div className="ind-tools-grid">
               <div className="ind-tool-item">
                 <div className="ind-tool-header">
-                  <span className="ind-tool-icon">💳</span>
+
                   <div>
                     <h3>Generador de Enlaces de Cobro PayPal</h3>
                     <p>Crea links de pago para tus comisiones con precios, descuentos y comisiones forzadas.</p>
@@ -207,7 +207,7 @@ export function IntranetDashboardPage() {
 
               <div className="ind-tool-item">
                 <div className="ind-tool-header">
-                  <span className="ind-tool-icon">🖼️</span>
+
                   <div>
                     <h3>Muestras de la Galería</h3>
                     <p>Revisa cómo se muestran tus estilos, bocetos y muestras de arte en tu catálogo interactivo.</p>
@@ -228,7 +228,7 @@ export function IntranetDashboardPage() {
             <div className="ind-form-column">
               <div className="ind-card">
                 <h2 className="ind-card-title">
-                  <span className="ind-icon">🎨</span> Información Pública de la Tarjeta
+                  Información Pública de la Tarjeta
                 </h2>
 
                 <div className="ind-field">
@@ -334,7 +334,7 @@ export function IntranetDashboardPage() {
               <div className="ind-card">
                 <div className="ind-card-header-flex">
                   <h2 className="ind-card-title mb-0">
-                    <span className="ind-icon">🌐</span> Redes Sociales y Enlaces
+                    Redes Sociales y Enlaces
                   </h2>
                   <button
                     type="button"
@@ -419,7 +419,7 @@ export function IntranetDashboardPage() {
 
                 <div className="ind-submit-wrapper">
                   <button type="submit" className="ind-btn-save-primary" disabled={saving}>
-                    {saving ? 'Guardando en Base de Datos...' : '💾 Guardar Cambios en mi Tarjeta'}
+                    {saving ? 'Guardando en Base de Datos...' : 'Guardar Cambios en mi Tarjeta'}
                   </button>
                 </div>
               </div>
