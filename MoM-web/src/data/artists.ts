@@ -17,6 +17,7 @@ export type SocialEntry = {
   platform: SocialPlatform;
   url: string;
   label?: string;
+  hidden?: boolean;
 };
 
 export type BaseArtistModule = { hidden?: boolean };

@@ -190,6 +190,22 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.checkout.view_commissions': 'View Gallery & Pricing',
     'specku.pay.checkout.success.title': 'Payment Successful!',
 
+    // intranet & artist auth
+    'intranet.login.title': 'Artist Intranet',
+    'intranet.login.subtitle': 'Exclusive portal for Lumivox creators to manage cards, profiles and workflows.',
+    'intranet.login.btn': 'Sign In to My Dashboard',
+    'intranet.login.loading': 'Signing in...',
+    'intranet.login.error.empty': 'Please enter your username/email and password.',
+    'intranet.login.error.credentials': 'Unrecognized credentials. Please verify your username and password.',
+    'intranet.login.error.rate_limit': 'Too many failed attempts. For security, please wait a moment before retrying.',
+    'intranet.login.error.general': 'Could not reach authentication server. Please try again.',
+    'intranet.dashboard.title': 'Creator Dashboard',
+    'intranet.dashboard.subtitle': 'Customize your public card information, update socials and access specialized tools.',
+    'intranet.dashboard.save': 'Save Changes to My Card',
+    'intranet.dashboard.saving': 'Saving to database...',
+    'intranet.dashboard.logout': 'Sign Out',
+    'intranet.dashboard.view_public': 'View public card',
+
     // sam commissions (mockup)
     'sam.tag': 'commissions',
     'sam.note': 'Sample design — to be reworked later.',
@@ -372,6 +388,22 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.checkout.contact': 'Contactar a Specku en Discord',
     'specku.pay.checkout.view_commissions': 'Ver Galería y Precios',
     'specku.pay.checkout.success.title': '¡Pago Realizado con Éxito!',
+
+    // intranet & artist auth
+    'intranet.login.title': 'Intranet de Artistas',
+    'intranet.login.subtitle': 'Portal exclusivo para que los creadores de Lumivox administren sus tarjetas, enlaces y herramientas.',
+    'intranet.login.btn': 'Ingresar a mi Panel',
+    'intranet.login.loading': 'Iniciando sesión...',
+    'intranet.login.error.empty': 'Por favor ingresa tu usuario o correo y tu contraseña.',
+    'intranet.login.error.credentials': 'Credenciales no reconocidas. Verifica tu usuario y contraseña.',
+    'intranet.login.error.rate_limit': 'Demasiados intentos fallidos. Por seguridad, espera unos momentos antes de reintentar.',
+    'intranet.login.error.general': 'No se pudo conectar al servidor de autenticación. Intenta de nuevo.',
+    'intranet.dashboard.title': 'Panel de Creador',
+    'intranet.dashboard.subtitle': 'Personaliza la información de tu tarjeta pública, actualiza tus redes y accede a tus herramientas exclusivas.',
+    'intranet.dashboard.save': 'Guardar Cambios en mi Tarjeta',
+    'intranet.dashboard.saving': 'Guardando en base de datos...',
+    'intranet.dashboard.logout': 'Cerrar Sesión',
+    'intranet.dashboard.view_public': 'Ver tarjeta pública',
 
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',

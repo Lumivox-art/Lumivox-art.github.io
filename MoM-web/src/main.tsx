@@ -1,4 +1,4 @@
-import { StrictMode, useEffect } from 'react';
+import { StrictMode, useEffect, ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,6 +7,7 @@ import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { PageTransition } from './components/PageTransition';
 import { ThemeProvider, useTheme } from './components/ThemeContext';
 import { LanguageProvider } from './i18n';
+import { AuthProvider, useAuth } from './components/AuthContext';
 import { LumivoxHomePage } from './pages/LumivoxHomePage';
 import { ArtistsPage } from './pages/ArtistsPage';
 import { SamCommissionsPage } from './pages/SamCommissionsPage';
@@ -15,6 +16,8 @@ import { SpeckuTermsPage } from './pages/SpeckuTermsPage';
 import { SpeckuGalleryPage } from './pages/SpeckuGalleryPage';
 import { SpeckuPayGeneratorPage } from './pages/SpeckuPayGeneratorPage';
 import { SpeckuPayCheckoutPage } from './pages/SpeckuPayCheckoutPage';
+import { IntranetLoginPage } from './pages/intranet/IntranetLoginPage';
+import { IntranetDashboardPage } from './pages/intranet/IntranetDashboardPage';
 import { setupWakeupSync } from './utils/wakeupSync';
 
 // Initialize tab visibility change and network wake-up listeners to prevent frozen/zombie connections
@@ -29,17 +32,34 @@ function AppThemeSync() {
   return null;
 }
 
+function AuthGuard({ children }: { children: ReactNode }) {
+  const { currentUser, loading } = useAuth();
+  if (loading) {
+    return (
+      <div style={{ minHeight: '60vh', display: 'grid', placeItems: 'center' }}>
+        <div className="spinner-border text-danger" role="status" />
+      </div>
+    );
+  }
+  if (!currentUser) {
+    return <Navigate to="/home" replace />;
+  }
+  return <>{children}</>;
+}
+
 // Root layout: mounts the page-transition overlay above every route within a global error boundary.
 function RootLayout() {
   return (
     <AppErrorBoundary>
       <LanguageProvider>
         <ThemeProvider>
-          <AppThemeSync />
-          <PageTransition />
-          <AppErrorBoundary>
-            <Outlet />
-          </AppErrorBoundary>
+          <AuthProvider>
+            <AppThemeSync />
+            <PageTransition />
+            <AppErrorBoundary>
+              <Outlet />
+            </AppErrorBoundary>
+          </AuthProvider>
         </ThemeProvider>
       </LanguageProvider>
     </AppErrorBoundary>
@@ -60,6 +80,15 @@ const router = createBrowserRouter([
       { path: '/home', element: <LumivoxHomePage /> },
       { path: '/artistas', element: <ArtistsPage /> },
       { path: '/artistas/:handle', element: <ArtistsPage /> },
+      { path: '/intranet/login', element: <IntranetLoginPage /> },
+      {
+        path: '/intranet',
+        element: (
+          <AuthGuard>
+            <IntranetDashboardPage />
+          </AuthGuard>
+        ),
+      },
       { path: '/home/sam/comisiones', element: <SamCommissionsPage /> },
       { path: '/home/specku/comisiones', element: <SpeckuCommissionsPage /> },
       { path: '/home/specku/terminos', element: <SpeckuTermsPage /> },

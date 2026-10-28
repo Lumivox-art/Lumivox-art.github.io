@@ -6,6 +6,11 @@
   gap: 0.6rem;
   text-decoration: none;
   color: inherit;
+  transition: transform 0.2s ease;
+
+  &.is-secret-pulsing {
+    animation: secretGlowPulse 0.45s ease-in-out;
+  }
 
   .lvx-brand-marks {
     position: relative;
@@ -43,5 +48,20 @@
   &[data-theme='night'] .mark-night {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes secretGlowPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(224, 122, 111, 0));
+  }
+  50% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 14px #ffe500);
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(224, 122, 111, 0));
   }
 }

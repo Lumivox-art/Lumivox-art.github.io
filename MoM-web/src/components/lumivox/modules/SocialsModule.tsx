@@ -26,7 +26,8 @@ export function SocialsModule({ entries }: SocialsModuleProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const { t } = useLang();
 
-  if (entries.length === 0) return null;
+  const visibleEntries = entries.filter((e) => !e.hidden);
+  if (visibleEntries.length === 0) return null;
 
   const handleCopyDiscord = (entry: SocialEntry) => {
     if (entry.platform === 'discord' && entry.label?.includes('@')) {
@@ -42,7 +43,7 @@ export function SocialsModule({ entries }: SocialsModuleProps) {
 
   return (
     <div className="lumivox-socials" role="list">
-      {entries.map((entry) => {
+      {visibleEntries.map((entry) => {
         const defaultLabel = entry.label ?? PLATFORM_LABELS[entry.platform];
         const isCopied = copiedKey === entry.platform;
         const displayLabel = isCopied
