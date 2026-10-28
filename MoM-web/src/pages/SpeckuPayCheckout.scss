@@ -1,0 +1,554 @@
+.specku-pay-checkout {
+  --spc-primary: #8d3e2e;
+  --spc-coral: #e07a6f;
+  --spc-coral-soft: rgba(224, 122, 111, 0.14);
+  --spc-ink: #2a1a12;
+  --spc-card: #ffffff;
+  --spc-card-border: #eadcc8;
+  --spc-input-bg: #fffbf5;
+  --spc-muted: #6b5c53;
+  --spc-accent-gold: #c97d10;
+  --spc-success: #1b8a4f;
+
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% -8%, #fbf5ea 0%, #f4ece0 50%, #eadcc8 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--spc-ink);
+  padding: 1.5rem 1rem 4rem;
+  font-family: 'Manrope', system-ui, sans-serif;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .spc-topbar {
+    max-width: 680px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .spc-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .spc-back-link {
+    color: var(--spc-primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    background: var(--spc-coral-soft);
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: rgba(224, 122, 111, 0.24);
+      transform: translateX(-2px);
+    }
+  }
+
+  .spc-container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .spc-card {
+    background: var(--spc-card);
+    border: 1px solid var(--spc-card-border);
+    border-radius: 20px;
+    padding: 2.2rem;
+    box-shadow: 0 10px 30px rgba(74, 52, 38, 0.08);
+
+    @media (max-width: 600px) {
+      padding: 1.5rem 1.2rem;
+    }
+  }
+
+  /* Invalid token state */
+  .spc-invalid-card {
+    text-align: center;
+    padding: 3rem 2rem;
+
+    .spc-warning-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      color: var(--spc-muted);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 1.8rem;
+    }
+
+    .spc-invalid-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+  }
+
+  /* Header of the checkout card */
+  .spc-card-header {
+    border-bottom: 1px dashed var(--spc-card-border);
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.4rem;
+
+    .spc-artist-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      background: var(--spc-coral-soft);
+      border: 1px solid rgba(224, 122, 111, 0.3);
+      color: var(--spc-primary);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+
+      .spc-artist-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--spc-primary);
+      }
+    }
+
+    .spc-order-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin: 0 0 0.5rem;
+      color: var(--spc-ink);
+    }
+
+    .spc-order-client {
+      font-size: 0.95rem;
+      color: var(--spc-muted);
+      margin-bottom: 0.4rem;
+
+      strong {
+        color: var(--spc-ink);
+      }
+    }
+
+    .spc-order-notes {
+      font-size: 0.88rem;
+      color: var(--spc-muted);
+      background: var(--spc-input-bg);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      margin-top: 0.6rem;
+      line-height: 1.45;
+
+      .spc-notes-label {
+        font-weight: 800;
+        color: var(--spc-primary);
+      }
+    }
+  }
+
+  .spc-error-alert {
+    background: #ffebe8;
+    border: 1px solid #f5c2c7;
+    color: #842029;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  /* Breakdown */
+  .spc-breakdown-section {
+    margin-bottom: 1.6rem;
+
+    .spc-section-heading {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 800;
+      color: var(--spc-muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .spc-line-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      color: var(--spc-ink);
+
+      &.spc-line-discount {
+        color: var(--spc-success);
+        font-weight: 700;
+      }
+
+      &.spc-line-subtotal {
+        font-weight: 700;
+        border-top: 1px solid var(--spc-card-border);
+        margin-top: 0.5rem;
+        padding-top: 0.7rem;
+      }
+    }
+  }
+
+  /* PayPal Fee Card */
+  .spc-fee-card {
+    background: var(--spc-input-bg);
+    border: 2px solid var(--spc-card-border);
+    border-radius: 14px;
+    padding: 1.1rem;
+    margin: 1rem 0;
+    transition: all 0.25s ease;
+
+    &.fee-active {
+      border-color: var(--spc-coral);
+      background: rgba(224, 122, 111, 0.06);
+    }
+
+    &.fee-forced {
+      border-color: var(--spc-primary);
+      background: rgba(141, 62, 46, 0.06);
+
+      .spc-fee-checkbox {
+        cursor: not-allowed;
+      }
+    }
+
+    .spc-fee-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .spc-fee-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--spc-primary);
+      cursor: pointer;
+    }
+
+    .spc-fee-text-col {
+      flex: 1;
+
+      .spc-fee-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+
+        strong {
+          font-size: 0.94rem;
+          color: var(--spc-ink);
+        }
+
+        .spc-fee-amount-badge {
+          font-size: 0.85rem;
+          font-weight: 800;
+          color: var(--spc-primary);
+          background: var(--spc-coral-soft);
+          padding: 0.2rem 0.5rem;
+          border-radius: 6px;
+        }
+      }
+
+      .spc-fee-desc {
+        font-size: 0.82rem;
+        color: var(--spc-muted);
+        margin: 0;
+        line-height: 1.4;
+
+        &.spc-forced-notice {
+          color: var(--spc-primary);
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  /* Total */
+  .spc-total-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 1rem;
+    border-top: 2px solid var(--spc-ink);
+    margin-top: 1.2rem;
+
+    .spc-total-label {
+      font-family: 'Fraunces', serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--spc-ink);
+    }
+
+    .spc-total-stack {
+      text-align: right;
+
+      .spc-total-amount {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.9rem;
+        font-weight: 900;
+        color: var(--spc-primary);
+        line-height: 1;
+      }
+
+      .spc-total-approx {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--spc-muted);
+        margin-top: 0.25rem;
+      }
+    }
+  }
+
+  /* PayPal section */
+  .spc-paypal-section {
+    margin-top: 1.8rem;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--spc-card-border);
+
+    .spc-paypal-intro {
+      text-align: center;
+      font-size: 0.84rem;
+      color: var(--spc-muted);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .spc-paypal-buttons-wrapper {
+      min-height: 110px;
+    }
+
+    .spc-security-badge {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.76rem;
+      color: var(--spc-muted);
+      opacity: 0.85;
+    }
+  }
+
+  /* Buttons */
+  .spc-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--spc-primary);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.4rem;
+    border-radius: 10px;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #733123;
+      transform: translateY(-1px);
+      color: #ffffff;
+    }
+  }
+
+  .spc-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--spc-input-bg);
+    border: 1px solid var(--spc-card-border);
+    color: var(--spc-ink);
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--spc-coral-soft);
+      border-color: var(--spc-coral);
+      color: var(--spc-primary);
+    }
+  }
+
+  .spc-btn-link {
+    display: inline-block;
+    color: var(--spc-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 0.5rem;
+
+    &:hover {
+      color: var(--spc-primary);
+      text-decoration: underline;
+    }
+  }
+
+  /* Success View */
+  .spc-success-card {
+    text-align: center;
+    padding: 3rem 2rem;
+
+    .spc-success-emblem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: var(--spc-success);
+      color: #ffffff;
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 18px rgba(27, 138, 79, 0.35);
+    }
+
+    .spc-badge-pill {
+      display: inline-block;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--spc-success);
+      background: rgba(27, 138, 79, 0.1);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 0.8rem;
+    }
+
+    .spc-success-title {
+      font-family: 'Fraunces', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      margin: 0 0 0.8rem;
+      color: var(--spc-ink);
+    }
+
+    .spc-success-intro {
+      color: var(--spc-muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto 1.8rem;
+      line-height: 1.5;
+    }
+
+    .spc-receipt-box {
+      background: var(--spc-input-bg);
+      border: 1px solid var(--spc-card-border);
+      border-radius: 14px;
+      padding: 1.2rem 1.4rem;
+      text-align: left;
+      margin: 0 auto 1.8rem;
+      max-width: 480px;
+
+      .spc-receipt-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.45rem 0;
+        font-size: 0.9rem;
+        color: var(--spc-muted);
+
+        strong {
+          color: var(--spc-ink);
+        }
+
+        &.spc-receipt-total {
+          border-top: 1px solid var(--spc-card-border);
+          margin-top: 0.6rem;
+          padding-top: 0.7rem;
+          font-weight: 800;
+          color: var(--spc-ink);
+
+          strong {
+            color: var(--spc-primary);
+            font-size: 1.1rem;
+          }
+        }
+
+        .spc-receipt-code {
+          background: rgba(0, 0, 0, 0.05);
+          padding: 0.2rem 0.4rem;
+          border-radius: 4px;
+          font-size: 0.85rem;
+          color: var(--spc-ink);
+        }
+      }
+    }
+
+    .spc-success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+  }
+
+  // --- Night Theme ---
+  &[data-theme='night'] {
+    --spc-primary: #ff5277;
+    --spc-coral: #ff7ab8;
+    --spc-coral-soft: rgba(255, 82, 119, 0.18);
+    --spc-ink: #f1ece0;
+    --spc-card: rgba(36, 31, 48, 0.92);
+    --spc-card-border: #46415a;
+    --spc-input-bg: #1c1828;
+    --spc-muted: #cfc8de;
+    --spc-accent-gold: #ffe500;
+    --spc-success: #3dd68c;
+
+    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%) !important;
+    background-attachment: fixed !important;
+
+    .spc-card-header {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .spc-total-container {
+      border-top-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .spc-receipt-box .spc-receipt-code {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffe500;
+    }
+  }
+}
+
+@keyframes shakeX {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shakeX 0.4s ease-in-out;
+}

@@ -37,6 +37,7 @@ jobs:
         working-directory: ./MoM-web
         env:
           FIREBASE_DB_SECRET: ${{ secrets.FIREBASE_DB_SECRET }}
+          VITE_PAYPAL_CLIENT_ID: ${{ secrets.PAYPAL_CLIENT_ID }}
 
       # Pages is sourced from the main branch root, so mirror the built dist there.
       - name: Publish built site to repository root

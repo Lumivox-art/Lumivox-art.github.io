@@ -24,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^10.6.1",
     "bootstrap": "^5.3.8",
     "firebase": "^13.1.0",
     "react": "^19.2.6",

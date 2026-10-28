@@ -177,6 +177,19 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.gallery.sheet': 'Sheet',
     'specku.gallery.view': 'Zoom in',
 
+    // specku payment gateway & generator
+    'specku.pay.generator.link': 'PayPal Payment Link',
+    'specku.pay.generator.badge': 'ADMIN / SPECKU',
+    'specku.pay.generator.title': 'Payment Link Generator',
+    'specku.pay.generator.subtitle':
+      'Set the price, discounts, and fee coverage to generate a custom PayPal link for your client.',
+    'specku.pay.checkout.invalid.title': 'Invalid or Incomplete Payment Link',
+    'specku.pay.checkout.invalid.desc':
+      'This payment portal requires a payment link generated beforehand by Specku. To request a commission or get your payment link, please reach out to the artist.',
+    'specku.pay.checkout.contact': 'Contact Specku on Discord',
+    'specku.pay.checkout.view_commissions': 'View Gallery & Pricing',
+    'specku.pay.checkout.success.title': 'Payment Successful!',
+
     // sam commissions (mockup)
     'sam.tag': 'commissions',
     'sam.note': 'Sample design — to be reworked later.',
@@ -346,6 +359,19 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.gallery.next': 'Siguiente hoja',
     'specku.gallery.sheet': 'Hoja',
     'specku.gallery.view': 'Zoom in',
+
+    // specku payment gateway & generator
+    'specku.pay.generator.link': 'Cobro PayPal',
+    'specku.pay.generator.badge': 'ADMIN / SPECKU',
+    'specku.pay.generator.title': 'Generador de Enlaces de Pago',
+    'specku.pay.generator.subtitle':
+      'Configura el precio, descuentos y la cobertura de comisión para generar un enlace único de PayPal para tu cliente.',
+    'specku.pay.checkout.invalid.title': 'Enlace de Pago No Válido o Incompleto',
+    'specku.pay.checkout.invalid.desc':
+      'Esta pasarela de pago requiere un enlace de cobro generado previamente por Specku. Para adquirir una comisión personalizada o solicitar tu enlace de pago, por favor contacta al artista.',
+    'specku.pay.checkout.contact': 'Contactar a Specku en Discord',
+    'specku.pay.checkout.view_commissions': 'Ver Galería y Precios',
+    'specku.pay.checkout.success.title': '¡Pago Realizado con Éxito!',
 
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',

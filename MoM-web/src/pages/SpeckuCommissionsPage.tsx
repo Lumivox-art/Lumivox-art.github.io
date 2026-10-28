@@ -647,6 +647,10 @@ export function SpeckuCommissionsPage() {
             {t('specku.footer.termsLink')}
           </Link>
           {t('specku.footer.suffix')}
+          {' · '}
+          <Link to="/home/specku/cobrar" className="jc-terms-link">
+            💳 {t('specku.pay.generator.link') || 'Cobro PayPal'}
+          </Link>
         </p>
       </footer>
     </div>

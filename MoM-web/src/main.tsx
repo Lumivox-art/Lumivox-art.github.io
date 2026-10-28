@@ -13,6 +13,8 @@ import { SamCommissionsPage } from './pages/SamCommissionsPage';
 import { SpeckuCommissionsPage } from './pages/SpeckuCommissionsPage';
 import { SpeckuTermsPage } from './pages/SpeckuTermsPage';
 import { SpeckuGalleryPage } from './pages/SpeckuGalleryPage';
+import { SpeckuPayGeneratorPage } from './pages/SpeckuPayGeneratorPage';
+import { SpeckuPayCheckoutPage } from './pages/SpeckuPayCheckoutPage';
 import { setupWakeupSync } from './utils/wakeupSync';
 
 // Initialize tab visibility change and network wake-up listeners to prevent frozen/zombie connections
@@ -62,6 +64,12 @@ const router = createBrowserRouter([
       { path: '/home/specku/comisiones', element: <SpeckuCommissionsPage /> },
       { path: '/home/specku/terminos', element: <SpeckuTermsPage /> },
       { path: '/home/specku/galeria', element: <SpeckuGalleryPage /> },
+      { path: '/home/specku/cobrar', element: <SpeckuPayGeneratorPage /> },
+      { path: '/home/specku/pagar', element: <SpeckuPayCheckoutPage /> },
+      { path: '/specku/cobrar', element: <Navigate to="/home/specku/cobrar" replace /> },
+      { path: '/specku/pagar', element: <Navigate to="/home/specku/pagar" replace /> },
+      { path: '/specku/pay', element: <Navigate to="/home/specku/pagar" replace /> },
+      { path: '/home/specku/pay', element: <Navigate to="/home/specku/pagar" replace /> },
       { path: '/home/specku/gallery', element: <Navigate to="/home/specku/galeria" replace /> },
       { path: '/home/specku/tos', element: <Navigate to="/home/specku/terminos" replace /> },
       { path: '/home/specku/terms', element: <Navigate to="/home/specku/terminos" replace /> },
