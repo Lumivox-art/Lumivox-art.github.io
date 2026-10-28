@@ -79,18 +79,17 @@ export const artists: Artist[] = [
   },
   {
     handle: 'specku',
-    // TODO confirm with Specku
     displayName: 'Specku',
-    tagline: 'Lorem ipsum dolor sit amet, consectetur',
-    discipline: 'Lorem Ipsum Dolor',
-    bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+    tagline: 'artist.specku.hook',
+    discipline: 'artist.specku.discipline',
+    bio: 'artist.specku.bio',
     splash: null,
     icon: null,
     accentColor: '#D17865',
     modules: [
       {
         kind: 'brief',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.',
+        body: 'artist.specku.brief',
       },
       {
         kind: 'socials',

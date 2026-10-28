@@ -30,6 +30,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Hi, I'm Nix. I designed this page to give my fellow artists a unique space for their commercial needs.",
     'artist.luis.brief':
       "We live in a time when digitalization makes spreading a digital brand remarkably easy. If you're looking to grow your brand through digital solutions, reach out!",
+    'artist.specku.hook': 'Every great universe starts with a single concept.',
+    'artist.specku.discipline': 'Illustrator · Storyteller',
+    'artist.specku.bio':
+      'Hello! I am Specku, an illustrator and storyteller who loves pulling ideas from imagination and turning them into compelling visuals.',
+    'artist.specku.brief':
+      "I pride myself in creating accessible, quality and diverse art that bring people's ideas to life, while keeping my clients comfortable and with an easy communication flow. Feel free to send a message, and let's start creating!",
     // specku commissions
     'specku.title': "Specku's Commissions!",
     'specku.subtitle': 'Not sure what to order? Visit my gallery',
@@ -189,6 +195,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       'Hola, soy Nix y he diseñado esta página para ayudar a mis compañeros artistas a tener un espacio único para sus necesidades comerciales.',
     'artist.luis.brief':
       'Estamos en un tiempo donde la facilidad que trae la digitalización a la propagación de una marca digital es bastante evidente. Si estás buscando impulsar tu marca mediante soluciones digitales, ¡puedes contactarme!',
+    'artist.specku.hook': 'Todo gran universo comienza con un solo concepto.',
+    'artist.specku.discipline': 'Ilustrador · Narrador visual',
+    'artist.specku.bio':
+      '¡Hola! Soy Specku, ilustrador y narrador al que le apasiona extraer ideas de la imaginación y convertirlas en obras visuales cautivadoras.',
+    'artist.specku.brief':
+      'Me enorgullece crear arte accesible, diverso y de calidad que da vida a las ideas de las personas, manteniendo a mis clientes cómodos y con una comunicación fluida. ¡No dudes en enviar un mensaje y comencemos a crear!',
     'specku.title': '¡Comisiones de Specku!',
     'specku.subtitle': '¿No sabes qué pedir? Visita mi galería',
     'specku.subtitle.prefix': '¿No sabes qué pedir? Visita mi',
