@@ -36,6 +36,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       'Hello! I am Specku, an illustrator and storyteller who loves pulling ideas from imagination and turning them into compelling visuals.',
     'artist.specku.brief':
       "I pride myself in creating accessible, quality and diverse art that bring people's ideas to life, while keeping my clients comfortable and with an easy communication flow. Feel free to send a message, and let's start creating!",
+    'artist.sunlight.hook': 'Especially invested on nourishing human-made creativity.',
+    'artist.sunlight.discipline': 'Digital Artist · Songwriter · Writer',
+    'artist.sunlight.bio':
+      'Hi, I´m Alex, "Sunlight Blue". I´m a creative with multiple passions: digital artist, song-writing, writer and more.',
+    'artist.sunlight.brief':
+      'If you want help for any creative endeavour, I´m more than happy to help!',
     // specku commissions
     'specku.title': "Specku's Commissions!",
     'specku.subtitle': 'Not sure what to order? Visit my gallery',
@@ -201,6 +207,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       '¡Hola! Soy Specku, ilustrador y narrador al que le apasiona extraer ideas de la imaginación y convertirlas en obras visuales cautivadoras.',
     'artist.specku.brief':
       'Me enorgullece crear arte accesible, diverso y de calidad que da vida a las ideas de las personas, manteniendo a mis clientes cómodos y con una comunicación fluida. ¡No dudes en enviar un mensaje y comencemos a crear!',
+    'artist.sunlight.hook': 'Especialmente enfocado en nutrir la creatividad humana.',
+    'artist.sunlight.discipline': 'Artista Digital · Compositor · Escritor',
+    'artist.sunlight.bio':
+      '¡Hola! Soy Alex, "Sunlight Blue". Soy un creador con múltiples pasiones: artista digital, compositor, escritor y más.',
+    'artist.sunlight.brief':
+      'Si buscas ayuda para cualquier proyecto creativo, ¡estaré más que feliz de colaborar!',
     'specku.title': '¡Comisiones de Specku!',
     'specku.subtitle': '¿No sabes qué pedir? Visita mi galería',
     'specku.subtitle.prefix': '¿No sabes qué pedir? Visita mi',

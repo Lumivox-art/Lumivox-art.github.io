@@ -49,6 +49,15 @@ const artistaMedio = {
     artista_medio_activo: true,
     artista_medio_borrado: false,
   },
+  'sunlight-blue': {
+    artista_medio_id: 5,
+    artista_medio_key: 'sunlight-blue',
+    artista_medio_nombre: 'Sunlight Blue',
+    artista_medio_splash_binario: fileToDataUrl(path.join(lumivoxMediaDir, 'sunlight-blue.jpg'), 'image/jpeg'),
+    artista_medio_icono_binario: fileToDataUrl(path.join(lumivoxMediaDir, 'sunlight-blue.jpg'), 'image/jpeg'),
+    artista_medio_activo: true,
+    artista_medio_borrado: false,
+  },
   joz: {
     artista_medio_id: 4,
     artista_medio_key: 'joz',

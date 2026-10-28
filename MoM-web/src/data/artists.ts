@@ -110,6 +110,37 @@ export const artists: Artist[] = [
     ],
   },
   {
+    handle: 'sunlight-blue',
+    displayName: 'Sunlight Blue',
+    tagline: 'artist.sunlight.hook',
+    discipline: 'artist.sunlight.discipline',
+    bio: 'artist.sunlight.bio',
+    splash: null,
+    icon: null,
+    accentColor: '#3A63A8',
+    modules: [
+      {
+        kind: 'brief',
+        body: 'artist.sunlight.brief',
+      },
+      {
+        kind: 'socials',
+        entries: [
+          {
+            platform: 'youtube',
+            url: 'https://www.youtube.com/@SunlightBlueYT',
+            label: 'YouTube',
+          },
+          {
+            platform: 'discord',
+            url: 'https://discord.com',
+            label: 'Discord: @sunlight_blue',
+          },
+        ],
+      },
+    ],
+  },
+  {
     handle: 'sam',
     hidden: true,
     // TODO confirm with Sam — placeholder
