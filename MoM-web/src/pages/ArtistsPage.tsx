@@ -76,7 +76,8 @@ export function ArtistsPage() {
           </Link>
           <LumivoxMark />
         </div>
-        <div className="lumivox-topbar-right">
+        <div className="lumivox-topbar-actions">
+          <span className="lumivox-tagline-top">{t('artists.tagline')}</span>
           {currentUser && (
             <Link
               to="/intranet"
@@ -90,7 +91,6 @@ export function ArtistsPage() {
                 background: 'rgba(224, 122, 111, 0.15)',
                 padding: '0.35rem 0.7rem',
                 borderRadius: '8px',
-                marginRight: '0.5rem',
               }}
             >
               🛠️ Intranet ({artistHandle})
@@ -101,8 +101,8 @@ export function ArtistsPage() {
         </div>
       </div>
 
-      <main className="lumivox-stage">
-        <div className="lumivox-roster-wrap">
+      {activeArtist ? (
+        <>
           <RosterStrip
             artists={artistList}
             activeHandle={activeArtist.handle}
@@ -110,16 +110,15 @@ export function ArtistsPage() {
             tabIdFor={tabIdFor}
             panelIdFor={panelIdFor}
           />
-        </div>
-
-        <div className="lumivox-deck">
           <ArtistShowcase
             artist={activeArtist}
             panelId={panelIdFor(activeArtist.handle)}
             labelledBy={tabIdFor(activeArtist.handle)}
           />
-        </div>
-      </main>
+        </>
+      ) : (
+        <p style={{ padding: '2rem', textAlign: 'center' }}>{t('artists.empty')}</p>
+      )}
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef, MouseEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { DayMark, NightMark } from '../components/LumivoxLogo';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
@@ -24,6 +24,27 @@ export function LumivoxHomePage() {
   const { theme } = useTheme();
   const { t } = useLang();
   const { currentUser, artistHandle } = useAuth();
+  const navigate = useNavigate();
+
+  // Easter Egg: 8 rapid clicks within 4 seconds unlocks the secret Intranet portal
+  const clicksRef = useRef<number[]>([]);
+  const [isPulsing, setIsPulsing] = useState(false);
+
+  const handleLogoClick = (e: MouseEvent<HTMLAnchorElement>) => {
+    const now = Date.now();
+    clicksRef.current = [...clicksRef.current.filter((timestamp) => now - timestamp < 4000), now];
+
+    if (clicksRef.current.length >= 8) {
+      e.preventDefault();
+      clicksRef.current = [];
+      setIsPulsing(true);
+
+      setTimeout(() => {
+        setIsPulsing(false);
+        navigate('/intranet/login');
+      }, 350);
+    }
+  };
 
   const [artistList, setArtistList] = useState<Artist[]>(() =>
     ArtistProfileService.GetHydratedProfiles(ArtistMediaService.GetHydratedArtists(artists)),
@@ -68,16 +89,20 @@ export function LumivoxHomePage() {
   return (
     <div className="lumivox-site" data-theme={theme}>
       <header className="lvx-top">
-        <div className="lvx-top-left">
-          <Link className="lvx-home-brand" to="/home" aria-label="Lumivox — recargar">
-            <span className="lvx-home-marks">
-              <DayMark />
-              <NightMark />
-            </span>
-            <span className="lvx-home-word">lumivox</span>
-          </Link>
-        </div>
-        <div className="lvx-top-right">
+        <Link
+          className={`lvx-brand ${isPulsing ? 'is-secret-pulsing' : ''}`}
+          to="/home"
+          aria-label="Lumivox — inicio"
+          onClick={handleLogoClick}
+        >
+          <div className="lvx-logo-mark markstack" aria-hidden="true">
+            <DayMark />
+            <NightMark />
+          </div>
+          <span className="lvx-word">lumivox</span>
+        </Link>
+
+        <div className="lvx-actions">
           {currentUser && (
             <Link
               to="/intranet"
@@ -91,7 +116,6 @@ export function LumivoxHomePage() {
                 background: 'rgba(224, 122, 111, 0.15)',
                 padding: '0.35rem 0.7rem',
                 borderRadius: '8px',
-                marginRight: '0.5rem',
               }}
             >
               🛠️ Intranet ({artistHandle})
@@ -102,36 +126,40 @@ export function LumivoxHomePage() {
         </div>
       </header>
 
-      <section className="lvx-hero-zone">
-        <h1 className="lvx-hero-headline">
-          <span className="lvx-hero-line">{t('home.hero.l1')}</span>
-          <span className="lvx-hero-line">{t('home.hero.l2')}</span>
-          <span className="lvx-hero-line lvx-hero-accent">{t('home.hero.accent')}</span>
-        </h1>
+      <section className="lvx-hero">
+        <div className="lvx-hero-text">
+          <h1>
+            {t('home.hero.l1')}
+            <br />
+            {t('home.hero.l2')}{' '}
+            <span className="lvx-accent">{t('home.hero.accent')}</span>.
+          </h1>
+        </div>
+
+        <div className="lvx-hero-mark markstack" aria-hidden="true">
+          <DayMark />
+          <NightMark stars />
+        </div>
       </section>
 
-      <section className="lvx-roster-zone">
-        <div className="lvx-roster-headline">
-          <span className="lvx-roster-title">{t('home.artists')}</span>
-        </div>
-
-        <div className="lvx-roster-strip-wrap">
-          <RosterStrip
-            artists={artistList}
-            activeHandle={activeArtist.handle}
-            onSelect={setActiveHandle}
-            tabIdFor={tabIdFor}
-            panelIdFor={panelIdFor}
-          />
-        </div>
-
-        <div className="lvx-stage-wrap">
-          <ArtistShowcase
-            artist={activeArtist}
-            panelId={panelIdFor(activeArtist.handle)}
-            labelledBy={tabIdFor(activeArtist.handle)}
-          />
-        </div>
+      <section className="lvx-artists" id="artistas">
+        <h2 className="lvx-section-title">{t('home.artists')}</h2>
+        {activeArtist && (
+          <div className="lvx-roster">
+            <RosterStrip
+              artists={artistList}
+              activeHandle={activeArtist.handle}
+              onSelect={setActiveHandle}
+              tabIdFor={tabIdFor}
+              panelIdFor={panelIdFor}
+            />
+            <ArtistShowcase
+              artist={activeArtist}
+              panelId={panelIdFor(activeArtist.handle)}
+              labelledBy={tabIdFor(activeArtist.handle)}
+            />
+          </div>
+        )}
       </section>
     </div>
   );
