@@ -207,10 +207,10 @@ const DICT: Record<Lang, Record<string, string>> = {
       '¡Hola! Soy Specku, ilustrador y narrador al que le apasiona extraer ideas de la imaginación y convertirlas en obras visuales cautivadoras.',
     'artist.specku.brief':
       'Me enorgullece crear arte accesible, diverso y de calidad que da vida a las ideas de las personas, manteniendo a mis clientes cómodos y con una comunicación fluida. ¡No dudes en enviar un mensaje y comencemos a crear!',
-    'artist.sunlight.hook': 'Especialmente enfocado en nutrir la creatividad humana.',
-    'artist.sunlight.discipline': 'Artista Digital · Compositor · Escritor',
+    'artist.sunlight.hook': 'Con especial dedicación a nutrir la creatividad humana.',
+    'artist.sunlight.discipline': 'Arte Digital · Composición · Escritura',
     'artist.sunlight.bio':
-      '¡Hola! Soy Alex, "Sunlight Blue". Soy un creador con múltiples pasiones: artista digital, compositor, escritor y más.',
+      '¡Hola! Soy Alex, "Sunlight Blue". Una persona creativa con múltiples pasiones: arte digital, composición de canciones, escritura y más.',
     'artist.sunlight.brief':
       'Si buscas ayuda para cualquier proyecto creativo, ¡estaré más que feliz de colaborar!',
     'specku.title': '¡Comisiones de Specku!',
