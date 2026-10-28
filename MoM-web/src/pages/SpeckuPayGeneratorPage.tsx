@@ -5,6 +5,8 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
+import { useAuth } from '../components/AuthContext';
+import { PaymentOrderService } from '../services/PaymentOrderService';
 import {
   SpeckuInvoicePayload,
   encodeInvoiceToUrl,
@@ -30,6 +32,10 @@ const PRESET_PRICES = [10, 15, 25, 40, 60, 85, 120];
 export function SpeckuPayGeneratorPage() {
   const { theme } = useTheme();
   const { t } = useLang();
+  const { currentUser } = useAuth();
+
+  // Master server order folio
+  const [orderId, setOrderId] = useState<string>(() => PaymentOrderService.GenerateOrderId());
 
   // Form states
   const [title, setTitle] = useState('Comisión Personalizada - Specku');
@@ -49,10 +55,12 @@ export function SpeckuPayGeneratorPage() {
   // Output link & copy state
   const [generatedLink, setGeneratedLink] = useState('');
   const [copied, setCopied] = useState(false);
+  const [isSavingServer, setIsSavingServer] = useState(false);
+  const [serverSaveSuccess, setServerSaveSuccess] = useState<boolean | null>(null);
 
   // Saved history in localStorage
   const [history, setHistory] = useState<
-    { id: string; title: string; client?: string; total: number; link: string; date: string }[]
+    { id: string; title: string; client?: string; total: number; link: string; date: string; status?: string }[]
   >([]);
 
   // Load history on mount
@@ -77,7 +85,7 @@ export function SpeckuPayGeneratorPage() {
 
   // Real-time breakdown calculation
   const dummyPayload: SpeckuInvoicePayload = {
-    id: 'preview',
+    id: orderId,
     title: title || 'Comisión',
     client: client || undefined,
     notes: notes || undefined,
@@ -100,7 +108,7 @@ export function SpeckuPayGeneratorPage() {
     }
 
     const payload: SpeckuInvoicePayload = {
-      id: Date.now().toString(36),
+      id: orderId,
       title: title.trim() || 'Comisión de Ilustración - Specku',
       client: client.trim() || undefined,
       notes: notes.trim() || undefined,
@@ -115,12 +123,45 @@ export function SpeckuPayGeneratorPage() {
     const token = encodeInvoiceToUrl(payload);
     const origin = window.location.origin;
     const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-    const fullUrl = `${origin}${base}/home/specku/pagar?inv=${token}`;
+    // Zero-Trust link: primary lookup by id (server-stored immutable order) with legacy inv fallback
+    const fullUrl = `${origin}${base}/home/specku/pagar?id=${orderId}&inv=${token}`;
     setGeneratedLink(fullUrl);
-  }, [title, client, notes, basePrice, discountType, discountValue, discountLabel, forceFee, currency, calculatedDiscount]);
+    setServerSaveSuccess(null);
+  }, [orderId, title, client, notes, basePrice, discountType, discountValue, discountLabel, forceFee, currency, calculatedDiscount]);
 
-  const handleCopyLink = () => {
-    if (!generatedLink) return;
+  const handleCopyLink = async () => {
+    if (!generatedLink || basePrice <= 0) return;
+
+    setIsSavingServer(true);
+    let idToken: string | undefined = undefined;
+    if (currentUser) {
+      try {
+        idToken = await currentUser.getIdToken();
+      } catch {
+        // Safe failover
+      }
+    }
+
+    // Persist immutable master order to Firebase RTDB (/ordenes_pago/{orderId})
+    const orderResp = await PaymentOrderService.CreateOrder(
+      {
+        orderId,
+        title: title.trim() || 'Comisión de Ilustración - Specku',
+        client: client.trim() || undefined,
+        notes: notes.trim() || undefined,
+        basePrice,
+        currency,
+        discountAmount: calculatedDiscount,
+        discountLabel: discountType !== 'none' ? discountLabel.trim() : undefined,
+        forceFee,
+        issuerUid: currentUser?.uid,
+      },
+      idToken,
+    );
+
+    setIsSavingServer(false);
+    setServerSaveSuccess(orderResp.CodeNumber === 200);
+
     navigator.clipboard.writeText(generatedLink).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
@@ -128,20 +169,27 @@ export function SpeckuPayGeneratorPage() {
       // Save to history
       try {
         const newEntry = {
-          id: Date.now().toString(),
+          id: orderId,
           title: title || 'Comisión',
           client: client || undefined,
           total: previewBreakdown.total,
           link: generatedLink,
           date: new Date().toLocaleDateString(),
+          status: 'PENDING',
         };
-        const updated = [newEntry, ...history.filter((h) => h.link !== generatedLink)].slice(0, 8);
+        const updated = [newEntry, ...history.filter((h) => h.id !== orderId)].slice(0, 8);
         setHistory(updated);
         localStorage.setItem(LOCAL_STORAGE_HISTORY_KEY, JSON.stringify(updated));
       } catch (e) {
         console.warn('Failed saving link to history', e);
       }
     });
+  };
+
+  const handleNewFolio = () => {
+    const newId = PaymentOrderService.GenerateOrderId();
+    setOrderId(newId);
+    setServerSaveSuccess(null);
   };
 
   const handleClearHistory = () => {
@@ -178,9 +226,24 @@ export function SpeckuPayGeneratorPage() {
         <div className="spg-layout">
           {/* Left Column: Generator Form Controls */}
           <section className="spg-form-card">
-            <h2 className="spg-section-title">
-              <span className="spg-num-badge">1</span> Detalles del Cobro
-            </h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <h2 className="spg-section-title" style={{ margin: 0 }}>
+                <span className="spg-num-badge">1</span> Detalles del Cobro
+              </h2>
+              <button
+                type="button"
+                onClick={handleNewFolio}
+                className="spg-chip-btn"
+                style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
+                title="Generar un nuevo folio de cobro"
+              >
+                🔄 Nuevo Folio
+              </button>
+            </div>
+
+            <div style={{ fontSize: '0.8rem', color: 'var(--spg-muted)', marginBottom: '1rem' }}>
+              Folio Asignado: <code style={{ fontWeight: 700, color: 'var(--spg-primary)' }}>{orderId}</code>
+            </div>
 
             {/* Concept / Title */}
             <div className="spg-field-group">
@@ -431,7 +494,12 @@ export function SpeckuPayGeneratorPage() {
 
               {/* Action Box: Generated Link */}
               <div className="spg-output-box">
-                <label className="spg-label">Enlace de Pago Generado:</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                  <label className="spg-label" style={{ margin: 0 }}>Enlace de Pago Generado:</label>
+                  <span style={{ fontSize: '0.72rem', color: '#1b8a4f', fontWeight: 700 }}>
+                    🛡️ Zero Trust Server-Bound
+                  </span>
+                </div>
                 <div className="spg-url-display" title={generatedLink}>
                   {generatedLink || 'Ingresa un precio válido para generar el enlace'}
                 </div>
@@ -441,9 +509,13 @@ export function SpeckuPayGeneratorPage() {
                     type="button"
                     className={`spg-btn-copy ${copied ? 'is-copied' : ''}`}
                     onClick={handleCopyLink}
-                    disabled={!generatedLink}
+                    disabled={!generatedLink || isSavingServer}
                   >
-                    {copied ? '✓ ¡Enlace Copiado!' : '📋 Copiar Enlace para el Cliente'}
+                    {isSavingServer
+                      ? '⏳ Registrando en Servidor...'
+                      : copied
+                        ? '✓ ¡Enlace Copiado y Registrado!'
+                        : '📋 Copiar Enlace para el Cliente'}
                   </button>
 
                   {generatedLink && (
@@ -457,6 +529,12 @@ export function SpeckuPayGeneratorPage() {
                     </a>
                   )}
                 </div>
+
+                {serverSaveSuccess === true && (
+                  <div style={{ fontSize: '0.75rem', color: '#1b8a4f', marginTop: '0.5rem', textAlign: 'center' }}>
+                    ✓ Orden maestra asentada de forma inmutable en Firebase RTDB.
+                  </div>
+                )}
               </div>
             </div>
 
@@ -474,9 +552,9 @@ export function SpeckuPayGeneratorPage() {
                     <div key={item.id} className="spg-history-item">
                       <div className="spg-history-info">
                         <strong>{item.title}</strong>
-                        {item.client && <span>({item.client})</span>}
+                        {item.client && <span> ({item.client})</span>}
                         <div className="spg-history-meta">
-                          ${item.total.toFixed(2)} USD · {item.date}
+                          ${item.total.toFixed(2)} USD · Folio: <code>{item.id}</code> · {item.date}
                         </div>
                       </div>
                       <button

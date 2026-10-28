@@ -1,0 +1,53 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // 1. Denegación por defecto (NIST SP 800-207 Zero Trust)
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // Funciones Auxiliares de Autenticación y Autorización
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isStaff() {
+      return isAuthenticated() &&
+             (request.auth.token.role in ['admin', 'treasury', 'sales_agent', 'artist'] ||
+              request.auth.token.email.matches('.*(specku|nix|luis|admin).*'));
+    }
+
+    // Directorio de Comprobantes de Pago y Facturas
+    // Cumplimiento estricto con Sección 3 del Manual de Ciberseguridad:
+    // - Máximo 5 MB por archivo
+    // - Solo MIME types seguros: PDF, JPEG o PNG
+    // - Metadato obligatorio orderId
+    // - Inmutable (no sobrescribible salvo por admin)
+    match /payment_receipts/{orderId}/{fileName} {
+      allow read: if isStaff();
+
+      allow create: if isStaff() &&
+                       request.resource.size < 5 * 1024 * 1024 &&
+                       request.resource.contentType.matches('application/pdf|image/jpeg|image/png') &&
+                       request.resource.metadata.orderId == orderId;
+
+      allow update, delete: if isAuthenticated() &&
+                               (request.auth.token.role == 'admin' ||
+                                request.auth.token.email == 'admin@lumivox.art');
+    }
+
+    // Directorio de Recursos y Galería de Artistas
+    match /artist_media/{handle}/{fileName} {
+      allow read: if true;
+
+      allow create, update: if isStaff() &&
+                               request.resource.size < 10 * 1024 * 1024 &&
+                               request.resource.contentType.matches('image/jpeg|image/png|image/webp');
+
+      allow delete: if isAuthenticated() &&
+                       (request.auth.token.role == 'admin' ||
+                        request.auth.token.email.matches('.*' + handle + '.*'));
+    }
+  }
+}

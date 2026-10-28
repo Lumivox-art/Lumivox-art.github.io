@@ -1,0 +1,41 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "artistas_perfiles": {
+      ".read": true,
+      "$handle": {
+        ".write": "auth != null && (auth.token.email.beginsWith($handle) || auth.token.email.beginsWith('nix') || auth.token.email.beginsWith('luis') || auth.token.email === 'admin@lumivox.art')",
+        ".validate": "newData.hasChildren(['handle', 'displayName', 'accentColor', 'updatedAt'])"
+      }
+    },
+
+    "ordenes_pago": {
+      ".read": true,
+      "$orderId": {
+        ".write": "auth != null || (data.exists() && data.child('status').val() === 'PENDING' && newData.child('status').val() === 'COMPLETED')",
+        ".validate": "newData.hasChildren(['orderId', 'basePrice', 'currency', 'status', 'createdAt']) && newData.child('basePrice').isNumber() && newData.child('basePrice').val() > 0"
+      }
+    },
+
+    "artista_medio": {
+      ".read": true,
+      "$key": {
+        ".write": "auth != null"
+      }
+    },
+
+    "Specku_Gallery": {
+      ".read": true,
+      "$item": {
+        ".write": "auth != null && (auth.token.email.beginsWith('specku') || auth.token.email.beginsWith('nix') || auth.token.email.beginsWith('luis'))"
+      }
+    },
+
+    "audit_logs": {
+      ".read": "auth != null && (auth.token.email.beginsWith('nix') || auth.token.email === 'admin@lumivox.art')",
+      ".write": "auth != null"
+    }
+  }
+}

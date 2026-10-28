@@ -189,6 +189,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.checkout.contact': 'Contact Specku on Discord',
     'specku.pay.checkout.view_commissions': 'View Gallery & Pricing',
     'specku.pay.checkout.success.title': 'Payment Successful!',
+    'specku.pay.checkout.already_paid.title': 'Order Already Settled',
+    'specku.pay.checkout.already_paid.desc':
+      'This payment order has already been paid and settled. Double charging is prevented by security policy.',
+    'specku.pay.checkout.expired.title': 'Payment Link Expired',
+    'specku.pay.checkout.expired.desc':
+      'For security and anti-tampering protection (TTL policy), this payment link has expired. Please contact Specku to receive a fresh link.',
+    'specku.pay.checkout.verifying': 'Verifying order authenticity on server...',
 
     // intranet & artist auth
     'intranet.login.title': 'Artist Intranet',
@@ -388,6 +395,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.checkout.contact': 'Contactar a Specku en Discord',
     'specku.pay.checkout.view_commissions': 'Ver Galería y Precios',
     'specku.pay.checkout.success.title': '¡Pago Realizado con Éxito!',
+    'specku.pay.checkout.already_paid.title': 'Esta Orden Ya Fue Liquidada',
+    'specku.pay.checkout.already_paid.desc':
+      'Esta orden de pago ya ha sido liquidada con anterioridad. Por políticas de seguridad, no se admiten cobros duplicados.',
+    'specku.pay.checkout.expired.title': 'Enlace de Pago Expirado',
+    'specku.pay.checkout.expired.desc':
+      'Por políticas de seguridad y protección contra alteraciones (política TTL), esta liga ha expirado. Por favor solicita un nuevo enlace a Specku.',
+    'specku.pay.checkout.verifying': 'Verificando autenticidad de la orden en el servidor...',
 
     // intranet & artist auth
     'intranet.login.title': 'Intranet de Artistas',

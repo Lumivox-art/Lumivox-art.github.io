@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Denegación por defecto para cualquier ruta no declarada (Zero Trust NIST SP 800-207)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Funciones Auxiliares de Validación Criptográfica y de Identidad
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isMfaVerified() {
+      return isAuthenticated() && request.auth.token.firebase.sign_in_second_factor != null;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && request.auth.token.role == role;
+    }
+
+    function hasAnyRole(roles) {
+      return isAuthenticated() && request.auth.token.role in roles;
+    }
+
+    function isStaff() {
+      return hasAnyRole(['admin', 'treasury', 'sales_agent', 'artist']);
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Reglas para la Colección de Ligas de Pago (Inmutables desde el cliente)
+    match /payment_links/{linkId} {
+      allow get: if true; // El comprador puede consultar su orden para pagar
+      allow list: if hasAnyRole(['admin', 'treasury', 'artist']);
+      allow create, update, delete: if false; // Solo backend / Admin SDK
+    }
+
+    // Reglas para Órdenes de Cobro y Facturación
+    match /orders/{orderId} {
+      allow get: if true;
+      allow list: if isStaff();
+
+      allow create: if isStaff() &&
+                       request.resource.data.keys().hasAll(['orderId', 'amount', 'currency', 'status', 'createdAt']) &&
+                       request.resource.data.amount is number &&
+                       request.resource.data.amount > 0 &&
+                       request.resource.data.currency in ['MXN', 'USD'] &&
+                       request.resource.data.status == 'PENDING' &&
+                       request.resource.data.createdAt == request.time;
+
+      allow update: if isStaff() &&
+                       !request.resource.data.diff(resource.data).affectedKeys().hasAny(['amount', 'currency', 'orderId']) &&
+                       request.resource.data.status in ['PENDING', 'PAID', 'CANCELLED'];
+
+      allow delete: if false;
+    }
+
+    // Registros de Auditoría Forense (Inmutables, append-only)
+    match /audit_logs/{logId} {
+      allow read: if hasRole('admin');
+      allow write: if false;
+    }
+
+    // Perfiles Internos de Artistas
+    match /intranet_profiles/{userId} {
+      allow read: if true;
+      allow update: if isOwner(userId) &&
+                       !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'permissions', 'email']);
+      allow create, delete: if false;
+    }
+  }
+}

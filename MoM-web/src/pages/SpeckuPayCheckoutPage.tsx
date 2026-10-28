@@ -6,6 +6,7 @@ import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
+import { PaymentOrderService, PaymentOrder } from '../services/PaymentOrderService';
 import {
   decodeInvoiceFromUrl,
   computeBreakdown,
@@ -23,12 +24,68 @@ export function SpeckuPayCheckoutPage() {
   const { t } = useLang();
   const [searchParams] = useSearchParams();
 
-  // Decode invoice payload from query string
+  const orderIdParam = searchParams.get('id');
+  const invParam = searchParams.get('inv');
+
+  // Server-stored master order state (Zero Trust & Anti-Tampering)
+  const [serverOrder, setServerOrder] = useState<PaymentOrder | null>(null);
+  const [isLoadingServer, setIsLoadingServer] = useState<boolean>(Boolean(orderIdParam));
+  const [isAlreadyPaid, setIsAlreadyPaid] = useState<boolean>(false);
+  const [isExpired, setIsExpired] = useState<boolean>(false);
+
+  // Fetch verified order from Firebase RTDB if orderIdParam is present
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadServerOrder(id: string) {
+      setIsLoadingServer(true);
+      const res = await PaymentOrderService.GetOrder(id);
+
+      if (isCancelled) return;
+      setIsLoadingServer(false);
+
+      if (res.Result) {
+        setServerOrder(res.Result);
+        if (res.Result.status === 'COMPLETED') {
+          setIsAlreadyPaid(true);
+        } else if (res.Result.expiresAt && Date.now() > res.Result.expiresAt) {
+          setIsExpired(true);
+        }
+      }
+    }
+
+    if (orderIdParam) {
+      loadServerOrder(orderIdParam);
+    } else {
+      setIsLoadingServer(false);
+    }
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [orderIdParam]);
+
+  // Decode invoice payload: Server order takes absolute priority over URL parameter
   const invoicePayload: SpeckuInvoicePayload | null = useMemo(() => {
-    const rawInv = searchParams.get('inv');
-    if (!rawInv) return null;
-    return decodeInvoiceFromUrl(rawInv);
-  }, [searchParams]);
+    if (serverOrder) {
+      return {
+        id: serverOrder.orderId,
+        title: serverOrder.title,
+        client: serverOrder.client,
+        notes: serverOrder.notes,
+        basePrice: serverOrder.basePrice,
+        discountAmount: serverOrder.discountAmount,
+        discountLabel: serverOrder.discountLabel,
+        forceFee: serverOrder.forceFee,
+        currency: serverOrder.currency,
+        createdAt: serverOrder.createdAt,
+      };
+    }
+    if (invParam) {
+      return decodeInvoiceFromUrl(invParam);
+    }
+    return null;
+  }, [serverOrder, invParam]);
 
   // Client fee selection: defaults to true if forced by Specku, or false if optional
   const [clientWantsToCoverFee, setClientWantsToCoverFee] = useState<boolean>(() => {
@@ -48,7 +105,127 @@ export function SpeckuPayCheckoutPage() {
   const [payerName, setPayerName] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
-  // If no valid invoice token
+  // Loading state while checking server order integrity
+  if (isLoadingServer) {
+    return (
+      <div className="specku-pay-checkout" data-theme={theme}>
+        <div className="spc-topbar">
+          <LumivoxBrand />
+          <div className="spc-topbar-actions">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+        </div>
+        <main className="spc-container">
+          <div className="spc-card spc-invalid-card">
+            <div className="spinner-border text-danger mb-3" role="status" />
+            <h2>{t('specku.pay.checkout.verifying') || 'Verificando autenticidad de la orden en el servidor...'}</h2>
+            <p>Conectando con el registro seguro de Firebase para garantizar la integridad de los importes.</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Already Paid Order state (Anti-Replay / Double Charging protection)
+  if (isAlreadyPaid && serverOrder) {
+    return (
+      <div className="specku-pay-checkout" data-theme={theme}>
+        <div className="spc-topbar">
+          <LumivoxBrand />
+          <div className="spc-topbar-actions">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+        </div>
+        <main className="spc-container">
+          <div className="spc-card spc-invalid-card">
+            <div className="spc-warning-icon">✅</div>
+            <h2>{t('specku.pay.checkout.already_paid.title') || 'Esta Orden Ya Fue Liquidada'}</h2>
+            <p>
+              {t('specku.pay.checkout.already_paid.desc') ||
+                'Esta orden de pago ya ha sido liquidada con anterioridad. Por políticas de seguridad, no se admiten cobros duplicados.'}
+            </p>
+            <div className="spc-receipt-box" style={{ maxWidth: '420px', margin: '0 auto 1.5rem', textAlign: 'left' }}>
+              <div className="spc-receipt-row">
+                <span>Folio:</span>
+                <code>{serverOrder.orderId}</code>
+              </div>
+              <div className="spc-receipt-row">
+                <span>Concepto:</span>
+                <strong>{serverOrder.title}</strong>
+              </div>
+              {serverOrder.transactionId && (
+                <div className="spc-receipt-row">
+                  <span>Transacción PayPal:</span>
+                  <code className="spc-receipt-code">{serverOrder.transactionId}</code>
+                </div>
+              )}
+              {serverOrder.paidAt && (
+                <div className="spc-receipt-row">
+                  <span>Fecha de Liquidación:</span>
+                  <span>{new Date(serverOrder.paidAt).toLocaleString()}</span>
+                </div>
+              )}
+            </div>
+            <div className="spc-invalid-actions">
+              <a
+                href={SPECKU_DISCORD_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="spc-btn-primary"
+              >
+                💬 Contactar a Specku en Discord
+              </a>
+              <Link to="/home/specku/comisiones" className="spc-btn-secondary">
+                🎨 Ver Galería de Specku
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Expired Link state (TTL policy enforcement)
+  if (isExpired && serverOrder) {
+    return (
+      <div className="specku-pay-checkout" data-theme={theme}>
+        <div className="spc-topbar">
+          <LumivoxBrand />
+          <div className="spc-topbar-actions">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
+        </div>
+        <main className="spc-container">
+          <div className="spc-card spc-invalid-card">
+            <div className="spc-warning-icon">⏳</div>
+            <h2>{t('specku.pay.checkout.expired.title') || 'Enlace de Pago Expirado'}</h2>
+            <p>
+              {t('specku.pay.checkout.expired.desc') ||
+                'Por políticas de seguridad y protección contra alteraciones (política TTL), esta liga ha expirado. Por favor solicita un nuevo enlace a Specku.'}
+            </p>
+            <div className="spc-invalid-actions">
+              <a
+                href={SPECKU_DISCORD_PROFILE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="spc-btn-primary"
+              >
+                💬 Solicitar Nueva Liga en Discord
+              </a>
+              <Link to="/home/specku/comisiones" className="spc-btn-secondary">
+                🎨 Ver Comisiones
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // If no valid invoice payload found
   if (!invoicePayload) {
     return (
       <div className="specku-pay-checkout" data-theme={theme}>
@@ -92,7 +269,7 @@ export function SpeckuPayCheckoutPage() {
 
   const handleDiscordNotify = () => {
     const message = encodeURIComponent(
-      `¡Hola Specku! Ya completé el pago de mi comisión "${invoicePayload.title}" por $${breakdown.total.toFixed(2)} ${breakdown.currency}.\nID de Transacción: ${transactionId}`,
+      `¡Hola Specku! Ya completé el pago de mi comisión "${invoicePayload.title}" por $${breakdown.total.toFixed(2)} ${breakdown.currency}.\nFolio de Orden: ${invoicePayload.id}\nID de Transacción: ${transactionId}`,
     );
     window.open(`${SPECKU_DISCORD_PROFILE_URL}?message=${message}`, '_blank', 'noopener,noreferrer');
   };
@@ -128,6 +305,10 @@ export function SpeckuPayCheckoutPage() {
 
             <div className="spc-receipt-box">
               <div className="spc-receipt-row">
+                <span>Folio de Orden:</span>
+                <code>{invoicePayload.id}</code>
+              </div>
+              <div className="spc-receipt-row">
                 <span>Concepto:</span>
                 <strong>{invoicePayload.title}</strong>
               </div>
@@ -138,7 +319,7 @@ export function SpeckuPayCheckoutPage() {
                 </div>
               )}
               <div className="spc-receipt-row">
-                <span>ID de Transacción:</span>
+                <span>ID de Transacción PayPal:</span>
                 <code className="spc-receipt-code">{transactionId || 'Capturado'}</code>
               </div>
               <div className="spc-receipt-row">
@@ -307,7 +488,8 @@ export function SpeckuPayCheckoutPage() {
                         },
                         purchase_units: [
                           {
-                            description: `${invoicePayload.title} - Specku Commission`,
+                            description: `${invoicePayload.title} - Specku Commission (${invoicePayload.id})`,
+                            custom_id: invoicePayload.id,
                             amount: {
                               currency_code: breakdown.currency,
                               value: breakdown.total.toFixed(2),
@@ -343,6 +525,12 @@ export function SpeckuPayCheckoutPage() {
                           details.payer?.name?.given_name ||
                           details.payer?.name?.surname ||
                           '';
+
+                        // Settle order on Firebase RTDB master record
+                        if (invoicePayload.id) {
+                          await PaymentOrderService.MarkOrderPaid(invoicePayload.id, id, name);
+                        }
+
                         setTransactionId(id);
                         setPayerName(name);
                         setIsSuccess(true);
@@ -365,7 +553,7 @@ export function SpeckuPayCheckoutPage() {
               </div>
 
               <div className="spc-security-badge">
-                <span>🔒 Transacción encriptada directa con PayPal · Bienes Digitales (Sin costos de envío)</span>
+                <span>🔒 Transacción encriptada directa con PayPal (PCI-DSS SAQ A) · Bienes Digitales (Sin costos de envío)</span>
               </div>
             </section>
           </div>
