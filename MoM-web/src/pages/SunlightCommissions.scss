@@ -201,11 +201,40 @@
 
   // --- Cassette Deck Stage (Outside form, sitting directly on background) ---
   .sl-cassette-stage {
-    max-width: 920px;
-    margin: 0 auto 2.25rem;
+    max-width: 1040px;
+    margin: 0 auto 2.5rem;
     padding: 0 1rem;
     position: relative;
     z-index: 2;
+
+    .sl-stage-layout {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      justify-content: center;
+
+      @media (max-width: 960px) {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    .sl-stage-player-col {
+      flex: 1 1 640px;
+      min-width: 0;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    .sl-stage-tower-col {
+      flex: 0 0 320px;
+      width: 100%;
+      max-width: 320px;
+
+      @media (max-width: 960px) {
+        max-width: 440px;
+      }
+    }
   }
 
   .sl-covers-grid {

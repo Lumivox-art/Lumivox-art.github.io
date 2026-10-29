@@ -53,6 +53,22 @@ const AUTHORIZED_USERS: AuthorizedAccount[] = [
     handle: 'luis-m',
     uid: 'usr_nix_auth',
   },
+  {
+    username: 'sunlight',
+    displayName: 'Sunlight Blue',
+    email: 'sunlight@lumivox.art',
+    password: 'Lumivox2',
+    handle: 'sunlight-blue',
+    uid: 'usr_sunlight_auth',
+  },
+  {
+    username: 'sunlight-blue',
+    displayName: 'Sunlight Blue',
+    email: 'sunlight-blue@lumivox.art',
+    password: 'Lumivox2',
+    handle: 'sunlight-blue',
+    uid: 'usr_sunlight_auth',
+  },
 ];
 
 /**

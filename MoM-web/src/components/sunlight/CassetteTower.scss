@@ -1,0 +1,314 @@
+// 90s Hi-Fi Cassette Tower / Tape Rack Styling
+// Accommodates up to 10 cassettes (20 tracks compiled 2 by 2), with arrow navigation for >10
+
+.sl-cassette-tower {
+  --tower-bg: linear-gradient(170deg, #ede3d4 0%, #dbcbba 100%);
+  --tower-border: #bfb09c;
+  --tower-shadow: 0 12px 30px rgba(42, 26, 18, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --tower-text: #2a1a12;
+  --tower-muted: #6e5845;
+  --slot-bg: linear-gradient(180deg, #2a221d 0%, #1a1512 100%);
+  --slot-border: #42362e;
+  --spine-bg: #fffdfa;
+  --spine-text: #1a1512;
+  --spine-accent: #254b82;
+  --chip-bg: #ede6da;
+  --chip-active-bg: #254b82;
+  --chip-active-text: #ffffff;
+
+  width: 100%;
+  max-width: 320px;
+  background: var(--tower-bg);
+  border: 2px solid var(--tower-border);
+  border-radius: 16px;
+  padding: 1.15rem 1rem;
+  box-shadow: var(--tower-shadow);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  transition: all 0.3s ease;
+
+  .sl-tower-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+
+    .sl-tower-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+
+      .sl-tower-tag {
+        font-size: 0.65rem;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        color: var(--spine-accent);
+      }
+
+      .sl-tower-heading {
+        font-family: 'Fraunces', serif;
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin: 0;
+        color: var(--tower-text);
+        line-height: 1.2;
+      }
+    }
+
+    .sl-tower-count-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--tower-muted);
+      background: rgba(0, 0, 0, 0.05);
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+  }
+
+  // Navigation Arrows for >10 Cassettes
+  .sl-tower-arrow-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.45rem;
+    background: var(--chip-bg);
+    border: 1px solid var(--tower-border);
+    border-radius: 8px;
+    color: var(--tower-text);
+    font-size: 0.75rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    margin-bottom: 0.5rem;
+
+    &:hover:not(:disabled) {
+      background: #ffffff;
+      color: var(--spine-accent);
+      border-color: var(--spine-accent);
+      transform: translateY(-1px);
+    }
+
+    &.is-disabled,
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &.arrow-down {
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
+  }
+
+  // Vertical Stack of Cassette Slots
+  .sl-tower-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    max-height: 520px;
+    overflow: hidden;
+  }
+
+  // Individual Slot
+  .sl-tower-slot {
+    position: relative;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s;
+    outline: none;
+
+    &:hover {
+      transform: translateX(-4px);
+    }
+
+    &.is-loaded {
+      transform: translateX(-8px);
+
+      .sl-spine-case {
+        border-color: var(--spine-accent);
+        box-shadow: 0 4px 14px rgba(37, 75, 130, 0.25);
+
+        .sl-spine-header .sl-spine-status {
+          background: var(--spine-accent);
+          color: #ffffff;
+          font-weight: 900;
+        }
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--spine-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  // Tape Spine (Realistic 90s cassette case edge)
+  .sl-spine-case {
+    background: var(--spine-bg);
+    border: 1.5px solid var(--slot-border);
+    border-left: 5px solid var(--spine-accent);
+    border-radius: 6px;
+    padding: 0.45rem 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+
+    .sl-spine-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .sl-spine-num {
+        font-family: 'Space Mono', monospace, monospace;
+        font-size: 0.72rem;
+        font-weight: 900;
+        color: var(--spine-accent);
+        letter-spacing: 0.05em;
+      }
+
+      .sl-spine-status {
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--tower-muted);
+        background: rgba(0, 0, 0, 0.06);
+        padding: 0.12rem 0.4rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+      }
+    }
+
+    .sl-spine-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+
+      .sl-spine-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--spine-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .sl-spine-tracks {
+        display: flex;
+        gap: 0.35rem;
+        flex-wrap: wrap;
+
+        .sl-track-chip {
+          font-size: 0.68rem;
+          font-weight: 700;
+          padding: 0.15rem 0.45rem;
+          background: var(--chip-bg);
+          border-radius: 4px;
+          color: var(--tower-muted);
+          cursor: pointer;
+          transition: all 0.15s ease;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 130px;
+
+          &:hover {
+            color: var(--spine-accent);
+            background: rgba(37, 75, 130, 0.1);
+          }
+
+          &.is-side-active {
+            background: var(--chip-active-bg);
+            color: var(--chip-active-text);
+            font-weight: 900;
+            box-shadow: 0 1px 4px rgba(37, 75, 130, 0.3);
+          }
+        }
+      }
+    }
+
+    .sl-spine-teeth {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 0.15rem;
+
+      span {
+        width: 12px;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 1px;
+      }
+    }
+  }
+}
+
+// --- NIGHT MODE PARITY ---
+[data-theme='night'] .sl-cassette-tower {
+  --tower-bg: linear-gradient(170deg, #1c182a 0%, #100d1b 100%);
+  --tower-border: #312b45;
+  --tower-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --tower-text: #f4efe6;
+  --tower-muted: #9a93b0;
+  --slot-bg: #09070f;
+  --slot-border: #2c2540;
+  --spine-bg: #151221;
+  --spine-text: #f4efe6;
+  --spine-accent: #38bdf8;
+  --chip-bg: #241f32;
+  --chip-active-bg: #38bdf8;
+  --chip-active-text: #0c0b16;
+
+  .sl-tower-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+
+    .sl-tower-count-badge {
+      background: rgba(255, 255, 255, 0.08);
+      color: #9a93b0;
+    }
+  }
+
+  .sl-tower-arrow-btn {
+    background: #241f32;
+    border-color: #312b45;
+    color: #f4efe6;
+
+    &:hover:not(:disabled) {
+      background: #2f2842;
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+  }
+
+  .sl-spine-case {
+    border-color: #312b45;
+    border-left-color: #38bdf8;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+
+    .sl-spine-header .sl-spine-status {
+      background: rgba(255, 255, 255, 0.08);
+      color: #9a93b0;
+    }
+
+    .sl-spine-teeth span {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  .sl-tower-slot.is-loaded .sl-spine-case {
+    border-color: #38bdf8;
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+
+    .sl-spine-header .sl-spine-status {
+      background: #38bdf8;
+      color: #0c0b16;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    }
+  }
+}

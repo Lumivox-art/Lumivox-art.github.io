@@ -22,7 +22,18 @@ export interface SunlightSampleBase {
   Duration?: string | null;
   TrackNumber?: number | null;
   HasVinylDisc?: boolean;
+  CassetteTitle?: string | null;
+  CassetteIndex?: number | null;
+  Side?: 'A' | 'B' | null;
   Order: number;
   IsActive: boolean;
   IsDeleted: boolean;
+}
+
+export interface SunlightCompiledCassette {
+  id: string;
+  tapeNumber: number;
+  title: string;
+  sideA: SunlightSampleBase;
+  sideB?: SunlightSampleBase | null;
 }

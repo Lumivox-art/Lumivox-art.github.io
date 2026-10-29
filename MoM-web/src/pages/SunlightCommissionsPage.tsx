@@ -9,6 +9,7 @@ import { useLang } from '../i18n';
 import { SunlightCommissionsService } from '../services/SunlightCommissionsService';
 import type { SunlightSampleBase } from '../models/Sunlight';
 import { CassettePlayer } from '../components/sunlight/CassettePlayer';
+import { CassetteTower } from '../components/sunlight/CassetteTower';
 import { VinylCoverCard } from '../components/sunlight/VinylCoverCard';
 import { LumivoxDbImage } from '../components/LumivoxDbImage';
 import './SunlightCommissions.scss';
@@ -37,8 +38,10 @@ export function SunlightCommissionsPage() {
   // Custom user notes
   const [notes, setNotes] = useState('');
 
-  // Cassette player track state
+  // Cassette player track and compiled cassette state
   const [playerTrackKey, setPlayerTrackKey] = useState<string>('instrumental');
+  const [activeCassetteIndex, setActiveCassetteIndex] = useState(0);
+  const [activeSide, setActiveSide] = useState<'A' | 'B'>('A');
 
   // Zoom modal state for album covers
   const [zoomedSample, setZoomedSample] = useState<SunlightSampleBase | null>(null);
@@ -59,6 +62,7 @@ export function SunlightCommissionsPage() {
 
   const artCovers = samples.filter((s) => s.Kind === 'cover');
   const musicTracks = samples.filter((s) => s.Kind === 'music');
+  const compiledCassettes = SunlightCommissionsService.CompileCassettes(musicTracks);
 
   const selectedArt = artCovers.find((s) => s.Key === selectedArtKey) || null;
   const selectedSong = musicTracks.find((s) => s.Key === selectedSongKey) || null;
@@ -147,17 +151,52 @@ export function SunlightCommissionsPage() {
 
       {/* Cassette Deck Stage - Outside the form, sitting directly over the background */}
       <section className="sl-cassette-stage">
-        <CassettePlayer
-          tracks={musicTracks}
-          activeTrackKey={playerTrackKey}
-          onTrackChange={(key) => {
-            setPlayerTrackKey(key);
-            if (key === 'instrumental' || key === 'vocal-with-lyrics') {
-              setSelectedSongKey(key);
-              setCopied(false);
-            }
-          }}
-        />
+        <div className="sl-stage-layout">
+          <div className="sl-stage-player-col">
+            <CassettePlayer
+              tracks={musicTracks}
+              activeTrackKey={playerTrackKey}
+              compiledCassette={compiledCassettes[activeCassetteIndex] || null}
+              activeSide={activeSide}
+              onSideChange={(side) => {
+                setActiveSide(side);
+                const tape = compiledCassettes[activeCassetteIndex];
+                if (tape) {
+                  const trk = side === 'B' && tape.sideB ? tape.sideB : tape.sideA;
+                  if (trk) {
+                    setPlayerTrackKey(trk.Key);
+                  }
+                }
+              }}
+              onTrackChange={(key) => {
+                setPlayerTrackKey(key);
+                if (key === 'instrumental' || key === 'vocal-with-lyrics') {
+                  setSelectedSongKey(key);
+                  setCopied(false);
+                }
+              }}
+            />
+          </div>
+
+          <div className="sl-stage-tower-col">
+            <CassetteTower
+              cassettes={compiledCassettes}
+              activeCassetteIndex={activeCassetteIndex}
+              activeSide={activeSide}
+              onSelectCassette={(idx, side = 'A') => {
+                setActiveCassetteIndex(idx);
+                setActiveSide(side);
+                const tape = compiledCassettes[idx];
+                if (tape) {
+                  const trk = side === 'B' && tape.sideB ? tape.sideB : tape.sideA;
+                  if (trk) {
+                    setPlayerTrackKey(trk.Key);
+                  }
+                }
+              }}
+            />
+          </div>
+        </div>
       </section>
 
       {/* Main Stepped Flow */}
@@ -198,7 +237,7 @@ export function SunlightCommissionsPage() {
           </p>
 
           <div className="sl-song-grid">
-            {musicTracks.map((song) => (
+            {musicTracks.map((song, songIdx) => (
               <button
                 key={song.Key}
                 type="button"
@@ -208,6 +247,10 @@ export function SunlightCommissionsPage() {
                   setSelectedSongKey(newKey);
                   if (newKey) {
                     setPlayerTrackKey(newKey);
+                    const tapeIdx = Math.floor(songIdx / 2);
+                    const tapeSide = songIdx % 2 === 1 ? 'B' : 'A';
+                    setActiveCassetteIndex(tapeIdx);
+                    setActiveSide(tapeSide);
                   }
                   setCopied(false);
                 }}

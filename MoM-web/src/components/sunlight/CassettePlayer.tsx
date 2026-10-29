@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLang } from '../../i18n';
-import type { SunlightSampleBase } from '../../models/Sunlight';
+import type { SunlightSampleBase, SunlightCompiledCassette } from '../../models/Sunlight';
 import './CassettePlayer.scss';
 
 interface CassettePlayerProps {
-  tracks: SunlightSampleBase[];
+  tracks?: SunlightSampleBase[];
+  compiledCassette?: SunlightCompiledCassette | null;
+  activeSide?: 'A' | 'B';
+  onSideChange?: (side: 'A' | 'B') => void;
   activeTrackKey?: string;
   selectedTrackKey?: string;
   onTrackChange?: (key: string) => void;
@@ -12,7 +15,10 @@ interface CassettePlayerProps {
 }
 
 export function CassettePlayer({
-  tracks,
+  tracks = [],
+  compiledCassette,
+  activeSide = 'A',
+  onSideChange,
   activeTrackKey,
   selectedTrackKey,
   onTrackChange,
@@ -29,18 +35,27 @@ export function CassettePlayer({
   };
 
   const musicTracks = tracks.filter((t) => t.Kind === 'music');
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [legacyIndex, setLegacyIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.85);
 
-  // Sync index when active key changes from parent and pause automatically
+  // Active track determination based on compiledCassette vs legacy tracks
+  const currentSide: 'A' | 'B' = compiledCassette ? activeSide : (legacyIndex === 1 ? 'B' : 'A');
+
+  const currentTrack: SunlightSampleBase | null = compiledCassette
+    ? currentSide === 'B' && compiledCassette.sideB
+      ? compiledCassette.sideB
+      : compiledCassette.sideA
+    : musicTracks[legacyIndex] || musicTracks[0] || null;
+
+  // Sync index when active key changes from parent (legacy fallback) and pause automatically
   useEffect(() => {
-    if (effectiveActiveKey) {
+    if (!compiledCassette && effectiveActiveKey) {
       const idx = musicTracks.findIndex((t) => t.Key === effectiveActiveKey);
-      if (idx >= 0 && idx !== currentIndex) {
-        setCurrentIndex(idx);
+      if (idx >= 0 && idx !== legacyIndex) {
+        setLegacyIndex(idx);
         if (audioRef.current) {
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
@@ -49,9 +64,7 @@ export function CassettePlayer({
         setCurrentTime(0);
       }
     }
-  }, [effectiveActiveKey, musicTracks]);
-
-  const currentTrack = musicTracks[currentIndex] || musicTracks[0];
+  }, [effectiveActiveKey, musicTracks, compiledCassette, legacyIndex]);
 
   const getTrackSrc = (trk?: SunlightSampleBase | null): string => {
     if (!trk) return '';
@@ -65,7 +78,7 @@ export function CassettePlayer({
     }
   }, [volume]);
 
-  // Update audio source when track changes and ensure player is paused
+  // Update audio source when track or cassette changes and ensure player is paused
   useEffect(() => {
     const audio = audioRef.current;
     if (audio && currentTrack) {
@@ -81,11 +94,11 @@ export function CassettePlayer({
         setCurrentTime(0);
       }
     }
-  }, [currentIndex, currentTrack]);
+  }, [currentTrack]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !currentTrack) return;
 
     if (!audio.paused) {
       audio.pause();
@@ -118,23 +131,39 @@ export function CassettePlayer({
     }
   };
 
-  const handleSwitchSide = (idx: number) => {
-    if (idx < 0 || idx >= musicTracks.length) return;
-    setCurrentIndex(idx);
-    const trk = musicTracks[idx];
-    if (trk) {
-      notifyTrackChange(trk.Key);
+  const handleSelectSide = (side: 'A' | 'B') => {
+    if (compiledCassette) {
+      if (side === 'B' && !compiledCassette.sideB) return;
+      if (side === activeSide) return;
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      setIsPlaying(false);
+      setCurrentTime(0);
+
+      onSideChange?.(side);
+      const targetTrk = side === 'B' ? compiledCassette.sideB : compiledCassette.sideA;
+      if (targetTrk) {
+        notifyTrackChange(targetTrk.Key);
+      }
+    } else {
+      const targetIdx = side === 'A' ? 0 : 1;
+      if (targetIdx >= 0 && targetIdx < musicTracks.length) {
+        setLegacyIndex(targetIdx);
+        const trk = musicTracks[targetIdx];
+        if (trk) {
+          notifyTrackChange(trk.Key);
+        }
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+        setIsPlaying(false);
+        setCurrentTime(0);
+      }
     }
-    const audio = audioRef.current;
-    if (audio) {
-      const src = getTrackSrc(trk);
-      audio.pause();
-      audio.currentTime = 0;
-      audio.src = src;
-      audio.load();
-    }
-    setIsPlaying(false);
-    setCurrentTime(0);
   };
 
   const handleTimeUpdate = () => {
@@ -171,7 +200,7 @@ export function CassettePlayer({
 
   if (!currentTrack) return null;
 
-  const isSideA = currentTrack.Key === 'instrumental';
+  const isSideA = currentSide === 'A';
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
@@ -245,7 +274,9 @@ export function CassettePlayer({
             <div className="sl-tape-sticker">
               <div className="sl-sticker-top">
                 <span className="sl-side-pill">{isSideA ? 'A' : 'B'}</span>
-                <span className="sl-tape-title">{currentTrack.Title}</span>
+                <span className="sl-tape-title">
+                  {compiledCassette ? (compiledCassette.title || currentTrack.Title) : currentTrack.Title}
+                </span>
               </div>
               <div className="sl-sticker-rule" />
               <div className="sl-sticker-bottom">
@@ -370,19 +401,32 @@ export function CassettePlayer({
       <div className="sl-deck-controls-row">
         {/* Physical Side Selector Buttons */}
         <div className="sl-deck-sides">
-          {musicTracks.map((trk, i) => (
-            <button
-              key={trk.Key}
-              type="button"
-              className={`sl-side-switch-btn ${currentIndex === i ? 'is-active' : ''}`}
-              onClick={() => handleSwitchSide(i)}
-            >
-              <span className="btn-side-char">{i === 0 ? 'A' : 'B'}</span>
-              <span className="btn-side-label">
-                {i === 0 ? t('sunlight.player.side_a') : t('sunlight.player.side_b')}
-              </span>
-            </button>
-          ))}
+          <button
+            type="button"
+            className={`sl-side-switch-btn ${isSideA ? 'is-active' : ''}`}
+            onClick={() => handleSelectSide('A')}
+            title="Cara A"
+          >
+            <span className="btn-side-char">A</span>
+            <span className="btn-side-label">
+              {compiledCassette ? compiledCassette.sideA.Title : t('sunlight.player.side_a')}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            className={`sl-side-switch-btn ${!isSideA ? 'is-active' : ''}`}
+            onClick={() => handleSelectSide('B')}
+            disabled={compiledCassette ? !compiledCassette.sideB : false}
+            title={compiledCassette && !compiledCassette.sideB ? 'Sin Cara B' : 'Cara B'}
+          >
+            <span className="btn-side-char">B</span>
+            <span className="btn-side-label">
+              {compiledCassette
+                ? (compiledCassette.sideB ? compiledCassette.sideB.Title : 'Sin Cara B')
+                : t('sunlight.player.side_b')}
+            </span>
+          </button>
         </div>
 
         {/* Mechanical Push Buttons */}

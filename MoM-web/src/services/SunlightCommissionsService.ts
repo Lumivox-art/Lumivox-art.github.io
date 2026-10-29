@@ -6,11 +6,11 @@
  */
 
 import { LocalCache } from '../utils/LocalCache';
-import type { SunlightSampleBase } from '../models/Sunlight';
+import type { SunlightSampleBase, SunlightCompiledCassette } from '../models/Sunlight';
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v5';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v6';
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
@@ -122,6 +122,7 @@ export class SunlightCommissionsService {
     LocalCache.Remove('lvx_cache_sunlight_samples_v2');
     LocalCache.Remove('lvx_cache_sunlight_samples_v3');
     LocalCache.Remove('lvx_cache_sunlight_samples_v4');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v5');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }
@@ -153,6 +154,9 @@ export class SunlightCommissionsService {
                 Duration: typeof rec.Duration === 'string' ? rec.Duration : null,
                 TrackNumber: typeof rec.TrackNumber === 'number' ? rec.TrackNumber : null,
                 HasVinylDisc: rec.HasVinylDisc === true || rec.HasVinylDisc === 'true',
+                CassetteTitle: typeof rec.CassetteTitle === 'string' ? rec.CassetteTitle : null,
+                CassetteIndex: typeof rec.CassetteIndex === 'number' ? rec.CassetteIndex : null,
+                Side: (rec.Side as 'A' | 'B') || null,
                 Order: Number(rec.Order) || 99,
                 IsActive: rec.IsActive !== false,
                 IsDeleted: rec.IsDeleted === true,
@@ -273,6 +277,81 @@ export class SunlightCommissionsService {
       };
     } catch (err) {
       console.warn('SetDiscMode failed:', err);
+      return {
+        CodeNumber: 500,
+        CodeName: 'InternalError',
+        Message: err instanceof Error ? err.message : String(err),
+        ErrorNumber: 500,
+        ServerName: 'local-contingency',
+        Result: false,
+      };
+    }
+  }
+  /**
+   * Compiles flat music tracks into cassettes paired by 2 (Side A and Side B).
+   * Supports 10+ cassettes seamlessly.
+   */
+  public static CompileCassettes(musicTracks: SunlightSampleBase[]): SunlightCompiledCassette[] {
+    const activeTracks = musicTracks.filter((t) => t.Kind === 'music' && t.IsActive && !t.IsDeleted);
+    const cassettes: SunlightCompiledCassette[] = [];
+
+    for (let i = 0; i < activeTracks.length; i += 2) {
+      const sideA = activeTracks[i];
+      const sideB = activeTracks[i + 1] || null;
+      const tapeNum = Math.floor(i / 2) + 1;
+      const formattedNum = String(tapeNum).padStart(2, '0');
+
+      const customTitle = sideA.CassetteTitle || sideB?.CassetteTitle;
+      const defaultTitle = sideB
+        ? `TAPE ${formattedNum}: ${sideA.Title.toUpperCase()} / ${sideB.Title.toUpperCase()}`
+        : `TAPE ${formattedNum}: ${sideA.Title.toUpperCase()}`;
+
+      cassettes.push({
+        id: `tape-${tapeNum}`,
+        tapeNumber: tapeNum,
+        title: customTitle || defaultTitle,
+        sideA: { ...sideA, Side: 'A', CassetteIndex: tapeNum },
+        sideB: sideB ? { ...sideB, Side: 'B', CassetteIndex: tapeNum } : null,
+      });
+    }
+
+    return cassettes;
+  }
+
+  /**
+   * Persists the entire sample catalog to Firebase RTDB and LocalCache.
+   */
+  public static async SaveAllSamples(samples: SunlightSampleBase[]): Promise<ResponseObject<boolean>> {
+    try {
+      LocalCache.Set(SunlightCommissionsService.cacheKey, samples);
+
+      const resp = await fetch(SunlightCommissionsService.restEndpoint, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(samples),
+      });
+
+      if (resp.ok) {
+        return {
+          CodeNumber: 200,
+          CodeName: 'OK',
+          Message: 'Catálogo guardado exitosamente en el servidor.',
+          ErrorNumber: null,
+          ServerName: 'firebase-rest',
+          Result: true,
+        };
+      }
+
+      return {
+        CodeNumber: resp.status,
+        CodeName: 'SaveFailed',
+        Message: `Fallo al guardar en el servidor: HTTP ${resp.status}`,
+        ErrorNumber: resp.status,
+        ServerName: 'firebase-rest',
+        Result: false,
+      };
+    } catch (err) {
+      console.error('[SunlightCommissionsService] SaveAllSamples error:', err);
       return {
         CodeNumber: 500,
         CodeName: 'InternalError',
