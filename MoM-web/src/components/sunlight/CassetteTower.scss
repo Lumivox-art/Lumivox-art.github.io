@@ -62,10 +62,46 @@
     flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding-bottom: 0.35rem;
     margin-bottom: 0.45rem;
     border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+
+    .sl-tower-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      .sl-tower-scroll-controls {
+        display: flex;
+        gap: 0.2rem;
+
+        .sl-tower-nav-arrow {
+          width: 22px;
+          height: 22px;
+          border-radius: 4px;
+          border: 1px solid var(--tower-border);
+          background: rgba(255, 255, 255, 0.6);
+          color: var(--tower-text);
+          display: grid;
+          place-items: center;
+          cursor: pointer;
+          transition: all 0.15s ease;
+          padding: 0;
+
+          &:hover {
+            background: #ffffff;
+            color: var(--jcard-accent);
+            border-color: var(--jcard-accent);
+            transform: translateY(-1px);
+          }
+
+          &:active {
+            transform: translateY(1px);
+          }
+        }
+      }
+    }
 
     .sl-tower-title-block {
       display: flex;
@@ -139,32 +175,33 @@
 
   // Vertical Stack of Cassette Jewel Cases (Generous padding to prevent any edge clipping)
   .sl-tower-stack {
-    flex: 1 1 0;
-    min-height: 0;
+    flex: 1 1 0px !important;
+    height: 0 !important;
+    min-height: 0 !important;
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
     padding: 3px 5px 6px;
-    overflow-y: auto;
+    overflow-y: scroll !important;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: rgba(37, 75, 130, 0.4) rgba(0, 0, 0, 0.04);
+    scrollbar-color: #254b82 rgba(0, 0, 0, 0.08);
 
     &::-webkit-scrollbar {
-      width: 5px;
+      width: 7px;
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.04);
+      background: rgba(0, 0, 0, 0.06);
       border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: rgba(37, 75, 130, 0.35);
+      background: #254b82;
       border-radius: 4px;
 
       &:hover {
-        background: var(--jcard-accent);
+        background: #1e3a6a;
       }
     }
   }

@@ -44,7 +44,7 @@ export function SunlightCommissionsPage() {
   const [activeSide, setActiveSide] = useState<'A' | 'B'>('A');
 
   const playerColRef = useRef<HTMLDivElement | null>(null);
-  const [deckHeight, setDeckHeight] = useState<number | undefined>(undefined);
+  const [deckHeight, setDeckHeight] = useState<number>(410);
 
   useEffect(() => {
     const el = playerColRef.current;
@@ -194,71 +194,72 @@ export function SunlightCommissionsPage() {
         <h1 className="sl-title">{t('sunlight.title')}</h1>
       </header>
 
-      {/* Cassette Deck Stage - Outside the form, sitting directly over the background */}
-      <section className="sl-cassette-stage" aria-label={t('sunlight.stage.music_gallery')}>
-        <div className="sl-stage-header">
-          <h2 className="sl-stage-title">{t('sunlight.stage.music_gallery')}</h2>
-        </div>
-        <div className="sl-stage-layout">
-          <div className="sl-stage-player-col" ref={playerColRef}>
-            <CassettePlayer
-              tracks={musicTracks}
-              activeTrackKey={playerTrackKey}
-              compiledCassette={compiledCassettes[activeCassetteIndex] || null}
-              activeSide={activeSide}
-              autoPlayOnChange={true}
-              onTrackEnded={handleTrackEnded}
-              onSideChange={(side) => {
-                CassetteSfx.playTapeSwitch();
-                setActiveSide(side);
-                const tape = compiledCassettes[activeCassetteIndex];
-                if (tape) {
-                  const trk = side === 'B' && tape.sideB ? tape.sideB : tape.sideA;
-                  if (trk) {
-                    setPlayerTrackKey(trk.Key);
-                  }
-                }
-              }}
-              onTrackChange={(key) => {
-                setPlayerTrackKey(key);
-                if (musicTracks.some((t) => t.Key === key)) {
-                  setSelectedSongKey(key);
-                  setCopied(false);
-                }
-              }}
-            />
-          </div>
-
-          <div
-            className="sl-stage-tower-col"
-            style={{
-              height: deckHeight ? `${deckHeight}px` : undefined,
-              maxHeight: deckHeight ? `${deckHeight}px` : undefined,
-            }}
-          >
-            <CassetteTower
-              cassettes={compiledCassettes}
-              activeCassetteIndex={activeCassetteIndex}
-              activeSide={activeSide}
-              onSelectCassette={(idx, side = 'A') => {
-                CassetteSfx.playTapeSwitch();
-                setActiveCassetteIndex(idx);
-                setActiveSide(side);
-                const tape = compiledCassettes[idx];
-                if (tape) {
-                  const trk = side === 'B' && tape.sideB ? tape.sideB : tape.sideA;
-                  if (trk) {
-                    setPlayerTrackKey(trk.Key);
-                  }
-                }
-              }}
-            />
-          </div>
-        </div>
-      </section>
-
       {/* Main Stepped Flow */}
       <main className="sl-container">
+
+        {/* Apartado: Galería Musical */}
+        <section className="sl-step sl-stage-step" aria-label={t('sunlight.stage.music_gallery')}>
+          <h2>
+            <span>{t('sunlight.stage.music_gallery')}</span>
+          </h2>
+
+          <div className="sl-stage-layout">
+            <div className="sl-stage-player-col" ref={playerColRef}>
+              <CassettePlayer
+                tracks={musicTracks}
+                activeTrackKey={playerTrackKey}
+                compiledCassette={compiledCassettes[activeCassetteIndex] || null}
+                activeSide={activeSide}
+                autoPlayOnChange={true}
+                onTrackEnded={handleTrackEnded}
+                onSideChange={(side) => {
+                  CassetteSfx.playTapeSwitch();
+                  setActiveSide(side);
+                  const tape = compiledCassettes[activeCassetteIndex];
+                  if (tape) {
+                    const trk = side === 'B' && tape.sideB ? tape.sideB : tape.sideA;
+                    if (trk) {
+                      setPlayerTrackKey(trk.Key);
+                    }
+                  }
+                }}
+                onTrackChange={(key) => {
+                  setPlayerTrackKey(key);
+                  if (musicTracks.some((t) => t.Key === key)) {
+                    setSelectedSongKey(key);
+                    setCopied(false);
+                  }
+                }}
+              />
+            </div>
+
+            <div
+              className="sl-stage-tower-col"
+              style={{
+                height: `${deckHeight}px`,
+                maxHeight: `${deckHeight}px`,
+              }}
+            >
+              <CassetteTower
+                cassettes={compiledCassettes}
+                activeCassetteIndex={activeCassetteIndex}
+                activeSide={activeSide}
+                onSelectCassette={(idx, side = 'A') => {
+                  CassetteSfx.playTapeSwitch();
+                  setActiveCassetteIndex(idx);
+                  setActiveSide(side);
+                  const tape = compiledCassettes[idx];
+                  if (tape) {
+                    const trk = side === 'B' && tape.sideB ? tape.sideB : tape.sideA;
+                    if (trk) {
+                      setPlayerTrackKey(trk.Key);
+                    }
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </section>
 
         {/* Step 1: Digital Art Styles & 90s Vinyl Album Covers */}
         <section className="sl-step">

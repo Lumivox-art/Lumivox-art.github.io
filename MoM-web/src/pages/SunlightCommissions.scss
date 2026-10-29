@@ -200,35 +200,18 @@
     opacity: 0.85;
   }
 
-  // --- Cassette Deck Stage (Outside form, sitting directly on background) ---
-  .sl-cassette-stage {
-    max-width: 960px;
-    margin: 0 auto 1.25rem;
-    padding: 0 1rem;
-    position: relative;
-    z-index: 2;
+  // --- Apartado: Galería Musical (Inside .sl-container as .sl-step) ---
+  .sl-step.sl-stage-step {
+    padding: 1.35rem 1.35rem 1.6rem;
 
-    .sl-stage-header {
-      text-align: left;
-      margin-bottom: 0.75rem;
-
-      .sl-stage-title {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin: 0;
-        color: var(--sl-ink);
-        font-family: 'Fraunces', Georgia, serif;
-        font-size: clamp(1.3rem, 3.5vw, 1.8rem);
-        font-weight: 700;
-        line-height: 1.25;
-      }
+    h2 {
+      margin-bottom: 1rem;
     }
 
     .sl-stage-layout {
       display: flex;
-      gap: 1.5rem;
-      align-items: stretch;
+      gap: 1.25rem;
+      align-items: flex-start;
       justify-content: center;
 
       @media (max-width: 960px) {
@@ -238,25 +221,28 @@
     }
 
     .sl-stage-player-col {
-      flex: 1 1 560px;
+      flex: 1 1 500px;
       min-width: 0;
       width: 100%;
-      max-width: 580px;
+      max-width: 540px;
       display: flex;
       flex-direction: column;
     }
 
     .sl-stage-tower-col {
-      flex: 0 0 340px;
+      flex: 0 0 300px;
       width: 100%;
-      max-width: 350px;
+      max-width: 310px;
+      height: 410px;
+      max-height: 410px;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      overflow: hidden;
 
       @media (max-width: 960px) {
         max-width: 440px;
-        height: auto !important;
+        height: 380px !important;
         max-height: 380px !important;
       }
     }
@@ -818,11 +804,7 @@
 
     }
 
-    .sl-stage-header {
-      .sl-stage-title {
-        color: #f1ece0;
-      }
-    }
+    
 
 
     .sl-step {

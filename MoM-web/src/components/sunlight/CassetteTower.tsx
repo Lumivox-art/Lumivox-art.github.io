@@ -35,9 +35,35 @@ export function CassetteTower({
           <span className="sl-tower-tag">TAPE RACK · HI-FI</span>
           <h3 className="sl-tower-heading">Torre de Cassettes</h3>
         </div>
-        <span className="sl-tower-count-badge">
-          {cassettes.length} {cassettes.length === 1 ? 'Cinta' : 'Cintas'}
-        </span>
+        <div className="sl-tower-header-actions">
+          <span className="sl-tower-count-badge">
+            {cassettes.length} {cassettes.length === 1 ? 'Cinta' : 'Cintas'}
+          </span>
+          <div className="sl-tower-scroll-controls">
+            <button
+              type="button"
+              className="sl-tower-nav-arrow arrow-up"
+              onClick={() => stackRef.current?.scrollBy({ top: -130, behavior: 'smooth' })}
+              title="Subir en la torre"
+              aria-label="Subir en la torre"
+            >
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="18 15 12 9 6 15" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="sl-tower-nav-arrow arrow-down"
+              onClick={() => stackRef.current?.scrollBy({ top: 130, behavior: 'smooth' })}
+              title="Bajar en la torre"
+              aria-label="Bajar en la torre"
+            >
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Stack of Cassette Jewel Cases with Dynamic Scroll */}
