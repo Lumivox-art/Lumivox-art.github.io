@@ -175,10 +175,6 @@ export function SunlightCommissionsPage() {
 
       {/* 90s Record Label Hero */}
       <header className="sl-hero">
-        <div className="sl-badge-pill">
-          <span className="sl-record-dot" />
-          <span>{t('sunlight.badge')}</span>
-        </div>
         <h1 className="sl-title">{t('sunlight.title')}</h1>
         <p className="sl-subtitle">{t('sunlight.subtitle')}</p>
       </header>

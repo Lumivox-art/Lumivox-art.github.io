@@ -70,29 +70,6 @@
     margin: 0 auto 2.25rem;
     text-align: center;
 
-    .sl-badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(37, 75, 130, 0.09);
-      border: 1px solid rgba(37, 75, 130, 0.25);
-      padding: 0.35rem 0.95rem;
-      border-radius: 999px;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      color: var(--sl-accent);
-      margin-bottom: 0.85rem;
-      text-transform: uppercase;
-
-      .sl-record-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--sl-accent);
-        box-shadow: 0 0 6px var(--sl-accent);
-      }
-    }
 
     h1.sl-title {
       font-family: 'Fraunces', Georgia, serif;
@@ -916,16 +893,6 @@
     }
 
     .sl-hero {
-      .sl-badge-pill {
-        background: rgba(56, 189, 248, 0.15);
-        border-color: rgba(56, 189, 248, 0.4);
-        color: #38bdf8;
-
-        .sl-record-dot {
-          background: #38bdf8;
-          box-shadow: 0 0 8px #38bdf8;
-        }
-      }
 
       h1.sl-title {
         color: #f1ece0;
