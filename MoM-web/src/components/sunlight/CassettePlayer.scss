@@ -359,6 +359,16 @@
         font-size: 0.72rem;
       }
 
+      .sl-lcd-loop-pill {
+        border: 1px solid currentColor;
+        background: rgba(0, 0, 0, 0.12);
+        padding: 0.08rem 0.35rem;
+        border-radius: 3px;
+        font-size: 0.65rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+
       .sl-lcd-counter {
         font-weight: 900;
       }
@@ -539,6 +549,25 @@
         &.btn-stop {
           color: #dc2626;
         }
+
+        &.btn-loop {
+          color: #0284c7;
+          border-color: #0284c7;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+
+          .btn-loop-icon {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          &.is-active {
+            background: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.45);
+          }
+        }
       }
     }
 
@@ -616,6 +645,21 @@
 
   .sl-vol-slider {
     background: rgba(255, 255, 255, 0.2);
+  }
+
+  .sl-push-btn.btn-loop {
+    color: #38bdf8;
+    border-color: #0284c7;
+
+    &.is-active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+    }
+  }
+
+  .sl-lcd-loop-pill {
+    background: rgba(56, 189, 248, 0.18);
   }
 }
 

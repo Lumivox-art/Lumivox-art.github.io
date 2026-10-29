@@ -8,7 +8,7 @@ interface CassettePlayerProps {
   compiledCassette?: SunlightCompiledCassette | null;
   activeSide?: 'A' | 'B';
   onSideChange?: (side: 'A' | 'B') => void;
-  onTrackEnded?: () => void;
+  onTrackEnded?: (loopEnabled?: boolean) => boolean | void;
   autoPlayOnChange?: boolean;
   activeTrackKey?: string;
   selectedTrackKey?: string;
@@ -44,6 +44,7 @@ export function CassettePlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.85);
+  const [isLoop, setIsLoop] = useState(true);
 
   const isPlayingRef = useRef(false);
   const shouldKeepPlayingRef = useRef(false);
@@ -213,22 +214,38 @@ export function CassettePlayer({
 
   const handleTrackEndedInternal = () => {
     hasUserInteractedRef.current = true;
-    shouldKeepPlayingRef.current = true;
 
     if (onTrackEnded) {
-      onTrackEnded();
+      const advanced = onTrackEnded(isLoop);
+      if (advanced === false) {
+        shouldKeepPlayingRef.current = false;
+        setIsPlaying(false);
+        return;
+      }
+      shouldKeepPlayingRef.current = true;
     } else if (compiledCassette) {
       // Local fallback for cassette side toggle
       if (currentSide === 'A' && compiledCassette.sideB) {
+        shouldKeepPlayingRef.current = true;
         handleSelectSide('B');
-      } else {
+      } else if (isLoop) {
+        shouldKeepPlayingRef.current = true;
         handleSelectSide('A');
+      } else {
+        shouldKeepPlayingRef.current = false;
+        setIsPlaying(false);
       }
     } else if (musicTracks.length > 0) {
+      if (!isLoop && legacyIndex >= musicTracks.length - 1) {
+        shouldKeepPlayingRef.current = false;
+        setIsPlaying(false);
+        return;
+      }
       const nextIdx = (legacyIndex + 1) % musicTracks.length;
       setLegacyIndex(nextIdx);
       const trk = musicTracks[nextIdx];
       if (trk) {
+        shouldKeepPlayingRef.current = true;
         notifyTrackChange(trk.Key);
       }
     }
@@ -409,6 +426,7 @@ export function CassettePlayer({
               <span className="sl-lcd-side">
                 SIDE {isSideA ? 'A' : 'B'}
               </span>
+              {isLoop && <span className="sl-lcd-loop-pill">LOOP</span>}
               <span className="sl-lcd-counter">
                 {formatTime(currentTime)} / {formatTime(duration)}
               </span>
@@ -492,6 +510,34 @@ export function CassettePlayer({
 
         {/* Mechanical Push Buttons */}
         <div className="sl-push-buttons">
+          <button
+            type="button"
+            className={`sl-push-btn btn-loop ${isLoop ? 'is-active' : ''}`}
+            onClick={() => setIsLoop((prev) => !prev)}
+            title={isLoop ? 'Bucle continuo activado' : 'Bucle desactivado'}
+            aria-label="Loop"
+            aria-pressed={isLoop}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="12"
+              height="12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="btn-loop-icon"
+            >
+              <polyline points="17 1 21 5 17 9" />
+              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+              <polyline points="7 23 3 19 7 15" />
+              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+            </svg>
+            LOOP
+          </button>
+
           <button
             type="button"
             className={`sl-push-btn btn-play ${isPlaying ? 'is-active' : ''}`}

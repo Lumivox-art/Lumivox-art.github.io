@@ -47,8 +47,8 @@ export function SunlightCommissionsPage() {
 
   // Clipboard & Discord action states
   // Auto-advance loop: Side A -> Side B -> Next Cassette Side A -> Loop back to first cassette Side A
-  const handleTrackEnded = () => {
-    if (compiledCassettes.length === 0) return;
+  const handleTrackEnded = (loopEnabled = true): boolean => {
+    if (compiledCassettes.length === 0) return false;
 
     const currentTape = compiledCassettes[activeCassetteIndex];
 
@@ -56,10 +56,16 @@ export function SunlightCommissionsPage() {
     if (activeSide === 'A' && currentTape?.sideB) {
       setActiveSide('B');
       setPlayerTrackKey(currentTape.sideB.Key);
-      return;
+      return true;
     }
 
-    // 2. Otherwise (on Side B, or Side A with no Side B) -> advance to next cassette Side A
+    // 2. Otherwise (on Side B, or Side A with no Side B)
+    const isLastTape = activeCassetteIndex >= compiledCassettes.length - 1;
+    if (isLastTape && !loopEnabled) {
+      return false;
+    }
+
+    // Advance to next cassette Side A (loops to 0 if last and loop is enabled)
     const nextTapeIndex = (activeCassetteIndex + 1) % compiledCassettes.length;
     setActiveCassetteIndex(nextTapeIndex);
     setActiveSide('A');
@@ -68,6 +74,7 @@ export function SunlightCommissionsPage() {
     if (nextTape) {
       setPlayerTrackKey(nextTape.sideA.Key);
     }
+    return true;
   };
 
   const [copied, setCopied] = useState(false);
