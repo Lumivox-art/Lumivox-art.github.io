@@ -611,7 +611,7 @@ export function SpeckuCommissionsPage() {
                     className="jc-discord-recopy-btn"
                     onClick={handleRecopy}
                   >
-                    {recopied ? '✓' : '📋'}{' '}
+                    {recopied ? '✓ ' : ''}
                     {recopied ? t('specku.discord.copied.copied') : t('specku.discord.copied.recopy')}
                   </button>
 
@@ -649,7 +649,7 @@ export function SpeckuCommissionsPage() {
           {t('specku.footer.suffix')}
           {' · '}
           <Link to="/home/specku/cobrar" className="jc-terms-link">
-            💳 {t('specku.pay.generator.link') || 'Cobro PayPal'}
+            {t('specku.pay.generator.link') || 'Cobro PayPal'}
           </Link>
         </p>
       </footer>

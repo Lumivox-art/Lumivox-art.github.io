@@ -140,7 +140,7 @@ export function SpeckuPayCheckoutPage() {
         </div>
         <main className="spc-container">
           <div className="spc-card spc-invalid-card">
-            <div className="spc-warning-icon">✅</div>
+
             <h2>{t('specku.pay.checkout.already_paid.title') || 'Esta Orden Ya Fue Liquidada'}</h2>
             <p>
               {t('specku.pay.checkout.already_paid.desc') ||
@@ -175,10 +175,10 @@ export function SpeckuPayCheckoutPage() {
                 rel="noopener noreferrer"
                 className="spc-btn-primary"
               >
-                💬 Contactar a Specku en Discord
+                Contactar a Specku en Discord
               </a>
               <Link to="/home/specku/comisiones" className="spc-btn-secondary">
-                🎨 Ver Galería de Specku
+                Ver Galería de Specku
               </Link>
             </div>
           </div>
@@ -200,7 +200,7 @@ export function SpeckuPayCheckoutPage() {
         </div>
         <main className="spc-container">
           <div className="spc-card spc-invalid-card">
-            <div className="spc-warning-icon">⏳</div>
+
             <h2>{t('specku.pay.checkout.expired.title') || 'Enlace de Pago Expirado'}</h2>
             <p>
               {t('specku.pay.checkout.expired.desc') ||
@@ -213,10 +213,10 @@ export function SpeckuPayCheckoutPage() {
                 rel="noopener noreferrer"
                 className="spc-btn-primary"
               >
-                💬 Solicitar Nueva Liga en Discord
+                Solicitar Nueva Liga en Discord
               </a>
               <Link to="/home/specku/comisiones" className="spc-btn-secondary">
-                🎨 Ver Comisiones
+                Ver Comisiones
               </Link>
             </div>
           </div>
@@ -239,7 +239,7 @@ export function SpeckuPayCheckoutPage() {
 
         <main className="spc-container">
           <div className="spc-card spc-invalid-card">
-            <div className="spc-warning-icon">⚠️</div>
+
             <h2>{t('specku.pay.checkout.invalid.title') || 'Enlace de Pago No Válido o Incompleto'}</h2>
             <p>
               {t('specku.pay.checkout.invalid.desc') ||
@@ -252,10 +252,10 @@ export function SpeckuPayCheckoutPage() {
                 rel="noopener noreferrer"
                 className="spc-btn-primary"
               >
-                💬 {t('specku.pay.checkout.contact') || 'Contactar a Specku en Discord'}
+                {t('specku.pay.checkout.contact') || 'Contactar a Specku en Discord'}
               </a>
               <Link to="/home/specku/comisiones" className="spc-btn-secondary">
-                🎨 {t('specku.pay.checkout.view_commissions') || 'Ver Galería y Precios'}
+                {t('specku.pay.checkout.view_commissions') || 'Ver Galería y Precios'}
               </Link>
             </div>
           </div>
@@ -292,7 +292,11 @@ export function SpeckuPayCheckoutPage() {
         {/* Payment Success View */}
         {isSuccess ? (
           <div className="spc-card spc-success-card animate-zoom-in">
-            <div className="spc-success-emblem">✓</div>
+            <div className="spc-success-emblem">
+              <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
             <span className="spc-badge-pill">TRANSACCIÓN COMPLETADA</span>
             <h1 className="spc-success-title">
               {t('specku.pay.checkout.success.title') || '¡Pago Realizado con Éxito!'}
@@ -338,14 +342,14 @@ export function SpeckuPayCheckoutPage() {
                 className="spc-btn-primary"
                 onClick={handleDiscordNotify}
               >
-                💬 Notificar a Specku por Discord
+                Notificar a Specku por Discord
               </button>
               <button
                 type="button"
                 className="spc-btn-secondary"
                 onClick={() => window.print()}
               >
-                🖨️ Imprimir / Guardar Recibo
+                Imprimir / Guardar Recibo
               </button>
               <Link to="/home/specku/comisiones" className="spc-btn-link">
                 ← Volver a Comisiones
@@ -377,7 +381,7 @@ export function SpeckuPayCheckoutPage() {
             {/* Error Message */}
             {paymentError && (
               <div className="spc-error-alert animate-shake">
-                <span>⚠️ {paymentError}</span>
+                <span>{paymentError}</span>
               </div>
             )}
 
@@ -428,7 +432,7 @@ export function SpeckuPayCheckoutPage() {
 
                     {invoicePayload.forceFee ? (
                       <p className="spc-fee-desc spc-forced-notice">
-                        🔒 <em>Incluido en el acuerdo de la comisión por el artista.</em>
+                        <em>Incluido en el acuerdo de la comisión por el artista.</em>
                       </p>
                     ) : (
                       <p className="spc-fee-desc">
@@ -553,7 +557,7 @@ export function SpeckuPayCheckoutPage() {
               </div>
 
               <div className="spc-security-badge">
-                <span>🔒 Transacción encriptada directa con PayPal (PCI-DSS SAQ A) · Bienes Digitales (Sin costos de envío)</span>
+                <span>Transacción encriptada directa con PayPal (PCI-DSS SAQ A) · Bienes Digitales (Sin costos de envío)</span>
               </div>
             </section>
           </div>

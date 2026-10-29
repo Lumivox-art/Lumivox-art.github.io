@@ -237,7 +237,7 @@ export function SpeckuPayGeneratorPage() {
                 style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
                 title="Generar un nuevo folio de cobro"
               >
-                🔄 Nuevo Folio
+                Nuevo Folio
               </button>
             </div>
 
@@ -433,11 +433,11 @@ export function SpeckuPayGeneratorPage() {
               <div className="spg-fee-explanation">
                 {forceFee ? (
                   <p className="spg-notice-forced">
-                    🔒 <strong>Modo Forzado:</strong> En el enlace de cobro, la casilla de comisión de PayPal aparecerá <strong>marcada y bloqueada</strong> para el cliente. Verá que está seleccionada pero no podrá quitarla, sumando automáticamente la comisión a su total.
+                    <strong>Modo Forzado:</strong> En el enlace de cobro, la casilla de comisión de PayPal aparecerá <strong>marcada y bloqueada</strong> para el cliente. Verá que está seleccionada pero no podrá quitarla, sumando automáticamente la comisión a su total.
                   </p>
                 ) : (
                   <p className="spg-notice-optional">
-                    🤝 <strong>Modo Opcional:</strong> El cliente verá una casilla libre donde podrá decidir voluntariamente si desea apoyar cubriendo la comisión (+${estimatedFee.toFixed(2)} USD) o pagar únicamente el subtotal de la obra.
+                    <strong>Modo Opcional:</strong> El cliente verá una casilla libre donde podrá decidir voluntariamente si desea apoyar cubriendo la comisión (+${estimatedFee.toFixed(2)} USD) o pagar únicamente el subtotal de la obra.
                   </p>
                 )}
               </div>
@@ -477,7 +477,7 @@ export function SpeckuPayGeneratorPage() {
                 {/* PayPal Fee Row */}
                 <div className={`spg-breakdown-row spg-row-fee ${forceFee ? 'fee-locked' : 'fee-optional'}`}>
                   <span>
-                    Comisión PayPal ({forceFee ? '🔒 Obligatoria' : '🤝 Opcional'})
+                    Comisión PayPal ({forceFee ? 'Obligatoria' : 'Opcional'})
                   </span>
                   <span>+${estimatedFee.toFixed(2)} USD</span>
                 </div>
@@ -497,7 +497,7 @@ export function SpeckuPayGeneratorPage() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                   <label className="spg-label" style={{ margin: 0 }}>Enlace de Pago Generado:</label>
                   <span style={{ fontSize: '0.72rem', color: '#1b8a4f', fontWeight: 700 }}>
-                    🛡️ Zero Trust Server-Bound
+                    Zero Trust Server-Bound
                   </span>
                 </div>
                 <div className="spg-url-display" title={generatedLink}>
@@ -512,10 +512,10 @@ export function SpeckuPayGeneratorPage() {
                     disabled={!generatedLink || isSavingServer}
                   >
                     {isSavingServer
-                      ? '⏳ Registrando en Servidor...'
+                      ? 'Registrando en Servidor...'
                       : copied
-                        ? '✓ ¡Enlace Copiado y Registrado!'
-                        : '📋 Copiar Enlace para el Cliente'}
+                        ? '¡Enlace Copiado y Registrado!'
+                        : 'Copiar Enlace para el Cliente'}
                   </button>
 
                   {generatedLink && (
@@ -525,14 +525,14 @@ export function SpeckuPayGeneratorPage() {
                       rel="noopener noreferrer"
                       className="spg-btn-test"
                     >
-                      👁️ Abrir Vista
+                      Abrir Vista
                     </a>
                   )}
                 </div>
 
                 {serverSaveSuccess === true && (
                   <div style={{ fontSize: '0.75rem', color: '#1b8a4f', marginTop: '0.5rem', textAlign: 'center' }}>
-                    ✓ Orden maestra asentada de forma inmutable en Firebase RTDB.
+                    Orden maestra asentada de forma inmutable en Firebase RTDB.
                   </div>
                 )}
               </div>
