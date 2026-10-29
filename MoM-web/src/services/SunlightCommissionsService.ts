@@ -10,7 +10,7 @@ import type { SunlightSampleBase } from '../models/Sunlight';
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v4';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v5';
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
@@ -121,6 +121,7 @@ export class SunlightCommissionsService {
     LocalCache.Remove('lvx_cache_sunlight_samples');
     LocalCache.Remove('lvx_cache_sunlight_samples_v2');
     LocalCache.Remove('lvx_cache_sunlight_samples_v3');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v4');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }
