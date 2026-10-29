@@ -49,7 +49,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f index.html 404.html .nojekyll favicon.ico mom-static
+          git add -f index.html 404.html .nojekyll favicon.ico mom-static sunlight-media lumivox-media
           if git diff --staged --quiet; then
             echo "No site changes to publish."
             exit 0

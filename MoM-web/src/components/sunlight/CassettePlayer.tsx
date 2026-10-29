@@ -48,30 +48,54 @@ export function CassettePlayer({
 
   const currentTrack = musicTracks[currentIndex] || musicTracks[0];
 
-  // Update audio source when track changes
+  const getTrackSrc = (trk?: SunlightSampleBase | null): string => {
+    if (!trk) return '';
+    return trk.AudioBinary || trk.AudioUrl || trk.MediaUrl || '';
+  };
+
+  // Sync volume to audio element
   useEffect(() => {
-    if (audioRef.current && currentTrack) {
-      const src = currentTrack.AudioBinary || currentTrack.AudioUrl || currentTrack.MediaUrl;
-      audioRef.current.src = src;
+    if (audioRef.current) {
       audioRef.current.volume = volume;
-      if (isPlaying) {
-        audioRef.current
-          .play()
-          .catch((err) => console.warn('Audio playback prevented:', err));
+    }
+  }, [volume]);
+
+  // Update audio source when track changes without destroying ongoing valid stream
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio && currentTrack) {
+      const src = getTrackSrc(currentTrack);
+      const currentSrc = audio.currentSrc || audio.src;
+      const isSame = currentSrc && (currentSrc === src || currentSrc.endsWith(src));
+      if (!isSame && src) {
+        audio.src = src;
+        audio.load();
+        if (isPlaying) {
+          audio.play().catch((err) => {
+            console.warn('Audio playback prevented:', err);
+            setIsPlaying(false);
+          });
+        }
       }
     }
   }, [currentIndex, currentTrack]);
 
   const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (!audio.paused) {
+      audio.pause();
       setIsPlaying(false);
     } else {
-      if (!audioRef.current.src && currentTrack) {
-        audioRef.current.src = currentTrack.AudioBinary || currentTrack.AudioUrl || currentTrack.MediaUrl;
+      const src = getTrackSrc(currentTrack);
+      const currentSrc = audio.currentSrc || audio.src;
+      const isSame = currentSrc && (currentSrc === src || currentSrc.endsWith(src));
+      if (!isSame && src) {
+        audio.src = src;
+        audio.load();
       }
-      audioRef.current
+      audio
         .play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
@@ -82,29 +106,39 @@ export function CassettePlayer({
   };
 
   const handleStop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
       setIsPlaying(false);
       setCurrentTime(0);
     }
   };
 
   const handleSwitchSide = (idx: number) => {
+    if (idx < 0 || idx >= musicTracks.length) return;
     setCurrentIndex(idx);
     const trk = musicTracks[idx];
     if (trk) {
       notifyTrackChange(trk.Key);
     }
-    setIsPlaying(true);
-  };
-
-  const handlePrev = () => {
-    const nextIdx = (currentIndex - 1 + musicTracks.length) % musicTracks.length;
-    handleSwitchSide(nextIdx);
+    const audio = audioRef.current;
+    if (audio) {
+      const src = getTrackSrc(trk);
+      audio.src = src;
+      audio.load();
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.warn('Play error:', err);
+          setIsPlaying(false);
+        });
+    }
   };
 
   const handleNext = () => {
+    if (musicTracks.length === 0) return;
     const nextIdx = (currentIndex + 1) % musicTracks.length;
     handleSwitchSide(nextIdx);
   };
@@ -150,6 +184,9 @@ export function CassettePlayer({
     <div className={`sl-cassette-unit ${isPlaying ? 'is-running' : ''}`}>
       <audio
         ref={audioRef}
+        preload="metadata"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={() => {
           if (audioRef.current) {
@@ -159,6 +196,10 @@ export function CassettePlayer({
         onEnded={() => {
           setIsPlaying(false);
           handleNext();
+        }}
+        onError={(e) => {
+          console.warn('Audio tag playback error:', e);
+          setIsPlaying(false);
         }}
       />
 
@@ -347,16 +388,6 @@ export function CassettePlayer({
 
         {/* Mechanical Push Buttons */}
         <div className="sl-push-buttons">
-          <button
-            type="button"
-            className="sl-push-btn btn-rewind"
-            onClick={handlePrev}
-            title="Rewind"
-            aria-label="Rewind"
-          >
-            REW
-          </button>
-
           <button
             type="button"
             className={`sl-push-btn btn-play ${isPlaying ? 'is-active' : ''}`}
