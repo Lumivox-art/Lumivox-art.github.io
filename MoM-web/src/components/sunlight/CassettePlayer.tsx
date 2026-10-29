@@ -8,6 +8,8 @@ interface CassettePlayerProps {
   compiledCassette?: SunlightCompiledCassette | null;
   activeSide?: 'A' | 'B';
   onSideChange?: (side: 'A' | 'B') => void;
+  onTrackEnded?: () => void;
+  autoPlayOnChange?: boolean;
   activeTrackKey?: string;
   selectedTrackKey?: string;
   onTrackChange?: (key: string) => void;
@@ -19,6 +21,8 @@ export function CassettePlayer({
   compiledCassette,
   activeSide = 'A',
   onSideChange,
+  onTrackEnded,
+  autoPlayOnChange = true,
   activeTrackKey,
   selectedTrackKey,
   onTrackChange,
@@ -41,6 +45,14 @@ export function CassettePlayer({
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.85);
 
+  const isPlayingRef = useRef(false);
+  const shouldKeepPlayingRef = useRef(false);
+  const hasUserInteractedRef = useRef(false);
+
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
   // Active track determination based on compiledCassette vs legacy tracks
   const currentSide: 'A' | 'B' = compiledCassette ? activeSide : (legacyIndex === 1 ? 'B' : 'A');
 
@@ -50,18 +62,12 @@ export function CassettePlayer({
       : compiledCassette.sideA
     : musicTracks[legacyIndex] || musicTracks[0] || null;
 
-  // Sync index when active key changes from parent (legacy fallback) and pause automatically
+  // Sync index when active key changes from parent (legacy fallback)
   useEffect(() => {
     if (!compiledCassette && effectiveActiveKey) {
       const idx = musicTracks.findIndex((t) => t.Key === effectiveActiveKey);
       if (idx >= 0 && idx !== legacyIndex) {
         setLegacyIndex(idx);
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
-        }
-        setIsPlaying(false);
-        setCurrentTime(0);
       }
     }
   }, [effectiveActiveKey, musicTracks, compiledCassette, legacyIndex]);
@@ -78,31 +84,69 @@ export function CassettePlayer({
     }
   }, [volume]);
 
-  // Update audio source when track or cassette changes and ensure player is paused
+  // Update audio source when track or cassette changes and ensure play button stays active
   useEffect(() => {
     const audio = audioRef.current;
-    if (audio && currentTrack) {
-      const src = getTrackSrc(currentTrack);
-      const currentSrc = audio.currentSrc || audio.src;
-      const isSame = currentSrc && (currentSrc === src || currentSrc.endsWith(src));
-      if (!isSame && src) {
-        audio.pause();
-        audio.currentTime = 0;
-        audio.src = src;
-        audio.load();
+    if (!audio || !currentTrack) return;
+
+    const src = getTrackSrc(currentTrack);
+    if (!src) return;
+
+    const currentSrc = audio.currentSrc || audio.src;
+    const isSame = currentSrc && (currentSrc === src || currentSrc.endsWith(src));
+
+    // Keep playing if already playing, or if explicitly requested, or if user interacted and autoPlayOnChange
+    const shouldPlay =
+      isPlayingRef.current ||
+      shouldKeepPlayingRef.current ||
+      (autoPlayOnChange && hasUserInteractedRef.current);
+
+    if (!isSame) {
+      audio.src = src;
+      audio.load();
+      setCurrentTime(0);
+
+      if (shouldPlay) {
+        audio
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+            shouldKeepPlayingRef.current = false;
+          })
+          .catch((err) => {
+            console.warn('Playback resume error:', err);
+            setIsPlaying(false);
+            shouldKeepPlayingRef.current = false;
+          });
+      } else {
         setIsPlaying(false);
-        setCurrentTime(0);
       }
+    } else if (shouldPlay && audio.paused) {
+      // Loop or restart same track
+      audio.currentTime = 0;
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          shouldKeepPlayingRef.current = false;
+        })
+        .catch((err) => {
+          console.warn('Playback restart error:', err);
+          setIsPlaying(false);
+          shouldKeepPlayingRef.current = false;
+        });
     }
-  }, [currentTrack]);
+  }, [currentTrack, autoPlayOnChange]);
 
   const togglePlay = () => {
+    hasUserInteractedRef.current = true;
     const audio = audioRef.current;
     if (!audio || !currentTrack) return;
 
     if (!audio.paused) {
       audio.pause();
       setIsPlaying(false);
+      shouldKeepPlayingRef.current = false;
     } else {
       const src = getTrackSrc(currentTrack);
       const currentSrc = audio.currentSrc || audio.src;
@@ -111,12 +155,14 @@ export function CassettePlayer({
         audio.src = src;
         audio.load();
       }
+      shouldKeepPlayingRef.current = true;
       audio
         .play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
           console.warn('Play error:', err);
           setIsPlaying(false);
+          shouldKeepPlayingRef.current = false;
         });
     }
   };
@@ -127,21 +173,26 @@ export function CassettePlayer({
       audio.pause();
       audio.currentTime = 0;
       setIsPlaying(false);
+      shouldKeepPlayingRef.current = false;
       setCurrentTime(0);
     }
   };
 
   const handleSelectSide = (side: 'A' | 'B') => {
+    hasUserInteractedRef.current = true;
+    shouldKeepPlayingRef.current = true;
+
     if (compiledCassette) {
       if (side === 'B' && !compiledCassette.sideB) return;
-      if (side === activeSide) return;
-
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
+      if (side === currentSide) {
+        if (audioRef.current && audioRef.current.paused) {
+          audioRef.current
+            .play()
+            .then(() => setIsPlaying(true))
+            .catch(() => setIsPlaying(false));
+        }
+        return;
       }
-      setIsPlaying(false);
-      setCurrentTime(0);
 
       onSideChange?.(side);
       const targetTrk = side === 'B' ? compiledCassette.sideB : compiledCassette.sideA;
@@ -156,12 +207,29 @@ export function CassettePlayer({
         if (trk) {
           notifyTrackChange(trk.Key);
         }
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.currentTime = 0;
-        }
-        setIsPlaying(false);
-        setCurrentTime(0);
+      }
+    }
+  };
+
+  const handleTrackEndedInternal = () => {
+    hasUserInteractedRef.current = true;
+    shouldKeepPlayingRef.current = true;
+
+    if (onTrackEnded) {
+      onTrackEnded();
+    } else if (compiledCassette) {
+      // Local fallback for cassette side toggle
+      if (currentSide === 'A' && compiledCassette.sideB) {
+        handleSelectSide('B');
+      } else {
+        handleSelectSide('A');
+      }
+    } else if (musicTracks.length > 0) {
+      const nextIdx = (legacyIndex + 1) % musicTracks.length;
+      setLegacyIndex(nextIdx);
+      const trk = musicTracks[nextIdx];
+      if (trk) {
+        notifyTrackChange(trk.Key);
       }
     }
   };
@@ -216,18 +284,11 @@ export function CassettePlayer({
             setDuration(audioRef.current.duration || 0);
           }
         }}
-        onEnded={() => {
-          const audio = audioRef.current;
-          if (audio) {
-            audio.pause();
-            audio.currentTime = 0;
-          }
-          setIsPlaying(false);
-          setCurrentTime(0);
-        }}
+        onEnded={handleTrackEndedInternal}
         onError={(e) => {
           console.warn('Audio tag playback error:', e);
           setIsPlaying(false);
+          shouldKeepPlayingRef.current = false;
         }}
       />
 

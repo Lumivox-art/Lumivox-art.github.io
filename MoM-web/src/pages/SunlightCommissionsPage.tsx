@@ -47,6 +47,30 @@ export function SunlightCommissionsPage() {
   const [zoomedSample, setZoomedSample] = useState<SunlightSampleBase | null>(null);
 
   // Clipboard & Discord action states
+  // Auto-advance loop: Side A -> Side B -> Next Cassette Side A -> Loop back to first cassette Side A
+  const handleTrackEnded = () => {
+    if (compiledCassettes.length === 0) return;
+
+    const currentTape = compiledCassettes[activeCassetteIndex];
+
+    // 1. If currently on Side A and this tape has Side B -> advance to Side B
+    if (activeSide === 'A' && currentTape?.sideB) {
+      setActiveSide('B');
+      setPlayerTrackKey(currentTape.sideB.Key);
+      return;
+    }
+
+    // 2. Otherwise (on Side B, or Side A with no Side B) -> advance to next cassette Side A
+    const nextTapeIndex = (activeCassetteIndex + 1) % compiledCassettes.length;
+    setActiveCassetteIndex(nextTapeIndex);
+    setActiveSide('A');
+
+    const nextTape = compiledCassettes[nextTapeIndex];
+    if (nextTape) {
+      setPlayerTrackKey(nextTape.sideA.Key);
+    }
+  };
+
   const [copied, setCopied] = useState(false);
   const [copiedMessage, setCopiedMessage] = useState<string | null>(null);
   const [recopied, setRecopied] = useState(false);
@@ -158,6 +182,8 @@ export function SunlightCommissionsPage() {
               activeTrackKey={playerTrackKey}
               compiledCassette={compiledCassettes[activeCassetteIndex] || null}
               activeSide={activeSide}
+              autoPlayOnChange={true}
+              onTrackEnded={handleTrackEnded}
               onSideChange={(side) => {
                 setActiveSide(side);
                 const tape = compiledCassettes[activeCassetteIndex];

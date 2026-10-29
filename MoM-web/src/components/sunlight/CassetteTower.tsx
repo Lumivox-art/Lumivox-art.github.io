@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { SunlightCompiledCassette } from '../../models/Sunlight';
 import './CassetteTower.scss';
 
@@ -30,6 +30,16 @@ export function CassetteTower({
   const handleScrollDown = () => {
     setScrollOffset((prev) => Math.min(maxOffset, prev + 1));
   };
+
+  // Keep active cassette visible in viewport when tower auto-advances or loops
+  useEffect(() => {
+    if (!hasOverflow) return;
+    if (activeCassetteIndex < scrollOffset) {
+      setScrollOffset(activeCassetteIndex);
+    } else if (activeCassetteIndex >= scrollOffset + VISIBLE_SLOTS_CAPACITY) {
+      setScrollOffset(Math.min(maxOffset, activeCassetteIndex - VISIBLE_SLOTS_CAPACITY + 1));
+    }
+  }, [activeCassetteIndex, hasOverflow, maxOffset, scrollOffset]);
 
   // Visible window of cassettes if overflow exceeds 10
   const displayedCassettes = hasOverflow
