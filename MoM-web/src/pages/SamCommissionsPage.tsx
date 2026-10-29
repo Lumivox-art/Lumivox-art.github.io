@@ -5,6 +5,7 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import './SamCommissions.scss';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 // Mockup landing for Sam's commissions — retro diner "menu" layout.
 // All copy is placeholder lorem ipsum (no real data — it must not bias any
@@ -48,6 +49,7 @@ export function SamCommissionsPage() {
       <div className="sc-topbar">
         <LumivoxBrand />
         <div className="sc-topbar-actions">
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

@@ -5,6 +5,7 @@ import { LanguageToggle } from '../components/LanguageToggle';
 import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import './SpeckuTerms.scss';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 export function SpeckuTermsPage() {
   const { theme } = useTheme();
@@ -15,6 +16,7 @@ export function SpeckuTermsPage() {
       <div className="st-topbar">
         <LumivoxBrand />
         <div className="st-topbar-actions">
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

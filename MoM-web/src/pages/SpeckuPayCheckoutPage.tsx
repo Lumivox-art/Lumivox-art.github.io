@@ -14,6 +14,7 @@ import {
 } from '../utils/speckuPaymentCodec';
 import { SPECKU_DISCORD_PROFILE_URL } from '../utils/discordMessage';
 import './SpeckuPayCheckout.scss';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 const DEFAULT_PAYPAL_CLIENT_ID =
   'BAA-aiHBfRBEkWGGh8umZAuwjJwpsUA104wjv6EJFoaDieVF93wwOrNXdSZjvP__hya21sARA2sWhVjUHg';
@@ -112,6 +113,7 @@ export function SpeckuPayCheckoutPage() {
         <div className="spc-topbar">
           <LumivoxBrand />
           <div className="spc-topbar-actions">
+            <IntranetShortcut />
             <LanguageToggle />
             <ThemeToggle />
           </div>

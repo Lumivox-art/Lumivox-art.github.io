@@ -14,6 +14,7 @@ import {
   calculatePayPalFee,
 } from '../utils/speckuPaymentCodec';
 import './SpeckuPayGenerator.scss';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 const LOCAL_STORAGE_HISTORY_KEY = 'specku_payment_links_history_v1';
 
@@ -206,6 +207,7 @@ export function SpeckuPayGeneratorPage() {
           <Link to="/home/specku/comisiones" className="spg-back-link">
             ← {t('artists.back') || 'Comisiones'}
           </Link>
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

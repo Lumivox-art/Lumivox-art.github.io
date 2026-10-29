@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { DayMark, NightMark } from '../components/LumivoxLogo';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 import { useTheme } from '../components/ThemeContext';
-import { useAuth } from '../components/AuthContext';
 import { useLang } from '../i18n';
 import { ArtistShowcase } from '../components/lumivox/ArtistShowcase';
 import { RosterStrip } from '../components/lumivox/RosterStrip';
@@ -23,7 +23,6 @@ const panelIdFor = (handle: string) => `showcase-${handle}`;
 export function LumivoxHomePage() {
   const { theme } = useTheme();
   const { t } = useLang();
-  const { currentUser, artistHandle } = useAuth();
   const navigate = useNavigate();
 
   // Easter Egg: 8 rapid clicks within 4 seconds unlocks the secret Intranet portal
@@ -103,24 +102,7 @@ export function LumivoxHomePage() {
         </Link>
 
         <div className="lvx-actions">
-          {currentUser && (
-            <Link
-              to="/intranet"
-              className="lvx-intranet-shortcut"
-              title="Ir a mi panel de intranet"
-              style={{
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                color: 'var(--color-accent, #8D3E2E)',
-                textDecoration: 'none',
-                background: 'rgba(224, 122, 111, 0.15)',
-                padding: '0.35rem 0.7rem',
-                borderRadius: '8px',
-              }}
-            >
-              Intranet ({artistHandle})
-            </Link>
-          )}
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

@@ -6,11 +6,11 @@ import { RosterStrip } from '../components/lumivox/RosterStrip';
 import { LanguageToggle } from '../components/LanguageToggle';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { useTheme } from '../components/ThemeContext';
-import { useAuth } from '../components/AuthContext';
 import { useLang } from '../i18n';
 import { artists, type Artist } from '../data/artists';
 import { ArtistMediaService } from '../services/ArtistMediaService';
 import { ArtistProfileService } from '../services/ArtistProfileService';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 // Artist roster: pick an artist and see their full card (socials + special
 // buttons). Optional /:handle pre-selects an artist (used by the home cards).
@@ -21,7 +21,6 @@ export function ArtistsPage() {
   const { theme } = useTheme();
   const { t } = useLang();
   const { handle } = useParams();
-  const { currentUser, artistHandle } = useAuth();
 
   const [artistList, setArtistList] = useState<Artist[]>(() =>
     ArtistProfileService.GetHydratedProfiles(ArtistMediaService.GetHydratedArtists(artists)),
@@ -78,24 +77,7 @@ export function ArtistsPage() {
         </div>
         <div className="lumivox-topbar-actions">
           <span className="lumivox-tagline-top">{t('artists.tagline')}</span>
-          {currentUser && (
-            <Link
-              to="/intranet"
-              className="lumivox-intranet-shortcut"
-              title="Ir a mi panel de intranet"
-              style={{
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                color: 'var(--color-accent, #8D3E2E)',
-                textDecoration: 'none',
-                background: 'rgba(224, 122, 111, 0.15)',
-                padding: '0.35rem 0.7rem',
-                borderRadius: '8px',
-              }}
-            >
-              Intranet ({artistHandle})
-            </Link>
-          )}
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

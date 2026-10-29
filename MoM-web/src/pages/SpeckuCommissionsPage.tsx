@@ -12,6 +12,7 @@ import {
   buildDiscordCommissionMessage,
 } from '../utils/discordMessage';
 import './SpeckuCommissions.scss';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 // Functional commission quote builder for Specku.
 // Pick one option per mandatory step (style + size + look);
@@ -230,6 +231,7 @@ export function SpeckuCommissionsPage() {
       <div className="jc-topbar">
         <LumivoxBrand />
         <div className="jc-topbar-actions">
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

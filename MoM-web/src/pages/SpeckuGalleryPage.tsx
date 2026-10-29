@@ -18,6 +18,7 @@ import { LumivoxLoadingCircle } from '../components/LumivoxLoadingCircle';
 import { ConnectionFailurePlaceholder } from '../components/ConnectionFailurePlaceholder';
 import type { GalleryItemBase } from '../models/Gallery';
 import './SpeckuGallery.scss';
+import { IntranetShortcut } from '../components/IntranetShortcut';
 
 const ITEMS_PER_SHEET = 6;
 
@@ -131,6 +132,7 @@ export function SpeckuGalleryPage() {
       <div className="sg-topbar">
         <LumivoxBrand />
         <div className="sg-topbar-actions">
+          <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
         </div>

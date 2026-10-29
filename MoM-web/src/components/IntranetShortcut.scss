@@ -1,0 +1,107 @@
+.lvx-intranet-shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(224, 122, 111, 0.14);
+  color: #8d3e2e;
+  border: 1px solid rgba(224, 122, 111, 0.28);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  .lvx-intranet-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1b8a4f;
+    box-shadow: 0 0 6px rgba(27, 138, 79, 0.6);
+  }
+
+  &:hover {
+    background: rgba(224, 122, 111, 0.24);
+    transform: translateY(-1px);
+    color: #733123;
+  }
+}
+
+:root[data-theme='night'] .lvx-intranet-shortcut,
+body[data-theme='night'] .lvx-intranet-shortcut {
+  background: rgba(255, 229, 0, 0.12);
+  color: #ffe500;
+  border-color: rgba(255, 229, 0, 0.32);
+
+  .lvx-intranet-dot {
+    background: #2ecc71;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.8);
+  }
+
+  &:hover {
+    background: rgba(255, 229, 0, 0.22);
+    color: #ffffff;
+  }
+}
+
+/* Floating bottom-right badge for instant return on any page */
+.lvx-intranet-floating-badge {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-decoration: none;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  background: #2a1a12;
+  color: #f4ece0;
+  box-shadow: 0 8px 24px rgba(42, 26, 18, 0.28);
+  border: 1px solid rgba(234, 220, 200, 0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .lvx-intranet-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2ecc71;
+    box-shadow: 0 0 8px #2ecc71;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    background: #150d09;
+    box-shadow: 0 12px 28px rgba(42, 26, 18, 0.38);
+    color: #ffffff;
+  }
+}
+
+:root[data-theme='night'] .lvx-intranet-floating-badge,
+body[data-theme='night'] .lvx-intranet-floating-badge {
+  background: #1a172a;
+  color: #ffe500;
+  border-color: rgba(255, 229, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  &:hover {
+    background: #25203d;
+    box-shadow: 0 12px 32px rgba(255, 229, 0, 0.25);
+  }
+}
+
+@media (max-width: 600px) {
+  .lvx-intranet-floating-badge {
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.78rem;
+  }
+}

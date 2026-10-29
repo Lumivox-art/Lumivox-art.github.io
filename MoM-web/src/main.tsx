@@ -8,6 +8,7 @@ import { PageTransition } from './components/PageTransition';
 import { ThemeProvider, useTheme } from './components/ThemeContext';
 import { LanguageProvider } from './i18n';
 import { AuthProvider, useAuth } from './components/AuthContext';
+import { IntranetFloatingBadge } from './components/IntranetShortcut';
 import { LumivoxHomePage } from './pages/LumivoxHomePage';
 import { ArtistsPage } from './pages/ArtistsPage';
 import { SamCommissionsPage } from './pages/SamCommissionsPage';
@@ -56,6 +57,7 @@ function RootLayout() {
           <AuthProvider>
             <AppThemeSync />
             <PageTransition />
+            <IntranetFloatingBadge />
             <AppErrorBoundary>
               <Outlet />
             </AppErrorBoundary>
