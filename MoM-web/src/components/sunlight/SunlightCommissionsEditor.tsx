@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { SunlightCommissionsService } from '../../services/SunlightCommissionsService';
 import type { SunlightSampleBase } from '../../models/Sunlight';
+import { CassetteSfx } from '../../utils/CassetteSfx';
 import './SunlightCommissionsEditor.scss';
 
 export function SunlightCommissionsEditor() {
@@ -147,6 +148,72 @@ export function SunlightCommissionsEditor() {
     }
   };
 
+  // Master dictionary pool of all songs known (canonical fallback + any in musicList)
+  const masterSongPool = useMemo(() => {
+    const map = new Map<string, SunlightSampleBase>();
+    SunlightCommissionsService.fallbackItems
+      .filter((s) => s.Kind === 'music')
+      .forEach((s) => map.set(s.Key, s));
+    musicList.forEach((s) => map.set(s.Key, s));
+    return Array.from(map.values());
+  }, [musicList]);
+
+  // Tap handler to toggle/order song from dictionary
+  const handleToggleSongFromDictionary = (song: SunlightSampleBase) => {
+    CassetteSfx.playTapeSwitch();
+    setMusicList((prev) => {
+      const idx = prev.findIndex((m) => m.Key === song.Key);
+      if (idx >= 0) {
+        return prev.filter((_, i) => i !== idx);
+      } else {
+        return [...prev, song];
+      }
+    });
+  };
+
+  // Reorder track position in sequence
+  const handleMoveTrack = (index: number, direction: 'up' | 'down') => {
+    const targetIdx = direction === 'up' ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= musicList.length) return;
+    CassetteSfx.playTapeSwitch();
+    setMusicList((prev) => {
+      const copy = [...prev];
+      const temp = copy[index];
+      copy[index] = copy[targetIdx];
+      copy[targetIdx] = temp;
+      return copy;
+    });
+  };
+
+  // Remove track from sequence
+  const handleRemoveTrackFromSequence = (index: number) => {
+    CassetteSfx.playTapeSwitch();
+    setMusicList((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Apply artist official 5-tape order
+  const handleApplyArtistOrder = () => {
+    CassetteSfx.playTapeSwitch();
+    const ordered: SunlightSampleBase[] = [];
+    const pool = masterSongPool;
+    for (const key of SunlightCommissionsService.ARTIST_DEFAULT_TRACK_KEYS) {
+      const found = pool.find((s) => s.Key === key);
+      if (found) {
+        ordered.push(found);
+      }
+    }
+    const remaining = musicList.filter(
+      (m) => !SunlightCommissionsService.ARTIST_DEFAULT_TRACK_KEYS.includes(m.Key)
+    );
+    setMusicList([...ordered, ...remaining]);
+  };
+
+  // Clear sequence
+  const handleClearSequence = () => {
+    CassetteSfx.playTapeSwitch();
+    setMusicList([]);
+  };
+
   // --- Persistence Handler ---
   const handleSaveAll = async () => {
     setSaving(true);
@@ -154,7 +221,13 @@ export function SunlightCommissionsEditor() {
 
     const fullCatalog: SunlightSampleBase[] = [
       ...artList.map((a, i) => ({ ...a, Order: i + 1 })),
-      ...musicList.map((m, i) => ({ ...m, Order: artList.length + i + 1 })),
+      ...musicList.map((m, i) => ({
+        ...m,
+        Order: artList.length + i + 1,
+        TrackNumber: i + 1,
+        CassetteIndex: Math.floor(i / 2) + 1,
+        Side: (i % 2 === 0 ? 'A' : 'B') as 'A' | 'B',
+      })),
     ];
 
     try {
@@ -389,6 +462,207 @@ export function SunlightCommissionsEditor() {
             >
               + Agregar Nuevo Cassette (Caras A y B)
             </button>
+          </div>
+
+          {/* Interactive Cassette Organizer & Dictionary */}
+          <div className="sl-cassette-organizer">
+            <div className="sl-organizer-header">
+              <div className="sl-organizer-title-wrap">
+                <h4>Organizador de Cintas & Diccionario de Canciones</h4>
+                <p>
+                  Haz tap en las opciones del diccionario (recuadro izquierdo) en el orden deseado. En el recuadro derecho verás en tiempo real cómo se compilan en Caras A y B para cada Cinta.
+                </p>
+              </div>
+
+              <div className="sl-organizer-actions">
+                <button
+                  type="button"
+                  className="sl-btn-preset-artist"
+                  onClick={handleApplyArtistOrder}
+                  title="Carga el orden oficial solicitado por el artista para las 5 cintas"
+                >
+                  ★ Aplicar Orden Oficial del Artista
+                </button>
+                <button
+                  type="button"
+                  className="sl-btn-clear-seq"
+                  onClick={handleClearSequence}
+                  title="Limpiar secuencia para hacer tap desde cero"
+                >
+                  ↺ Limpiar Orden
+                </button>
+              </div>
+            </div>
+
+            <div className="sl-organizer-boxes">
+              {/* Recuadro 1: Diccionario de Canciones Disponibles */}
+              <div className="sl-dict-box">
+                <div className="sl-box-header">
+                  <h5>1. Diccionario de Canciones (Tap para ordenar)</h5>
+                  <span className="sl-box-badge">{masterSongPool.length} canciones</span>
+                </div>
+                <p className="sl-box-hint">
+                  Haz tap en una canción para agregarla al siguiente slot disponible. Si ya está agregada, haz tap para removerla.
+                </p>
+
+                <div className="sl-dict-grid">
+                  {masterSongPool.map((song) => {
+                    const assignedIndex = musicList.findIndex((m) => m.Key === song.Key);
+                    const isAssigned = assignedIndex >= 0;
+                    const tapeNumber = isAssigned ? Math.floor(assignedIndex / 2) + 1 : null;
+                    const side = isAssigned ? (assignedIndex % 2 === 0 ? 'A' : 'B') : null;
+
+                    return (
+                      <button
+                        key={song.Key}
+                        type="button"
+                        className={`sl-dict-song-btn ${isAssigned ? 'is-assigned' : 'is-unassigned'}`}
+                        onClick={() => handleToggleSongFromDictionary(song)}
+                      >
+                        <div className="sl-dict-info">
+                          <span className="sl-dict-title">{song.Title}</span>
+                          <span className="sl-dict-duration">{song.Duration || '2:30'}</span>
+                        </div>
+
+                        <div className="sl-dict-badge-wrap">
+                          {isAssigned ? (
+                            <span className="sl-badge-assigned">
+                              ✓ Tape {tapeNumber} · Cara {side}
+                            </span>
+                          ) : (
+                            <span className="sl-badge-add">+ Tap para agregar</span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Recuadro 2: Orden de las Cintas (Live Preview) */}
+              <div className="sl-preview-box">
+                <div className="sl-box-header">
+                  <h5>2. Orden de las Cintas (Compilación en Vivo)</h5>
+                  <span className="sl-box-badge">
+                    {totalTapesCount} {totalTapesCount === 1 ? 'Cinta' : 'Cintas'} ({musicList.length} canciones)
+                  </span>
+                </div>
+                <p className="sl-box-hint">
+                  Las canciones se agrupan en cintas de 2 en 2 (Cara A y Cara B).
+                </p>
+
+                {musicList.length === 0 ? (
+                  <div className="sl-empty-seq-notice">
+                    <p>No hay canciones asignadas.</p>
+                    <small>Haz tap en las canciones del diccionario de la izquierda o presiona "Aplicar Orden Oficial del Artista".</small>
+                  </div>
+                ) : (
+                  <div className="sl-tapes-preview-list">
+                    {Array.from({ length: totalTapesCount }).map((_, tapeIdx) => {
+                      const tapeNumber = tapeIdx + 1;
+                      const trackA = musicList[tapeIdx * 2];
+                      const trackB = musicList[tapeIdx * 2 + 1];
+
+                      return (
+                        <div key={`tape-preview-${tapeNumber}`} className="sl-tape-preview-card">
+                          <div className="sl-tape-preview-header">
+                            <span className="sl-preview-tag">TAPE {String(tapeNumber).padStart(2, '0')}</span>
+                            <span className="sl-preview-subtitle">
+                              {trackA?.Title} {trackB ? `/ ${trackB.Title}` : '(Sin Cara B)'}
+                            </span>
+                          </div>
+
+                          <div className="sl-preview-slots">
+                            {/* Slot Cara A */}
+                            <div className="sl-slot-item slot-a">
+                              <span className="sl-slot-pill a">A</span>
+                              <div className="sl-slot-main">
+                                <span className="sl-slot-name">{trackA?.Title || 'Ranura vacía'}</span>
+                                {trackA?.Duration && <span className="sl-slot-time">{trackA.Duration}</span>}
+                              </div>
+                              <div className="sl-slot-controls">
+                                <button
+                                  type="button"
+                                  className="sl-btn-arrow"
+                                  disabled={tapeIdx * 2 === 0}
+                                  onClick={() => handleMoveTrack(tapeIdx * 2, 'up')}
+                                  title="Subir de posición"
+                                >
+                                  ▲
+                                </button>
+                                <button
+                                  type="button"
+                                  className="sl-btn-arrow"
+                                  disabled={tapeIdx * 2 >= musicList.length - 1}
+                                  onClick={() => handleMoveTrack(tapeIdx * 2, 'down')}
+                                  title="Bajar de posición"
+                                >
+                                  ▼
+                                </button>
+                                <button
+                                  type="button"
+                                  className="sl-btn-del-slot"
+                                  onClick={() => handleRemoveTrackFromSequence(tapeIdx * 2)}
+                                  title="Remover de la cinta"
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Slot Cara B */}
+                            <div className={`sl-slot-item slot-b ${!trackB ? 'is-empty-slot' : ''}`}>
+                              <span className="sl-slot-pill b">B</span>
+                              <div className="sl-slot-main">
+                                <span className="sl-slot-name">
+                                  {trackB ? trackB.Title : '(Sin Cara B - Hueco libre)'}
+                                </span>
+                                {trackB?.Duration && <span className="sl-slot-time">{trackB.Duration}</span>}
+                              </div>
+                              {trackB && (
+                                <div className="sl-slot-controls">
+                                  <button
+                                    type="button"
+                                    className="sl-btn-arrow"
+                                    onClick={() => handleMoveTrack(tapeIdx * 2 + 1, 'up')}
+                                    title="Subir de posición"
+                                  >
+                                    ▲
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="sl-btn-arrow"
+                                    disabled={tapeIdx * 2 + 1 >= musicList.length - 1}
+                                    onClick={() => handleMoveTrack(tapeIdx * 2 + 1, 'down')}
+                                    title="Bajar de posición"
+                                  >
+                                    ▼
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="sl-btn-del-slot"
+                                    onClick={() => handleRemoveTrackFromSequence(tapeIdx * 2 + 1)}
+                                    title="Remover de la cinta"
+                                  >
+                                    ✕
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Detailed Metadata Form Section */}
+          <div className="sl-detailed-section-divider">
+            <h4>Detalle y Edición de Metadatos por Cassette</h4>
+            <p>Edita nombres de cinta, títulos individuales, precios y URLs de audio MP3 para cada pista.</p>
           </div>
 
           <div className="sl-cassettes-list">

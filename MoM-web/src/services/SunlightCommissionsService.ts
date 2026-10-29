@@ -10,14 +10,29 @@ import type { SunlightSampleBase, SunlightCompiledCassette } from '../models/Sun
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v8';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v9';
+
+  /**
+   * Official artist cassette track keys sequence (5 tapes: 4 dual-sided + 1 single-sided).
+   */
+  public static readonly ARTIST_DEFAULT_TRACK_KEYS: string[] = [
+    'vocal-with-lyrics',          // TAPE 1: A - La Tormenta
+    'melodia-cosmica',            // TAPE 1: B - Melodia Cosmica (Main Theme)
+    'lost-parcel',                // TAPE 2: A - Lost Parcel
+    'chocolimon',                 // TAPE 2: B - Chocolimon
+    'deeno-swing',                // TAPE 3: A - Deeno Swing
+    'instrumental',               // TAPE 3: B - Deeno Spooky
+    'veloz',                      // TAPE 4: A - Veloz
+    'sin-los-pies-en-la-tierra',  // TAPE 4: B - Sin Los Pies En La Tierra
+    'cielo-azul',                 // TAPE 5: A - Cielo Azul (Sin cara B)
+  ];
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
   /**
    * Static contingency dataset with real high-resolution artwork samples and audio metadata.
    */
-  private static readonly fallbackItems: SunlightSampleBase[] = [
+  public static readonly fallbackItems: SunlightSampleBase[] = [
     {
       SampleID: 1,
       Key: 'headshot',
@@ -78,23 +93,7 @@ export class SunlightCommissionsService {
       IsActive: true,
       IsDeleted: false,
     },
-    {
-      SampleID: 5,
-      Key: 'instrumental',
-      Title: 'Deeno Spooky',
-      Category: 'custom_song',
-      Kind: 'music',
-      PriceUsd: 30,
-      PriceMxn: 550,
-      MediaUrl: '/sunlight-media/instrumental.mp3',
-      AudioUrl: '/sunlight-media/instrumental.mp3',
-      Description: 'Deeno Spooky',
-      Duration: '2:30',
-      TrackNumber: 1,
-      Order: 5,
-      IsActive: true,
-      IsDeleted: false,
-    },
+    // TAPE 1 - Side A: La Tormenta
     {
       SampleID: 6,
       Key: 'vocal-with-lyrics',
@@ -107,79 +106,15 @@ export class SunlightCommissionsService {
       AudioUrl: '/sunlight-media/vocal-with-lyrics.mp3',
       Description: 'La tormenta (Vocals with lyrics)',
       Duration: '1:23',
-      TrackNumber: 2,
-      Order: 6,
+      CassetteIndex: 1,
+      CassetteTitle: 'Tape 01: La Tormenta / Melodía Cósmica',
+      Side: 'A',
+      TrackNumber: 1,
+      Order: 5,
       IsActive: true,
       IsDeleted: false,
     },
-    {
-      SampleID: 7,
-      Key: 'chocolimon',
-      Title: 'Chocolimón',
-      Category: 'custom_song',
-      Kind: 'music',
-      PriceUsd: 30,
-      PriceMxn: 550,
-      MediaUrl: '/sunlight-media/chocolimon.mp3',
-      AudioUrl: '/sunlight-media/chocolimon.mp3',
-      Description: 'Chocolimón',
-      Duration: '1:08',
-      TrackNumber: 3,
-      Order: 7,
-      IsActive: true,
-      IsDeleted: false,
-    },
-    {
-      SampleID: 8,
-      Key: 'deeno-swing',
-      Title: 'Deeno Swing',
-      Category: 'custom_song',
-      Kind: 'music',
-      PriceUsd: 30,
-      PriceMxn: 550,
-      MediaUrl: '/sunlight-media/deeno-swing.mp3',
-      AudioUrl: '/sunlight-media/deeno-swing.mp3',
-      Description: 'Deeno Swing',
-      Duration: '2:16',
-      TrackNumber: 4,
-      Order: 8,
-      IsActive: true,
-      IsDeleted: false,
-    },
-    {
-      SampleID: 9,
-      Key: 'lost-parcel',
-      Title: 'Lost Parcel',
-      Category: 'custom_song',
-      Kind: 'music',
-      PriceUsd: 30,
-      PriceMxn: 550,
-      MediaUrl: '/sunlight-media/lost-parcel.mp3',
-      AudioUrl: '/sunlight-media/lost-parcel.mp3',
-      Description: 'Lost Parcel',
-      Duration: '2:18',
-      TrackNumber: 5,
-      Order: 9,
-      IsActive: true,
-      IsDeleted: false,
-    },
-    {
-      SampleID: 10,
-      Key: 'cielo-azul',
-      Title: 'Cielo Azul',
-      Category: 'custom_song',
-      Kind: 'music',
-      PriceUsd: 30,
-      PriceMxn: 550,
-      MediaUrl: '/sunlight-media/cielo-azul.mp3',
-      AudioUrl: '/sunlight-media/cielo-azul.mp3',
-      Description: 'Cielo Azul',
-      Duration: '3:24',
-      TrackNumber: 6,
-      Order: 10,
-      IsActive: true,
-      IsDeleted: false,
-    },
+    // TAPE 1 - Side B: Melodia Cosmica (Main theme)
     {
       SampleID: 11,
       Key: 'melodia-cosmica',
@@ -192,28 +127,99 @@ export class SunlightCommissionsService {
       AudioUrl: '/sunlight-media/melodia-cosmica.mp3',
       Description: 'Melodía Cósmica (Main Theme)',
       Duration: '1:39',
-      TrackNumber: 7,
-      Order: 11,
+      CassetteIndex: 1,
+      CassetteTitle: 'Tape 01: La Tormenta / Melodía Cósmica',
+      Side: 'B',
+      TrackNumber: 2,
+      Order: 6,
       IsActive: true,
       IsDeleted: false,
     },
+    // TAPE 2 - Side A: Lost Parcel
     {
-      SampleID: 12,
-      Key: 'sin-los-pies-en-la-tierra',
-      Title: 'Sin Los Pies En La Tierra',
+      SampleID: 9,
+      Key: 'lost-parcel',
+      Title: 'Lost Parcel',
       Category: 'custom_song',
       Kind: 'music',
       PriceUsd: 30,
       PriceMxn: 550,
-      MediaUrl: '/sunlight-media/sin-los-pies-en-la-tierra.mp3',
-      AudioUrl: '/sunlight-media/sin-los-pies-en-la-tierra.mp3',
-      Description: 'Sin Los Pies En La Tierra',
-      Duration: '3:03',
-      TrackNumber: 8,
-      Order: 12,
+      MediaUrl: '/sunlight-media/lost-parcel.mp3',
+      AudioUrl: '/sunlight-media/lost-parcel.mp3',
+      Description: 'Lost Parcel',
+      Duration: '2:18',
+      CassetteIndex: 2,
+      CassetteTitle: 'Tape 02: Lost Parcel / Chocolimón',
+      Side: 'A',
+      TrackNumber: 3,
+      Order: 7,
       IsActive: true,
       IsDeleted: false,
     },
+    // TAPE 2 - Side B: Chocolimon
+    {
+      SampleID: 7,
+      Key: 'chocolimon',
+      Title: 'Chocolimón',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/chocolimon.mp3',
+      AudioUrl: '/sunlight-media/chocolimon.mp3',
+      Description: 'Chocolimón',
+      Duration: '1:08',
+      CassetteIndex: 2,
+      CassetteTitle: 'Tape 02: Lost Parcel / Chocolimón',
+      Side: 'B',
+      TrackNumber: 4,
+      Order: 8,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    // TAPE 3 - Side A: Deeno Swing
+    {
+      SampleID: 8,
+      Key: 'deeno-swing',
+      Title: 'Deeno Swing',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/deeno-swing.mp3',
+      AudioUrl: '/sunlight-media/deeno-swing.mp3',
+      Description: 'Deeno Swing',
+      Duration: '2:16',
+      CassetteIndex: 3,
+      CassetteTitle: 'Tape 03: Deeno Swing / Deeno Spooky',
+      Side: 'A',
+      TrackNumber: 5,
+      Order: 9,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    // TAPE 3 - Side B: Deeno Spooky
+    {
+      SampleID: 5,
+      Key: 'instrumental',
+      Title: 'Deeno Spooky',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/instrumental.mp3',
+      AudioUrl: '/sunlight-media/instrumental.mp3',
+      Description: 'Deeno Spooky',
+      Duration: '2:30',
+      CassetteIndex: 3,
+      CassetteTitle: 'Tape 03: Deeno Swing / Deeno Spooky',
+      Side: 'B',
+      TrackNumber: 6,
+      Order: 10,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    // TAPE 4 - Side A: Veloz
     {
       SampleID: 13,
       Key: 'veloz',
@@ -226,6 +232,51 @@ export class SunlightCommissionsService {
       AudioUrl: '/sunlight-media/veloz.mp3',
       Description: 'Veloz',
       Duration: '2:54',
+      CassetteIndex: 4,
+      CassetteTitle: 'Tape 04: Veloz / Sin Los Pies En La Tierra',
+      Side: 'A',
+      TrackNumber: 7,
+      Order: 11,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    // TAPE 4 - Side B: Sin los pies en la tierra
+    {
+      SampleID: 12,
+      Key: 'sin-los-pies-en-la-tierra',
+      Title: 'Sin Los Pies En La Tierra',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/sin-los-pies-en-la-tierra.mp3',
+      AudioUrl: '/sunlight-media/sin-los-pies-en-la-tierra.mp3',
+      Description: 'Sin Los Pies En La Tierra',
+      Duration: '3:03',
+      CassetteIndex: 4,
+      CassetteTitle: 'Tape 04: Veloz / Sin Los Pies En La Tierra',
+      Side: 'B',
+      TrackNumber: 8,
+      Order: 12,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    // TAPE 5 - Side A: Cielo Azul (Sin cara B)
+    {
+      SampleID: 10,
+      Key: 'cielo-azul',
+      Title: 'Cielo Azul',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/cielo-azul.mp3',
+      AudioUrl: '/sunlight-media/cielo-azul.mp3',
+      Description: 'Cielo Azul',
+      Duration: '3:24',
+      CassetteIndex: 5,
+      CassetteTitle: 'Tape 05: Cielo Azul',
+      Side: 'A',
       TrackNumber: 9,
       Order: 13,
       IsActive: true,
@@ -244,6 +295,7 @@ export class SunlightCommissionsService {
     LocalCache.Remove('lvx_cache_sunlight_samples_v5');
     LocalCache.Remove('lvx_cache_sunlight_samples_v6');
     LocalCache.Remove('lvx_cache_sunlight_samples_v7');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v8');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }

@@ -39,7 +39,7 @@ export function SunlightCommissionsPage() {
   const [notes, setNotes] = useState('');
 
   // Cassette player track and compiled cassette state
-  const [playerTrackKey, setPlayerTrackKey] = useState<string>('instrumental');
+  const [playerTrackKey, setPlayerTrackKey] = useState<string>('vocal-with-lyrics');
   const [activeCassetteIndex, setActiveCassetteIndex] = useState(0);
   const [activeSide, setActiveSide] = useState<'A' | 'B'>('A');
 
