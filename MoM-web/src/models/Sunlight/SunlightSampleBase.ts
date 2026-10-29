@@ -16,6 +16,7 @@ export interface SunlightSampleBase {
   PriceMxn: number;
   MediaUrl: string;
   ImageBinary?: string | null;
+  AudioBinary?: string | null;
   AudioUrl?: string | null;
   Description?: string | null;
   ReleaseYear?: string | null;

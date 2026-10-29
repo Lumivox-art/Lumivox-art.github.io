@@ -1,27 +1,58 @@
 // 90s Vinyl Sleeve & Album Cover Card styling
+// Grounded in the Lumivox brand identity with Day & Night parity
+
 .vinyl-cover-card {
-  background: rgba(18, 24, 38, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  position: relative;
+  background: #faf6f0;
+  border: 1.5px solid rgba(42, 26, 18, 0.1);
+  border-radius: 14px;
   padding: 1rem;
   cursor: pointer;
-  transition: all 0.25s ease;
-  position: relative;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-color 0.2s,
+              box-shadow 0.2s,
+              background-color 0.2s;
   display: flex;
   flex-direction: column;
   user-select: none;
   outline: none;
+  color: #2a1a12;
+  box-shadow: 0 4px 14px rgba(42, 26, 18, 0.05);
 
   &:hover {
     transform: translateY(-4px);
-    border-color: rgba(58, 99, 168, 0.6);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    border-color: #254b82;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(42, 26, 18, 0.1);
   }
 
   &.is-selected {
-    border-color: #3b82f6;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-    background: rgba(30, 42, 66, 0.85);
+    border-color: #254b82;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 75, 130, 0.18), 0 8px 20px rgba(37, 75, 130, 0.12);
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      background: #254b82;
+      color: #ffffff;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 8px rgba(37, 75, 130, 0.35);
+      z-index: 10;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid #254b82;
+    outline-offset: 2px;
   }
 
   .sleeve-container {
@@ -42,21 +73,21 @@
       width: 90%;
       height: 90%;
       border-radius: 50%;
-      background: radial-gradient(circle, #0a0c10 0%, #151921 50%, #05070a 100%);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9);
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: radial-gradient(circle, #0a0c10 0%, #171b22 50%, #05070a 100%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
       z-index: 1;
       display: grid;
       place-items: center;
 
       &.is-slid-out {
-        transform: translateX(35%) rotate(45deg);
+        transform: translateX(36%) rotate(42deg);
       }
 
       .vinyl-groove {
         position: absolute;
         border-radius: 50%;
-        border: 1px dashed rgba(255, 255, 255, 0.08);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
 
         &.groove-1 { width: 85%; height: 85%; }
         &.groove-2 { width: 70%; height: 70%; }
@@ -67,7 +98,7 @@
         width: 38%;
         height: 38%;
         border-radius: 50%;
-        background: radial-gradient(circle, #3a63a8 30%, #1e3a6a 100%);
+        background: radial-gradient(circle, #254b82 30%, #15294a 100%);
         border: 2px solid #60a5fa;
         display: flex;
         flex-direction: column;
@@ -92,7 +123,7 @@
         border-radius: 50%;
         background: #000000;
         z-index: 3;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.25);
       }
     }
 
@@ -101,12 +132,12 @@
       position: relative;
       width: 100%;
       height: 100%;
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       z-index: 2;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-      background: #1e2532;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 20px rgba(42, 26, 18, 0.2);
+      background: #e8ded2;
+      border: 1px solid rgba(42, 26, 18, 0.15);
 
       .jacket-art {
         width: 100%;
@@ -120,9 +151,9 @@
         inset: 0;
         background: linear-gradient(
           135deg,
-          rgba(255, 255, 255, 0.25) 0%,
-          rgba(255, 255, 255, 0.05) 40%,
-          rgba(255, 255, 255, 0) 60%
+          rgba(255, 255, 255, 0.3) 0%,
+          rgba(255, 255, 255, 0.06) 40%,
+          rgba(255, 255, 255, 0) 65%
         );
         pointer-events: none;
         z-index: 3;
@@ -146,13 +177,13 @@
         }
 
         .badge-stereo {
-          background: rgba(0, 0, 0, 0.75);
-          color: #38bdf8;
-          border: 1px solid rgba(56, 189, 248, 0.4);
+          background: rgba(42, 26, 18, 0.85);
+          color: #60a5fa;
+          border: 1px solid rgba(96, 165, 250, 0.4);
         }
 
         .badge-year {
-          background: rgba(58, 99, 168, 0.85);
+          background: #254b82;
           color: #ffffff;
         }
       }
@@ -162,20 +193,23 @@
         bottom: 8px;
         right: 8px;
         z-index: 4;
-        background: rgba(0, 0, 0, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(42, 26, 18, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.25);
         color: #ffffff;
-        font-size: 0.68rem;
-        font-weight: 700;
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 0.25rem 0.55rem;
+        border-radius: 6px;
         cursor: pointer;
         opacity: 0;
         transform: translateY(4px);
         transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
 
         &:hover {
-          background: #3a63a8;
+          background: #254b82;
           border-color: #60a5fa;
         }
       }
@@ -190,17 +224,20 @@
   // Meta
   .vinyl-card-meta {
     .meta-title {
-      font-size: 0.95rem;
+      font-size: 1.05rem;
       font-weight: 800;
-      color: #f1f5f9;
+      color: inherit;
       margin: 0 0 0.2rem 0;
     }
 
     .meta-vibe {
       display: block;
-      font-size: 0.72rem;
-      color: #94a3b8;
-      margin-bottom: 0.4rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: #705845;
+      margin-bottom: 0.45rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .meta-price-row {
@@ -209,14 +246,102 @@
       gap: 0.5rem;
 
       .price-usd {
-        font-size: 0.95rem;
-        font-weight: 900;
-        color: #38bdf8;
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #254b82;
       }
 
       .price-mxn {
-        font-size: 0.75rem;
-        color: #64748b;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #705845;
+        opacity: 0.85;
+      }
+    }
+  }
+}
+
+// --- NIGHT THEME PARITY ---
+[data-theme='night'] .vinyl-cover-card {
+  background: #1c1827;
+  border-color: #3d374e;
+  color: #f1ece0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  &:hover {
+    background: #241f30;
+    border-color: #38bdf8;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 14px rgba(56, 189, 248, 0.2);
+  }
+
+  &.is-selected {
+    background: #241f30;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35), 0 8px 20px rgba(0, 0, 0, 0.5);
+
+    &::after {
+      background: #38bdf8;
+      color: #0c0b16;
+      box-shadow: 0 2px 10px rgba(56, 189, 248, 0.5);
+    }
+  }
+
+  &:focus-visible {
+    outline-color: #38bdf8;
+  }
+
+  .sleeve-container {
+    .album-jacket {
+      background: #14111d;
+      border-color: #3d374e;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+
+      .jacket-overlay-badges {
+        .badge-stereo {
+          background: rgba(0, 0, 0, 0.85);
+          color: #38bdf8;
+          border-color: rgba(56, 189, 248, 0.4);
+        }
+
+        .badge-year {
+          background: #2563eb;
+        }
+      }
+
+      .jacket-zoom-btn {
+        background: rgba(0, 0, 0, 0.8);
+        border-color: rgba(255, 255, 255, 0.2);
+
+        &:hover {
+          background: #2563eb;
+          border-color: #38bdf8;
+        }
+      }
+    }
+
+    .vinyl-disc {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9);
+
+      .vinyl-center-label {
+        background: radial-gradient(circle, #1e3a6a 30%, #0d1a33 100%);
+        border-color: #38bdf8;
+      }
+    }
+  }
+
+  .vinyl-card-meta {
+    .meta-vibe {
+      color: #9a93b0;
+    }
+
+    .meta-price-row {
+      .price-usd {
+        color: #ffe500;
+      }
+
+      .price-mxn {
+        color: #ff7ab8;
       }
     }
   }

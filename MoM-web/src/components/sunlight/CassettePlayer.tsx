@@ -5,64 +5,79 @@ import './CassettePlayer.scss';
 
 interface CassettePlayerProps {
   tracks: SunlightSampleBase[];
+  activeTrackKey?: string;
   selectedTrackKey?: string;
+  onTrackChange?: (key: string) => void;
   onSelectTrack?: (key: string) => void;
 }
 
 export function CassettePlayer({
   tracks,
+  activeTrackKey,
   selectedTrackKey,
+  onTrackChange,
   onSelectTrack,
 }: CassettePlayerProps) {
   const { t } = useLang();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const effectiveActiveKey = activeTrackKey || selectedTrackKey;
+
+  const notifyTrackChange = (key: string) => {
+    onTrackChange?.(key);
+    onSelectTrack?.(key);
+  };
+
   const musicTracks = tracks.filter((t) => t.Kind === 'music');
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.85);
 
-  const activeTrack = musicTracks[currentTrackIndex] || musicTracks[0];
-
-  // Sync with selectedTrackKey if parent component changes it
+  // Sync index when active key changes from parent (e.g. commission builder)
   useEffect(() => {
-    if (selectedTrackKey) {
-      const idx = musicTracks.findIndex((t) => t.Key === selectedTrackKey);
-      if (idx >= 0 && idx !== currentTrackIndex) {
-        setCurrentTrackIndex(idx);
+    if (effectiveActiveKey) {
+      const idx = musicTracks.findIndex((t) => t.Key === effectiveActiveKey);
+      if (idx >= 0 && idx !== currentIndex) {
+        setCurrentIndex(idx);
         setIsPlaying(true);
       }
     }
-  }, [selectedTrackKey, musicTracks]);
+  }, [effectiveActiveKey, musicTracks]);
 
-  // Audio source effect
+  const currentTrack = musicTracks[currentIndex] || musicTracks[0];
+
+  // Update audio source when track changes
   useEffect(() => {
-    if (audioRef.current && activeTrack) {
-      audioRef.current.src = activeTrack.AudioUrl || activeTrack.MediaUrl;
+    if (audioRef.current && currentTrack) {
+      const src = currentTrack.AudioBinary || currentTrack.AudioUrl || currentTrack.MediaUrl;
+      audioRef.current.src = src;
       audioRef.current.volume = volume;
       if (isPlaying) {
         audioRef.current
           .play()
-          .catch((err) => console.warn('Audio auto-play prevented:', err));
+          .catch((err) => console.warn('Audio playback prevented:', err));
       }
     }
-  }, [currentTrackIndex, activeTrack]);
+  }, [currentIndex, currentTrack]);
 
-  const handlePlay = () => {
-    if (audioRef.current) {
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      if (!audioRef.current.src && currentTrack) {
+        audioRef.current.src = currentTrack.AudioBinary || currentTrack.AudioUrl || currentTrack.MediaUrl;
+      }
       audioRef.current
         .play()
         .then(() => setIsPlaying(true))
-        .catch((err) => console.warn('Playback error:', err));
-    }
-  };
-
-  const handlePause = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
+        .catch((err) => {
+          console.warn('Play error:', err);
+          setIsPlaying(false);
+        });
     }
   };
 
@@ -75,16 +90,23 @@ export function CassettePlayer({
     }
   };
 
+  const handleSwitchSide = (idx: number) => {
+    setCurrentIndex(idx);
+    const trk = musicTracks[idx];
+    if (trk) {
+      notifyTrackChange(trk.Key);
+    }
+    setIsPlaying(true);
+  };
+
   const handlePrev = () => {
-    const nextIdx = (currentTrackIndex - 1 + musicTracks.length) % musicTracks.length;
-    setCurrentTrackIndex(nextIdx);
-    onSelectTrack?.(musicTracks[nextIdx].Key);
+    const nextIdx = (currentIndex - 1 + musicTracks.length) % musicTracks.length;
+    handleSwitchSide(nextIdx);
   };
 
   const handleNext = () => {
-    const nextIdx = (currentTrackIndex + 1) % musicTracks.length;
-    setCurrentTrackIndex(nextIdx);
-    onSelectTrack?.(musicTracks[nextIdx].Key);
+    const nextIdx = (currentIndex + 1) % musicTracks.length;
+    handleSwitchSide(nextIdx);
   };
 
   const handleTimeUpdate = () => {
@@ -105,26 +127,27 @@ export function CassettePlayer({
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const vol = parseFloat(e.target.value);
-    setVolume(vol);
+    const val = parseFloat(e.target.value);
+    setVolume(val);
     if (audioRef.current) {
-      audioRef.current.volume = vol;
+      audioRef.current.volume = val;
     }
   };
 
   const formatTime = (secs: number) => {
-    if (isNaN(secs)) return '00:00';
+    if (isNaN(secs) || secs < 0) return '00:00';
     const m = Math.floor(secs / 60);
     const s = Math.floor(secs % 60);
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  if (!activeTrack) return null;
+  if (!currentTrack) return null;
 
-  const isSideA = activeTrack.Key === 'instrumental';
+  const isSideA = currentTrack.Key === 'instrumental';
+  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="sunlight-cassette-deck">
+    <div className={`sl-cassette-unit ${isPlaying ? 'is-running' : ''}`}>
       <audio
         ref={audioRef}
         onTimeUpdate={handleTimeUpdate}
@@ -134,131 +157,164 @@ export function CassettePlayer({
           }
         }}
         onEnded={() => {
+          setIsPlaying(false);
           handleNext();
         }}
       />
 
-      {/* Retro Deck Header */}
-      <div className="deck-header">
-        <div className="deck-brand-pill">
-          <span className="deck-led-dot active" />
-          <span>SUNLIGHT BLUE · HI-FI STEREO CASSETTE DECK</span>
+      {/* Top Deck Transport Control Bar */}
+      <div className="sl-deck-topbar">
+        <div className="sl-deck-branding">
+          <span className="sl-brand-logo-text">SUNLIGHT BLUE</span>
+          <span className="sl-brand-model">WM-90 STEREO CASSETTE DECK</span>
         </div>
-        <div className="deck-dolby-badge">DOLBY B-NR · TYPE II CHROME</div>
-      </div>
-
-      {/* Cassette Tape Physical Housing */}
-      <div className={`cassette-casing ${isPlaying ? 'is-playing' : ''}`}>
-        <div className="cassette-body">
-          {/* Top screws & bevels */}
-          <div className="cassette-screw top-left" />
-          <div className="cassette-screw top-right" />
-          <div className="cassette-screw bottom-left" />
-          <div className="cassette-screw bottom-right" />
-
-          {/* Cassette Sticker / Label */}
-          <div className="cassette-label">
-            <div className="label-side-banner">
-              <span className="label-side-letter">{isSideA ? 'A' : 'B'}</span>
-              <span className="label-title">{activeTrack.Title}</span>
-              <span className="label-year">{activeTrack.ReleaseYear || '1995'}</span>
-            </div>
-            <div className="label-sub">{t('sunlight.player.tape_label')}</div>
-          </div>
-
-          {/* Acrylic Window with Tape Reels */}
-          <div className="cassette-window">
-            {/* Left Spool */}
-            <div className={`spool spool-left ${isPlaying ? 'is-spinning' : ''}`}>
-              <div className="spool-core">
-                <div className="spool-teeth tooth-1" />
-                <div className="spool-teeth tooth-2" />
-                <div className="spool-teeth tooth-3" />
-              </div>
-              <div
-                className="tape-pack tape-left"
-                style={{
-                  transform: `scale(${0.6 + (0.4 * (duration ? 1 - currentTime / duration : 1))})`,
-                }}
-              />
-            </div>
-
-            {/* Magnetic Tape Ribbon Window */}
-            <div className="tape-center-window">
-              <div className="tape-bridge" />
-              <div className="tape-guide-marks">
-                <span>100</span>
-                <span>50</span>
-                <span>0</span>
-              </div>
-            </div>
-
-            {/* Right Spool */}
-            <div className={`spool spool-right ${isPlaying ? 'is-spinning' : ''}`}>
-              <div className="spool-core">
-                <div className="spool-teeth tooth-1" />
-                <div className="spool-teeth tooth-2" />
-                <div className="spool-teeth tooth-3" />
-              </div>
-              <div
-                className="tape-pack tape-right"
-                style={{
-                  transform: `scale(${0.6 + (0.4 * (duration ? currentTime / duration : 0))})`,
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Cassette Bottom Trapezoid Cutout */}
-          <div className="cassette-bottom-trap">
-            <div className="pressure-pad" />
-            <div className="tape-roller left" />
-            <div className="tape-roller right" />
-          </div>
+        <div className="sl-deck-leds">
+          <span className={`sl-led ${isPlaying ? 'is-active' : ''}`} title="Power / Play" />
+          <span className="sl-led-label">AUTO REVERSE · DOLBY B-NR</span>
         </div>
       </div>
 
-      {/* Retro LCD & VU Meters Section */}
-      <div className="deck-display-panel">
-        <div className="lcd-screen">
-          <div className="lcd-status-row">
-            <span className={`lcd-status ${isPlaying ? 'status-play' : 'status-stop'}`}>
-              {isPlaying
-                ? `▶ ${t('sunlight.player.now_playing')}`
-                : currentTime > 0
-                  ? `❚❚ ${t('sunlight.player.paused')}`
-                  : `■ ${t('sunlight.player.stopped')}`}
-            </span>
-            <span className="lcd-track-num">TRK 0{currentTrackIndex + 1}</span>
-            <span className="lcd-time">
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </span>
+      {/* Main Player Body: Cassette Door + Integrated LCD Display */}
+      <div className="sl-deck-main">
+        {/* Cassette Tape Chamber with Window */}
+        <div
+          className="sl-tape-door"
+          onClick={togglePlay}
+          role="button"
+          tabIndex={0}
+          title={isPlaying ? 'Click to Pause' : 'Click to Play'}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              togglePlay();
+            }
+          }}
+        >
+          {/* Glass Reflection */}
+          <div className="sl-door-glass-sheen" />
+
+          {/* Real Cassette Body */}
+          <div className="sl-cassette-shell">
+            {/* Corner Screws */}
+            <span className="sl-screw s-tl" />
+            <span className="sl-screw s-tr" />
+            <span className="sl-screw s-bl" />
+            <span className="sl-screw s-br" />
+
+            {/* Cassette Tape Label Sticker */}
+            <div className="sl-tape-sticker">
+              <div className="sl-sticker-top">
+                <span className="sl-side-pill">{isSideA ? 'A' : 'B'}</span>
+                <span className="sl-tape-title">{currentTrack.Title}</span>
+                <span className="sl-tape-meta">{currentTrack.ReleaseYear || '1995'}</span>
+              </div>
+              <div className="sl-sticker-rule" />
+              <div className="sl-sticker-bottom">
+                <span>SUNLIGHT RECORDS · CHROME POSITION · TYPE II</span>
+                <span>EQ 70us</span>
+              </div>
+            </div>
+
+            {/* Tape Window with Dual Rotating Spools */}
+            <div className="sl-spool-chamber">
+              {/* Left Spool */}
+              <div className={`sl-spool spool-left ${isPlaying ? 'spool-spinning' : ''}`}>
+                <div className="sl-spool-hub">
+                  <span className="hub-tooth t-1" />
+                  <span className="hub-tooth t-2" />
+                  <span className="hub-tooth t-3" />
+                </div>
+                <div
+                  className="sl-tape-pancake"
+                  style={{
+                    transform: `scale(${0.55 + 0.45 * (1 - progressPercent / 100)})`,
+                  }}
+                />
+              </div>
+
+              {/* Tape Center Bridge */}
+              <div className="sl-tape-bridge">
+                <div className="sl-tape-ribbon" />
+                <div className="sl-tape-ticks">
+                  <span>100</span>
+                  <span>50</span>
+                  <span>0</span>
+                </div>
+              </div>
+
+              {/* Right Spool */}
+              <div className={`sl-spool spool-right ${isPlaying ? 'spool-spinning' : ''}`}>
+                <div className="sl-spool-hub">
+                  <span className="hub-tooth t-1" />
+                  <span className="hub-tooth t-2" />
+                  <span className="hub-tooth t-3" />
+                </div>
+                <div
+                  className="sl-tape-pancake"
+                  style={{
+                    transform: `scale(${0.55 + 0.45 * (progressPercent / 100)})`,
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Bottom Tape Roller Cutout */}
+            <div className="sl-tape-bottom-notch">
+              <span className="sl-guide-pin" />
+              <span className="sl-felt-pad" />
+              <span className="sl-guide-pin" />
+            </div>
           </div>
-          <div className="lcd-track-title">{activeTrack.Title}</div>
         </div>
 
-        {/* Animated 90s Equalizer Spectrum */}
-        <div className={`deck-vu-meter ${isPlaying ? 'is-active' : ''}`}>
-          <div className="vu-label">PEAK LEVEL (dB)</div>
-          <div className="vu-bars-row">
-            <span className="vu-bar bar-1" />
-            <span className="vu-bar bar-2" />
-            <span className="vu-bar bar-3" />
-            <span className="vu-bar bar-4" />
-            <span className="vu-bar bar-5" />
-            <span className="vu-bar bar-6" />
-            <span className="vu-bar bar-7" />
-            <span className="vu-bar bar-8" />
-            <span className="vu-bar bar-9" />
-            <span className="vu-bar bar-10" />
-            <span className="vu-bar bar-11" />
-            <span className="vu-bar bar-12" />
+        {/* Integrated LCD Display Screen (Built directly into the cassette player) */}
+        <div className="sl-integrated-lcd">
+          {/* LCD Bezel */}
+          <div className="sl-lcd-glass">
+            <div className="sl-lcd-status-line">
+              <span className={`sl-lcd-indicator ${isPlaying ? 'is-playing' : ''}`}>
+                {isPlaying ? 'PLAY' : currentTime > 0 ? 'PAUSE' : 'STOP'}
+              </span>
+              <span className="sl-lcd-side">
+                SIDE {isSideA ? 'A' : 'B'}
+              </span>
+              <span className="sl-lcd-counter">
+                {formatTime(currentTime)} / {formatTime(duration)}
+              </span>
+            </div>
+
+            {/* Marquee Song Name Display (Zero emojis) */}
+            <div className="sl-lcd-track-line">
+              <div className="sl-marquee-wrap">
+                <span className="sl-marquee-text">
+                  TRACK: {currentTrack.Title.toUpperCase()} — {currentTrack.Vibe?.toUpperCase() || '90S ANALOG SOUND'}
+                </span>
+              </div>
+            </div>
+
+            {/* Equalizer Spectrum Bars */}
+            <div className={`sl-lcd-spectrum ${isPlaying ? 'is-active' : ''}`}>
+              <div className="sl-eq-col"><span className="eq-bar bar-1" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-2" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-3" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-4" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-5" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-6" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-7" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-8" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-9" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-10" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-11" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-12" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-13" /></div>
+              <div className="sl-eq-col"><span className="eq-bar bar-14" /></div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Timeline Scrubber */}
-      <div className="deck-scrubber-row">
+      {/* Progress & Scrubbing Bar */}
+      <div className="sl-deck-scrub-row">
         <input
           type="range"
           min={0}
@@ -266,92 +322,76 @@ export function CassettePlayer({
           step={0.1}
           value={currentTime}
           onChange={handleSeek}
-          className="deck-scrubber"
-          aria-label="Audio scrubber"
+          className="sl-scrub-slider"
+          aria-label="Seek position"
         />
       </div>
 
-      {/* Cassette Deck Tactile Control Buttons */}
-      <div className="deck-controls-panel">
-        {/* Side Switch Buttons */}
-        <div className="deck-side-selector">
+      {/* Tactile Control Buttons Bar */}
+      <div className="sl-deck-controls-row">
+        {/* Physical Side Selector Buttons */}
+        <div className="sl-deck-sides">
           {musicTracks.map((trk, i) => (
             <button
               key={trk.Key}
               type="button"
-              className={`deck-side-btn ${currentTrackIndex === i ? 'is-active' : ''}`}
-              onClick={() => {
-                setCurrentTrackIndex(i);
-                onSelectTrack?.(trk.Key);
-                setIsPlaying(true);
-              }}
+              className={`sl-side-switch-btn ${currentIndex === i ? 'is-active' : ''}`}
+              onClick={() => handleSwitchSide(i)}
             >
-              <span className="side-letter">{i === 0 ? 'A' : 'B'}</span>
-              <span className="side-title">
+              <span className="btn-side-char">{i === 0 ? 'A' : 'B'}</span>
+              <span className="btn-side-label">
                 {i === 0 ? t('sunlight.player.side_a') : t('sunlight.player.side_b')}
               </span>
             </button>
           ))}
         </div>
 
-        {/* Tape Transport Controls */}
-        <div className="deck-transport-buttons">
+        {/* Mechanical Push Buttons */}
+        <div className="sl-push-buttons">
           <button
             type="button"
-            className="deck-btn btn-rewind"
+            className="sl-push-btn btn-rewind"
             onClick={handlePrev}
-            title="Previous Track"
-            aria-label="Previous Track"
+            title="Rewind"
+            aria-label="Rewind"
           >
-            ◄◄
+            REW
           </button>
 
-          {!isPlaying ? (
-            <button
-              type="button"
-              className="deck-btn btn-play"
-              onClick={handlePlay}
-              title="Play"
-              aria-label="Play"
-            >
-              ▶ PLAY
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="deck-btn btn-pause is-active"
-              onClick={handlePause}
-              title="Pause"
-              aria-label="Pause"
-            >
-              ❚❚ PAUSE
-            </button>
-          )}
+          <button
+            type="button"
+            className={`sl-push-btn btn-play ${isPlaying ? 'is-active' : ''}`}
+            onClick={togglePlay}
+            title={isPlaying ? 'Pause' : 'Play'}
+            aria-label={isPlaying ? 'Pause' : 'Play'}
+          >
+            {isPlaying ? 'PAUSE' : 'PLAY'}
+          </button>
 
           <button
             type="button"
-            className="deck-btn btn-stop"
+            className="sl-push-btn btn-stop"
             onClick={handleStop}
             title="Stop"
             aria-label="Stop"
           >
-            ■ STOP
+            STOP
           </button>
 
           <button
             type="button"
-            className="deck-btn btn-fastforward"
+            className="sl-push-btn btn-fastforward"
             onClick={handleNext}
-            title="Next Track"
-            aria-label="Next Track"
+            title="Fast Forward"
+            aria-label="Fast Forward"
           >
-            ►►
+            FF
           </button>
         </div>
 
-        {/* Volume Fader */}
-        <div className="deck-volume-fader">
-          <span className="vol-icon">VOL</span>
+        {/* Volume Thumbwheel */}
+        <div className="sl-volume-thumb">
+          <span className="vol-text">VOL</span>
           <input
             type="range"
             min={0}
@@ -359,8 +399,8 @@ export function CassettePlayer({
             step={0.05}
             value={volume}
             onChange={handleVolumeChange}
-            className="deck-fader"
-            aria-label="Volume slider"
+            className="sl-vol-slider"
+            aria-label="Volume level"
           />
         </div>
       </div>

@@ -1,636 +1,809 @@
-// 90s Record Label & Vinyl Studio Styling for Sunlight Blue
-.sunlight-commissions-page {
+// Sunlight Blue 90s Record Label & Audio Studio Commissions Flow
+// Implements full Lumivox Brand Identity with Day and Night Parity
+
+.sunlight-comm {
+  --sl-ink: #2a1a12;
+  --sl-subtext: #705845;
+  --sl-accent: #254b82; // Sunlight Blue rich sapphire
+  --sl-accent-hover: #1e3a6a;
+  --sl-accent-soft: rgba(37, 75, 130, 0.12);
+  --sl-gold: #c68a2c;
+  --sl-card-bg: #faf6f0;
+  --sl-step-bg: #ffffff;
+  --sl-border: rgba(42, 26, 18, 0.09);
+  --sl-shadow: 0 4px 20px rgba(42, 26, 18, 0.05);
+
   min-height: 100vh;
-  background-color: var(--lvx-bg, #0b0f17);
-  background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(58, 99, 168, 0.25) 0%, transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(30, 58, 138, 0.15) 0%, transparent 40%);
-  color: var(--lvx-text, #f1f5f9);
-  font-family: 'Inter', system-ui, sans-serif;
-  padding-bottom: 5rem;
+  // Lumivox warm cream background gradient pinned to viewport
+  background: radial-gradient(circle at 50% -8%, #fbf5ea 0%, #f4ece0 50%, #eadcc8 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--sl-ink);
+  padding: 1.5rem 1rem 4.5rem;
+  font-family: 'Manrope', 'Inter', system-ui, sans-serif;
+  box-sizing: border-box;
+
+  * {
+    box-sizing: border-box;
+  }
 
   // Topbar
   .sl-topbar {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 1.5rem 1.5rem 1rem;
+    max-width: 920px;
+    margin: 0 auto 1.25rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 
-    .sl-topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
+    .lvx-brand-logo {
+      color: var(--sl-ink);
+    }
+  }
 
-      .sl-back-link {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #94a3b8;
-        text-decoration: none;
-        padding: 0.35rem 0.75rem;
-        border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.2s ease;
+  .sl-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
 
-        &:hover {
-          color: #38bdf8;
-          border-color: #38bdf8;
-        }
+    .sl-back-link {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--sl-subtext);
+      text-decoration: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--sl-border);
+      background: rgba(255, 255, 255, 0.6);
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: var(--sl-accent);
+        border-color: var(--sl-accent);
+        background: #ffffff;
       }
     }
   }
 
   // Hero Section
   .sl-hero {
-    max-width: 900px;
-    margin: 2rem auto 3rem;
+    max-width: 920px;
+    margin: 0 auto 2.25rem;
     text-align: center;
-    padding: 0 1.5rem;
 
     .sl-badge-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(58, 99, 168, 0.2);
-      border: 1px solid rgba(96, 165, 250, 0.4);
-      padding: 0.35rem 0.9rem;
+      background: rgba(37, 75, 130, 0.09);
+      border: 1px solid rgba(37, 75, 130, 0.25);
+      padding: 0.35rem 0.95rem;
       border-radius: 999px;
       font-size: 0.72rem;
       font-weight: 900;
       letter-spacing: 0.12em;
-      color: #93c5fd;
-      margin-bottom: 1rem;
+      color: var(--sl-accent);
+      margin-bottom: 0.85rem;
       text-transform: uppercase;
 
       .sl-record-dot {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background: #38bdf8;
-        box-shadow: 0 0 8px #38bdf8;
+        background: var(--sl-accent);
+        box-shadow: 0 0 6px var(--sl-accent);
       }
     }
 
-    .sl-title {
-      font-size: clamp(2rem, 5vw, 3.25rem);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      color: #ffffff;
-      margin-bottom: 0.75rem;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    h1.sl-title {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      margin: 0 0 0.5rem;
+      color: var(--sl-ink);
+      line-height: 1.15;
     }
 
-    .sl-subtitle {
+    p.sl-subtitle {
+      margin: 0.5rem auto 0;
+      max-width: 36rem;
       font-size: 1.05rem;
-      color: #94a3b8;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
+      font-weight: 600;
+      color: var(--sl-subtext);
+      line-height: 1.5;
     }
   }
 
-  // Main Container
+  // Stepped Flow Container
   .sl-container {
-    max-width: 1040px;
+    max-width: 920px;
     margin: 0 auto;
-    padding: 0 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 3.5rem;
-  }
-
-  // Generic Section
-  .sl-section {
-    .sl-section-heading {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.4rem;
-
-      .sl-sec-num {
-        display: inline-grid;
-        place-items: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: #3a63a8;
-        color: #ffffff;
-        font-size: 0.85rem;
-        font-weight: 900;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #ffffff;
-        margin: 0;
-        letter-spacing: -0.02em;
-      }
-    }
-
-    .sl-section-desc {
-      font-size: 0.92rem;
-      color: #94a3b8;
-      margin-bottom: 1.5rem;
-      max-width: 650px;
-    }
-  }
-
-  // Vinyl Covers Grid
-  .sl-covers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
   }
 
-  // Custom Song Options Grid
-  .sl-song-options-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
+  // Step Section Card
+  .sl-step {
+    background: var(--sl-step-bg);
+    border: 1px solid var(--sl-border);
+    border-radius: 20px;
+    padding: 1.5rem 1.5rem 1.85rem;
+    box-shadow: var(--sl-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 
-    .sl-song-card {
-      background: rgba(18, 24, 38, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 1.25rem;
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0 0 0.4rem;
+      color: var(--sl-ink);
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+    }
+
+    .sl-step-desc {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--sl-subtext);
+      margin: 0 0 1.35rem 0;
+      max-width: 620px;
+      line-height: 1.5;
+    }
+  }
+
+  // Step Number Badge
+  .sl-num {
+    display: inline-grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: var(--sl-accent);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    flex: none;
+    box-shadow: 0 2px 6px rgba(37, 75, 130, 0.28);
+  }
+
+  // Generic Selectable Card
+  .sl-card {
+    position: relative;
+    border: 1.5px solid rgba(42, 26, 18, 0.1);
+    border-radius: 14px;
+    background: var(--sl-card-bg);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+    font-family: inherit;
+    color: var(--sl-ink);
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: var(--sl-accent);
+      background: #ffffff;
+      box-shadow: 0 6px 16px rgba(42, 26, 18, 0.08);
+    }
+
+    &.selected {
+      border-color: var(--sl-accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 75, 130, 0.18), 0 4px 12px rgba(37, 75, 130, 0.1);
+
+      &::after {
+        content: '✓';
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 24px;
+        height: 24px;
+        display: grid;
+        place-items: center;
+        background: var(--sl-accent);
+        color: #ffffff;
+        border-radius: 50%;
+        font-weight: 900;
+        font-size: 0.85rem;
+        box-shadow: 0 2px 6px rgba(37, 75, 130, 0.35);
+        z-index: 5;
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--sl-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  // Price Display
+  .sl-price {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--sl-accent);
+    line-height: 1;
+  }
+
+  .sl-price-sub {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--sl-subtext);
+    opacity: 0.85;
+  }
+
+  // --- Step 1: Cassette Player Container ---
+  .sl-deck-step {
+    padding-bottom: 1.75rem;
+  }
+
+  // --- Step 2: Covers & Art Choice ---
+  .sl-art-choice-row {
+    margin-bottom: 1.25rem;
+
+    .sl-skip-card {
+      width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 1rem 1.25rem;
       gap: 1rem;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: inherit;
 
-      &:hover {
-        border-color: rgba(58, 99, 168, 0.6);
-        background: rgba(24, 32, 50, 0.85);
-        transform: translateY(-2px);
-      }
+      .sl-skip-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
 
-      &.selected {
-        border-color: #3b82f6;
-        background: rgba(30, 48, 80, 0.9);
-        box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
-      }
-
-      .sl-song-info {
-        h3 {
-          font-size: 1.05rem;
+        .sl-skip-title {
           font-weight: 800;
-          color: #ffffff;
-          margin-bottom: 0.35rem;
+          font-size: 1rem;
         }
 
-        p {
+        .sl-skip-desc {
           font-size: 0.82rem;
-          color: #94a3b8;
-          margin: 0;
+          color: var(--sl-subtext);
+        }
+      }
+    }
+  }
+
+  .sl-covers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.15rem;
+
+    @media (max-width: 820px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 460px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  // --- Step 3: Music Choice Grid ---
+  .sl-song-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+
+    .sl-song-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.15rem 1.35rem;
+      gap: 1.25rem;
+
+      .sl-song-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+
+        .sl-song-name {
+          font-weight: 800;
+          font-size: 1.05rem;
+        }
+
+        .sl-song-desc {
+          font-size: 0.84rem;
+          color: var(--sl-subtext);
           line-height: 1.4;
         }
       }
 
-      .sl-song-price-col {
-        text-align: right;
+      .sl-price-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.15rem;
         flex-shrink: 0;
-
-        .sl-song-price {
-          display: block;
-          font-size: 1.2rem;
-          font-weight: 900;
-          color: #38bdf8;
-        }
-
-        .sl-song-price-mxn {
-          font-size: 0.75rem;
-          color: #64748b;
-        }
       }
     }
   }
 
-  // Details & Customization Card
-  .sl-details-card {
-    background: rgba(18, 24, 38, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 1.5rem;
+  // --- Step 4: Options & Addons Panel ---
+  .sl-options-panel {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.35rem;
 
-    .sl-details-title {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin: 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 0.75rem;
-    }
-
-    .sl-field-row {
+    .sl-field-block {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.65rem;
 
-      .sl-field-label {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #cbd5e1;
-      }
-
-      .sl-radio-pill-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-
-        .sl-pill-btn {
-          background: rgba(30, 41, 59, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          color: #94a3b8;
-          padding: 0.4rem 0.9rem;
-          border-radius: 999px;
-          font-size: 0.82rem;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.2s;
-
-          &:hover {
-            border-color: #38bdf8;
-            color: #ffffff;
-          }
-
-          &.active {
-            background: #3a63a8;
-            border-color: #60a5fa;
-            color: #ffffff;
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-          }
-        }
-      }
-
-      .sl-genre-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-
-        .sl-chip-btn {
-          background: rgba(20, 27, 42, 0.8);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #94a3b8;
-          padding: 0.35rem 0.75rem;
-          border-radius: 6px;
-          font-size: 0.78rem;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.2s;
-
-          &:hover {
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.2);
-          }
-
-          &.active {
-            background: #2563eb;
-            color: #ffffff;
-            border-color: #60a5fa;
-          }
-        }
+      .sl-field-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: var(--sl-ink);
       }
     }
 
-    .sl-addons-stack {
+    .sl-lang-pills {
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 0.6rem;
-      padding: 0.85rem;
-      background: rgba(10, 14, 22, 0.6);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
 
-      .sl-addon-checkbox {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
+      .sl-pill-btn {
+        background: var(--sl-card-bg);
+        border: 1.5px solid rgba(42, 26, 18, 0.1);
+        color: var(--sl-ink);
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 800;
         cursor: pointer;
-        font-size: 0.88rem;
-        color: #e2e8f0;
-        user-select: none;
+        transition: all 0.15s ease;
 
-        input {
-          width: 16px;
-          height: 16px;
-          accent-color: #3a63a8;
-          cursor: pointer;
+        &:hover {
+          border-color: var(--sl-accent);
+          background: #ffffff;
         }
 
-        .sl-addon-text {
-          font-weight: 600;
+        &.is-active {
+          background: var(--sl-accent);
+          color: #ffffff;
+          border-color: var(--sl-accent);
+          box-shadow: 0 2px 8px rgba(37, 75, 130, 0.3);
         }
       }
     }
 
-    .sl-field-group {
+    .sl-genre-chips {
       display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
+      flex-wrap: wrap;
+      gap: 0.55rem;
 
-      .sl-field-label {
-        font-size: 0.85rem;
+      .sl-chip-btn {
+        background: var(--sl-card-bg);
+        border: 1.5px solid rgba(42, 26, 18, 0.1);
+        color: var(--sl-ink);
+        padding: 0.45rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.82rem;
         font-weight: 700;
-        color: #cbd5e1;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        &:hover {
+          border-color: var(--sl-accent);
+          background: #ffffff;
+        }
+
+        &.is-active {
+          background: var(--sl-accent);
+          color: #ffffff;
+          border-color: var(--sl-accent);
+          box-shadow: 0 2px 6px rgba(37, 75, 130, 0.28);
+        }
+      }
+    }
+
+    .sl-addons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+
+      @media (max-width: 720px) {
+        grid-template-columns: 1fr;
       }
 
-      .sl-textarea {
-        background: #090c12;
-        border: 1px solid #202b3d;
-        border-radius: 8px;
-        padding: 0.75rem;
-        color: #ffffff;
-        font-family: inherit;
-        font-size: 0.9rem;
-        resize: vertical;
-        outline: none;
+      .sl-addon-card {
+        border: 1.5px solid rgba(42, 26, 18, 0.1);
+        border-radius: 12px;
+        background: var(--sl-card-bg);
+        padding: 0.95rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.65rem;
+        cursor: pointer;
+        transition: all 0.15s ease;
 
-        &:focus {
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        input[type='checkbox'] {
+          accent-color: var(--sl-accent);
+          width: 17px;
+          height: 17px;
+          cursor: pointer;
         }
+
+        .addon-details {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+
+          .addon-name {
+            font-weight: 800;
+            font-size: 0.92rem;
+            color: var(--sl-ink);
+          }
+
+          .addon-sub {
+            font-size: 0.76rem;
+            color: var(--sl-subtext);
+            line-height: 1.35;
+          }
+        }
+
+        .addon-price {
+          font-family: 'Fraunces', serif;
+          font-size: 1.1rem;
+          font-weight: 800;
+          color: var(--sl-accent);
+          align-self: flex-end;
+        }
+
+        &:hover {
+          border-color: var(--sl-accent);
+          background: #ffffff;
+        }
+
+        &.is-checked {
+          border-color: var(--sl-accent);
+          background: #ffffff;
+          box-shadow: 0 0 0 2px rgba(37, 75, 130, 0.15);
+        }
+      }
+    }
+
+    .sl-textarea {
+      width: 100%;
+      border: 1.5px solid rgba(42, 26, 18, 0.12);
+      border-radius: 10px;
+      padding: 0.85rem;
+      font-family: inherit;
+      font-size: 0.92rem;
+      background: var(--sl-card-bg);
+      color: var(--sl-ink);
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s, background-color 0.15s;
+
+      &:focus {
+        border-color: var(--sl-accent);
+        background: #ffffff;
       }
     }
   }
 
-  // Summary Card / Receipt
-  .sl-summary-card {
-    background: linear-gradient(135deg, #131a26 0%, #0d121c 100%);
-    border: 2px solid #28374f;
-    border-radius: 14px;
-    padding: 1.75rem;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-    max-width: 680px;
-    margin: 0 auto;
+  // --- Step 5: Summary Card (Studio Ledger) ---
+  .sl-summary-step {
+    .sl-summary-card {
+      background: #ffffff;
+      border: 2px solid rgba(42, 26, 18, 0.12);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 24px rgba(42, 26, 18, 0.07);
 
-    .sl-summary-header {
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-
-      .sl-summary-tag {
-        font-size: 0.68rem;
-        font-weight: 900;
-        letter-spacing: 0.15em;
-        color: #38bdf8;
-        text-transform: uppercase;
-      }
-
-      .sl-summary-title {
-        font-size: 1.4rem;
-        font-weight: 900;
-        color: #ffffff;
-        margin: 0.25rem 0 0;
-      }
-    }
-
-    .sl-summary-empty {
-      color: #94a3b8;
-      font-size: 0.95rem;
-      text-align: center;
-      padding: 1.5rem 0;
-    }
-
-    .sl-summary-lines {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 1.25rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-
-      .sl-summary-line {
+      .sl-summary-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 0.95rem;
-        color: #e2e8f0;
-        padding-bottom: 0.4rem;
-        border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+        border-bottom: 2px dashed rgba(42, 26, 18, 0.12);
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.25rem;
 
-        .line-label {
-          font-weight: 600;
+        .sl-receipt-tag {
+          font-size: 0.76rem;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          color: var(--sl-accent);
         }
 
-        .line-price {
-          font-weight: 800;
-          color: #38bdf8;
-        }
-
-        &.line-extra {
-          color: #94a3b8;
-          font-size: 0.85rem;
+        .sl-receipt-date {
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: var(--sl-subtext);
         }
       }
-    }
 
-    .sl-summary-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      background: rgba(10, 14, 22, 0.8);
-      padding: 1rem 1.25rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-      border: 1px solid #1e293b;
+      .sl-summary-empty {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--sl-subtext);
+        text-align: center;
+        padding: 1.5rem 0;
+      }
 
-      .total-usd {
+      .sl-summary-lines {
+        list-style: none;
+        margin: 0;
+        padding: 0;
         display: flex;
         flex-direction: column;
+        gap: 0.65rem;
+        margin-bottom: 1.5rem;
 
-        span {
-          font-size: 0.75rem;
-          color: #94a3b8;
-          text-transform: uppercase;
-          font-weight: 700;
-        }
+        .sl-summary-line {
+          display: flex;
+          align-items: baseline;
+          gap: 0.75rem;
+          padding-bottom: 0.65rem;
+          border-bottom: 1px solid rgba(42, 26, 18, 0.07);
 
-        strong {
-          font-size: 1.6rem;
-          font-weight: 900;
-          color: #38bdf8;
+          .line-category {
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--sl-accent);
+            width: 130px;
+            flex-shrink: 0;
+          }
+
+          .line-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--sl-ink);
+            flex: 1;
+          }
+
+          .line-price {
+            font-family: 'Fraunces', serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--sl-accent);
+            flex-shrink: 0;
+          }
+
+          &.is-addon {
+            .line-category {
+              color: var(--sl-gold);
+            }
+          }
         }
       }
 
-      .total-mxn {
-        text-align: right;
-
-        span {
-          display: block;
-          font-size: 0.72rem;
-          color: #64748b;
-        }
-
-        strong {
-          font-size: 1.1rem;
-          font-weight: 800;
-          color: #cbd5e1;
-        }
-      }
-    }
-
-    .sl-discord-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      background: #5865f2;
-      border: none;
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: 800;
-      padding: 0.9rem;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(88, 101, 242, 0.4);
-      transition: all 0.2s ease;
-
-      &:hover:not(.disabled) {
-        background: #4752c4;
-        transform: translateY(-2px);
-      }
-
-      &.disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-    }
-
-    .sl-discord-feedback {
-      margin-top: 1.25rem;
-      padding: 1rem;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid #22c55e;
-      border-radius: 8px;
-
-      .sl-feedback-header {
+      .sl-summary-total {
         display: flex;
-        gap: 0.75rem;
-        align-items: flex-start;
-        margin-bottom: 0.75rem;
+        gap: 1rem;
+        align-items: center;
+        justify-content: flex-end;
+        padding-top: 0.5rem;
+        margin-bottom: 1.5rem;
 
-        .sl-check-mark {
-          display: inline-grid;
-          place-items: center;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          background: #22c55e;
-          color: #000000;
-          font-weight: 900;
-          flex-shrink: 0;
+        @media (max-width: 520px) {
+          flex-direction: column;
+          align-items: stretch;
         }
 
-        strong {
-          font-size: 0.95rem;
-          color: #4ade80;
-          display: block;
-        }
+        .sl-total-chip {
+          display: flex;
+          align-items: baseline;
+          gap: 0.6rem;
+          padding: 0.75rem 1.25rem;
+          border-radius: 12px;
 
-        p {
-          font-size: 0.8rem;
-          color: #cbd5e1;
-          margin: 0;
+          .chip-label {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+          }
+
+          .chip-value {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.75rem;
+            font-weight: 900;
+            line-height: 1;
+          }
+
+          &.total-usd {
+            background: var(--sl-accent);
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 75, 130, 0.25);
+
+            .chip-value {
+              color: #ffffff;
+            }
+          }
+
+          &.total-mxn {
+            background: #faf6f0;
+            border: 1.5px solid rgba(42, 26, 18, 0.12);
+            color: var(--sl-subtext);
+
+            .chip-value {
+              color: var(--sl-ink);
+            }
+          }
         }
       }
 
-      .sl-message-preview {
-        background: #090c12;
-        padding: 0.75rem;
-        border-radius: 6px;
-        font-size: 0.8rem;
-        color: #cbd5e1;
-        white-space: pre-wrap;
-        font-family: 'Courier New', monospace;
-        margin-bottom: 0.85rem;
-        border: 1px solid #1e293b;
-      }
+      .sl-discord-action {
+        border-top: 1px solid rgba(42, 26, 18, 0.1);
+        padding-top: 1.25rem;
 
-      .sl-feedback-actions {
-        display: flex;
-        gap: 0.5rem;
-
-        .sl-btn-recopy {
-          background: #334155;
+        .sl-discord-btn {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          background: #5865F2;
+          color: #ffffff;
           border: none;
-          color: #ffffff;
-          font-size: 0.8rem;
-          font-weight: 700;
-          padding: 0.45rem 0.85rem;
-          border-radius: 6px;
+          border-radius: 12px;
+          padding: 0.95rem 1.5rem;
+          font-size: 1.05rem;
+          font-weight: 800;
           cursor: pointer;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
+
+          &:hover:not(.is-disabled) {
+            background: #4752c4;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.45);
+          }
+
+          &.is-disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            opacity: 0.6;
+            box-shadow: none;
+          }
         }
 
-        .sl-btn-send {
-          background: #5865f2;
-          color: #ffffff;
-          text-decoration: none;
-          font-size: 0.8rem;
-          font-weight: 800;
-          padding: 0.45rem 0.85rem;
-          border-radius: 6px;
-          display: inline-block;
+        .sl-discord-feedback {
+          margin-top: 1.25rem;
+          background: #f0fdf4;
+          border: 1.5px solid #86efac;
+          border-radius: 12px;
+          padding: 1.15rem;
 
-          &:hover {
-            background: #4752c4;
+          .sl-feedback-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+
+            .sl-check-mark {
+              display: grid;
+              place-items: center;
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background: #16a34a;
+              color: #ffffff;
+              font-size: 0.85rem;
+              font-weight: 900;
+              flex-shrink: 0;
+            }
+
+            strong {
+              color: #14532d;
+              font-size: 0.95rem;
+            }
+
+            p {
+              margin: 0.2rem 0 0;
+              font-size: 0.82rem;
+              color: #166534;
+            }
+          }
+
+          .sl-message-preview {
+            background: #ffffff;
+            border: 1px solid rgba(22, 101, 52, 0.2);
+            border-radius: 8px;
+            padding: 0.85rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.82rem;
+            color: #14532d;
+            white-space: pre-wrap;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-bottom: 0.85rem;
+          }
+
+          .sl-feedback-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+
+            .sl-btn-recopy {
+              background: #ffffff;
+              border: 1.5px solid #16a34a;
+              color: #16a34a;
+              padding: 0.45rem 0.95rem;
+              border-radius: 8px;
+              font-size: 0.85rem;
+              font-weight: 800;
+              cursor: pointer;
+              transition: all 0.15s ease;
+
+              &:hover {
+                background: #f0fdf4;
+              }
+            }
+
+            .sl-btn-send {
+              display: inline-flex;
+              align-items: center;
+              background: #5865F2;
+              color: #ffffff;
+              text-decoration: none;
+              padding: 0.45rem 1rem;
+              border-radius: 8px;
+              font-size: 0.85rem;
+              font-weight: 800;
+              transition: all 0.15s ease;
+
+              &:hover {
+                background: #4752c4;
+              }
+            }
           }
         }
       }
     }
   }
 
-  // Lightbox Modal
+  // --- Lightbox Modal ---
   .sl-lightbox-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(13, 11, 20, 0.85);
     backdrop-filter: blur(8px);
-    z-index: 9999;
+    z-index: 1000;
     display: grid;
     place-items: center;
     padding: 1.5rem;
 
     .sl-lightbox-card {
-      background: #111622;
-      border: 1px solid #28374f;
-      border-radius: 12px;
+      background: #ffffff;
+      border-radius: 20px;
       max-width: 540px;
       width: 100%;
       overflow: hidden;
       position: relative;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
 
       .sl-lightbox-close {
         position: absolute;
         top: 12px;
         right: 12px;
-        z-index: 10;
-        background: rgba(0, 0, 0, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #ffffff;
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
+        background: rgba(42, 26, 18, 0.7);
+        color: #ffffff;
+        border: none;
+        font-size: 1.1rem;
+        cursor: pointer;
         display: grid;
         place-items: center;
-        cursor: pointer;
+        z-index: 10;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background: #000000;
+        }
       }
 
       .sl-lightbox-media {
         width: 100%;
         aspect-ratio: 1 / 1;
-        background: #090c12;
+        background: #15131f;
 
         img {
           width: 100%;
@@ -640,45 +813,408 @@
       }
 
       .sl-lightbox-info {
-        padding: 1.25rem;
+        padding: 1.35rem;
 
         h3 {
-          font-size: 1.2rem;
-          font-weight: 800;
-          color: #ffffff;
-          margin-bottom: 0.35rem;
+          font-family: 'Fraunces', serif;
+          font-size: 1.45rem;
+          color: #2a1a12;
+          margin: 0 0 0.4rem;
         }
 
         p {
-          font-size: 0.88rem;
-          color: #94a3b8;
+          font-size: 0.92rem;
+          color: #705845;
+          margin: 0 0 1.25rem;
           line-height: 1.5;
-          margin-bottom: 1rem;
         }
 
         .sl-lightbox-footer {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          gap: 1rem;
+          border-top: 1px solid rgba(42, 26, 18, 0.1);
+          padding-top: 1rem;
 
           .lightbox-price {
-            font-size: 1.05rem;
-            font-weight: 900;
-            color: #38bdf8;
+            font-family: 'Fraunces', serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #254b82;
           }
 
           .sl-btn-lightbox-select {
-            background: #3a63a8;
-            border: none;
+            background: #254b82;
             color: #ffffff;
-            font-size: 0.85rem;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 10px;
             font-weight: 800;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            font-size: 0.9rem;
             cursor: pointer;
+            transition: all 0.2s ease;
 
             &:hover {
-              background: #2563eb;
+              background: #1e3a6a;
+              transform: translateY(-1px);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Fade-in utility
+  .animate-fade-in {
+    animation: slFadeIn 0.25s ease-out;
+  }
+
+  @keyframes slFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  // =========================================================================
+  // NIGHT THEME PARITY (Grounding with Lumivox Brand Identity)
+  // =========================================================================
+  &[data-theme='night'] {
+    --sl-card-bg: #1c1827;
+    --sl-step-bg: rgba(36, 31, 48, 0.85);
+    --sl-border: #46415a;
+    --sl-ink: #f1ece0;
+    --sl-subtext: #9a93b0;
+    --sl-accent: #38bdf8;
+    --sl-accent-hover: #60a5fa;
+
+    background: radial-gradient(circle at 50% -10%, #2a2545 0%, #15131f 55%, #0d0b14 100%) !important;
+    background-attachment: fixed !important;
+    color: #f1ece0;
+
+    .sl-topbar {
+      .lvx-brand-logo {
+        color: #f1ece0;
+      }
+
+      .sl-back-link {
+        background: rgba(36, 31, 48, 0.6);
+        border-color: #46415a;
+        color: #9a93b0;
+
+        &:hover {
+          color: #38bdf8;
+          border-color: #38bdf8;
+          background: #241f30;
+        }
+      }
+    }
+
+    .sl-hero {
+      .sl-badge-pill {
+        background: rgba(56, 189, 248, 0.15);
+        border-color: rgba(56, 189, 248, 0.4);
+        color: #38bdf8;
+
+        .sl-record-dot {
+          background: #38bdf8;
+          box-shadow: 0 0 8px #38bdf8;
+        }
+      }
+
+      h1.sl-title {
+        color: #f1ece0;
+        text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+      }
+
+      p.sl-subtitle {
+        color: #9a93b0;
+      }
+    }
+
+    .sl-step {
+      background: rgba(36, 31, 48, 0.85);
+      border: 1px solid #46415a;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+
+      h2 {
+        color: #f1ece0;
+      }
+
+      .sl-step-desc {
+        color: #9a93b0;
+      }
+    }
+
+    .sl-num {
+      background: #38bdf8;
+      color: #0c0b16;
+      font-weight: 900;
+      box-shadow: 0 2px 10px rgba(56, 189, 248, 0.45);
+    }
+
+    .sl-price {
+      color: #ffe500;
+    }
+
+    .sl-card {
+      background: #1c1827;
+      border: 1.5px solid #3d374e;
+      color: #f1ece0;
+
+      &:hover {
+        background: #241f30;
+        border-color: #38bdf8;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(56, 189, 248, 0.2);
+      }
+
+      &.selected {
+        background: #241f30;
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35);
+
+        &::after {
+          background: #38bdf8;
+          color: #0c0b16;
+          font-weight: 900;
+          box-shadow: 0 2px 8px rgba(56, 189, 248, 0.45);
+        }
+      }
+    }
+
+    .sl-art-choice-row .sl-skip-card .sl-skip-info .sl-skip-desc {
+      color: #9a93b0;
+    }
+
+    .sl-song-grid .sl-song-card .sl-song-info .sl-song-desc {
+      color: #9a93b0;
+    }
+
+    .sl-options-panel {
+      .sl-field-block .sl-field-title {
+        color: #f1ece0;
+      }
+
+      .sl-lang-pills .sl-pill-btn {
+        background: #1c1827;
+        border-color: #3d374e;
+        color: #f1ece0;
+
+        &:hover {
+          border-color: #38bdf8;
+          background: #241f30;
+        }
+
+        &.is-active {
+          background: #38bdf8;
+          color: #0c0b16;
+          border-color: #38bdf8;
+          box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+        }
+      }
+
+      .sl-genre-chips .sl-chip-btn {
+        background: #1c1827;
+        border-color: #3d374e;
+        color: #f1ece0;
+
+        &:hover {
+          border-color: #38bdf8;
+          background: #241f30;
+        }
+
+        &.is-active {
+          background: #38bdf8;
+          color: #0c0b16;
+          border-color: #38bdf8;
+          box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+      }
+
+      .sl-addons-grid .sl-addon-card {
+        background: #1c1827;
+        border-color: #3d374e;
+
+        .addon-details {
+          .addon-name {
+            color: #f1ece0;
+          }
+          .addon-sub {
+            color: #9a93b0;
+          }
+        }
+
+        .addon-price {
+          color: #ffe500;
+        }
+
+        &:hover {
+          border-color: #38bdf8;
+          background: #241f30;
+        }
+
+        &.is-checked {
+          border-color: #38bdf8;
+          background: #241f30;
+          box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+        }
+      }
+
+      .sl-textarea {
+        background: #1c1827;
+        border-color: #3d374e;
+        color: #f1ece0;
+
+        &:focus {
+          border-color: #38bdf8;
+          background: #241f30;
+        }
+      }
+    }
+
+    .sl-summary-step {
+      .sl-summary-card {
+        background: rgba(36, 31, 48, 0.9);
+        border-color: #46415a;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+
+        .sl-summary-header {
+          border-bottom-color: rgba(255, 255, 255, 0.12);
+
+          .sl-receipt-tag {
+            color: #38bdf8;
+          }
+
+          .sl-receipt-date {
+            color: #9a93b0;
+          }
+        }
+
+        .sl-summary-empty {
+          color: #9a93b0;
+        }
+
+        .sl-summary-lines .sl-summary-line {
+          border-bottom-color: rgba(255, 255, 255, 0.08);
+
+          .line-category {
+            color: #38bdf8;
+          }
+
+          .line-title {
+            color: #f1ece0;
+          }
+
+          .line-price {
+            color: #ffe500;
+          }
+
+          &.is-addon .line-category {
+            color: #ffe500;
+          }
+        }
+
+        .sl-summary-total {
+          .sl-total-chip {
+            &.total-usd {
+              background: #ffe500;
+              color: #0c0b16;
+              box-shadow: 0 4px 14px rgba(255, 229, 0, 0.35);
+
+              .chip-label {
+                color: #0c0b16;
+              }
+
+              .chip-value {
+                color: #0c0b16;
+              }
+            }
+
+            &.total-mxn {
+              background: rgba(255, 0, 127, 0.18);
+              border-color: rgba(255, 0, 127, 0.35);
+              color: #ff7ab8;
+
+              .chip-label {
+                color: #ff7ab8;
+              }
+
+              .chip-value {
+                color: #ff7ab8;
+              }
+            }
+          }
+        }
+
+        .sl-discord-action {
+          border-top-color: rgba(255, 255, 255, 0.1);
+
+          .sl-discord-feedback {
+            background: rgba(22, 101, 52, 0.25);
+            border-color: rgba(134, 239, 172, 0.4);
+
+            strong {
+              color: #86efac;
+            }
+
+            p {
+              color: #bbf7d0;
+            }
+
+            .sl-message-preview {
+              background: #102416;
+              border-color: rgba(134, 239, 172, 0.3);
+              color: #86efac;
+            }
+
+            .sl-feedback-actions .sl-btn-recopy {
+              background: #14532d;
+              color: #86efac;
+              border-color: #86efac;
+
+              &:hover {
+                background: #166534;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .sl-lightbox-overlay .sl-lightbox-card {
+      background: #241f30;
+      border: 1px solid #46415a;
+
+      .sl-lightbox-info {
+        h3 {
+          color: #f1ece0;
+        }
+
+        p {
+          color: #9a93b0;
+        }
+
+        .sl-lightbox-footer {
+          border-top-color: rgba(255, 255, 255, 0.1);
+
+          .lightbox-price {
+            color: #ffe500;
+          }
+
+          .sl-btn-lightbox-select {
+            background: #38bdf8;
+            color: #0c0b16;
+            font-weight: 900;
+
+            &:hover {
+              background: #60a5fa;
             }
           }
         }

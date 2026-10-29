@@ -26,6 +26,7 @@ export function VinylCoverCard({
       onClick={onSelect}
       role="button"
       tabIndex={0}
+      aria-pressed={isSelected}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -65,7 +66,7 @@ export function VinylCoverCard({
             )}
           </div>
 
-          {/* Quick Zoom Pill */}
+          {/* Quick Zoom Pill (No emojis) */}
           <button
             type="button"
             className="jacket-zoom-btn"
@@ -76,7 +77,23 @@ export function VinylCoverCard({
             title="Zoom Cover"
             aria-label="Zoom Cover"
           >
-            🔍 Zoom
+            <svg
+              viewBox="0 0 24 24"
+              width="13"
+              height="13"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <line x1="11" y1="8" x2="11" y2="14" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
+            <span>Zoom</span>
           </button>
         </div>
       </div>

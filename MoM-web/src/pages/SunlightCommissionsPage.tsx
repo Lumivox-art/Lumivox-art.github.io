@@ -48,7 +48,7 @@ export function SunlightCommissionsPage() {
   // Custom user notes
   const [notes, setNotes] = useState('');
 
-  // Cassette player current selection
+  // Cassette player track state
   const [playerTrackKey, setPlayerTrackKey] = useState<string>('instrumental');
 
   // Zoom modal state for album covers
@@ -108,7 +108,7 @@ export function SunlightCommissionsPage() {
     if (selectedSong) {
       const lyricsDetail =
         selectedSong.Key === 'vocal-with-lyrics'
-          ? ` [Idioma: ${lyricsLanguage === 'es' ? 'Español' : lyricsLanguage === 'en' ? 'Inglés' : 'Ambos'}]`
+          ? ` [Idioma: ${lyricsLanguage === 'es' ? 'Español' : lyricsLanguage === 'en' ? 'Inglés' : 'Bilingüe'}]`
           : '';
       items.push(`• Custom Song: ${selectedSong.Title}${lyricsDetail} ($${selectedSong.PriceUsd} USD ~ $${selectedSong.PriceMxn} MXN)`);
       items.push(`  - Vibe/Género: ${GENRE_OPTIONS.find((g) => g.id === selectedGenre)?.label || selectedGenre}`);
@@ -159,7 +159,7 @@ export function SunlightCommissionsPage() {
   };
 
   return (
-    <div className="sunlight-commissions-page" data-theme={theme}>
+    <div className="sunlight-comm" data-theme={theme}>
       {/* Topbar */}
       <div className="sl-topbar">
         <LumivoxBrand />
@@ -183,22 +183,22 @@ export function SunlightCommissionsPage() {
         <p className="sl-subtitle">{t('sunlight.subtitle')}</p>
       </header>
 
-      {/* Main Container */}
+      {/* Main Stepped Flow */}
       <main className="sl-container">
-        {/* Section 1: Interactive Cassette Player */}
-        <section className="sl-section sl-music-section">
-          <div className="sl-section-heading">
-            <span className="sl-sec-num">★</span>
-            <h2>{t('sunlight.player.title')}</h2>
-          </div>
-          <p className="sl-section-desc">
-            Escucha muestras musicales grabadas en cinta por Sunlight Blue. Pulsa PLAY para activar el reproductor analógico.
+        {/* Step 1: Integrated 90s Analog Cassette Deck */}
+        <section className="sl-step sl-deck-step">
+          <h2>
+            <span className="sl-num">1</span>
+            <span>{t('sunlight.player.title')}</span>
+          </h2>
+          <p className="sl-step-desc">
+            Escucha muestras musicales análogas compuestas por Sunlight Blue. Haz clic sobre la cinta o pulsa PLAY para accionar los cabezales magnéticos.
           </p>
 
           <CassettePlayer
             tracks={musicTracks}
-            selectedTrackKey={playerTrackKey}
-            onSelectTrack={(key) => {
+            activeTrackKey={playerTrackKey}
+            onTrackChange={(key) => {
               setPlayerTrackKey(key);
               if (key === 'instrumental' || key === 'vocal-with-lyrics') {
                 setSelectedSongKey(key);
@@ -208,13 +208,32 @@ export function SunlightCommissionsPage() {
           />
         </section>
 
-        {/* Section 2: 90s Vinyl & Album Covers Gallery */}
-        <section className="sl-section sl-covers-section">
-          <div className="sl-section-heading">
-            <span className="sl-sec-num">1</span>
-            <h2>{t('sunlight.gallery.title')}</h2>
+        {/* Step 2: Digital Art Styles & 90s Vinyl Album Covers */}
+        <section className="sl-step">
+          <h2>
+            <span className="sl-num">2</span>
+            <span>{t('sunlight.step.art')}</span>
+          </h2>
+          <p className="sl-step-desc">{t('sunlight.gallery.subtitle')}</p>
+
+          <div className="sl-art-choice-row">
+            {/* Option to skip cover art (audio-only) */}
+            <button
+              type="button"
+              className={`sl-card sl-skip-card ${selectedArtKey === null ? 'selected' : ''}`}
+              onClick={() => {
+                setSelectedArtKey(null);
+                setCopied(false);
+              }}
+              aria-pressed={selectedArtKey === null}
+            >
+              <div className="sl-skip-info">
+                <span className="sl-skip-title">{t('sunlight.step.art.none')}</span>
+                <span className="sl-skip-desc">Cotizar únicamente producción musical o grabación sonora.</span>
+              </div>
+              <span className="sl-price">$0 USD</span>
+            </button>
           </div>
-          <p className="sl-section-desc">{t('sunlight.gallery.subtitle')}</p>
 
           <div className="sl-covers-grid">
             {artCovers.map((cover) => (
@@ -232,64 +251,78 @@ export function SunlightCommissionsPage() {
           </div>
         </section>
 
-        {/* Section 3: Commission Builder & Customization */}
-        <section className="sl-section sl-builder-section">
-          <div className="sl-section-heading">
-            <span className="sl-sec-num">2</span>
-            <h2>{t('sunlight.step.song')}</h2>
-          </div>
+        {/* Step 3: Custom Music / Song Production */}
+        <section className="sl-step">
+          <h2>
+            <span className="sl-num">3</span>
+            <span>{t('sunlight.step.song')}</span>
+          </h2>
+          <p className="sl-step-desc">
+            Composiciones originales a medida para proyectos multimedia, portadas sonoras o canciones de autor.
+          </p>
 
-          <div className="sl-song-options-grid">
+          <div className="sl-song-grid">
+            {/* Option: No song (visual art only) */}
             <button
               type="button"
-              className={`sl-song-card ${selectedSongKey === null ? 'selected' : ''}`}
+              className={`sl-card sl-song-card ${selectedSongKey === null ? 'selected' : ''}`}
               onClick={() => {
                 setSelectedSongKey(null);
                 setCopied(false);
               }}
+              aria-pressed={selectedSongKey === null}
             >
               <div className="sl-song-info">
-                <h3>{t('sunlight.step.song.none')}</h3>
-                <p>Cotizar únicamente arte visual sin producción musical.</p>
+                <span className="sl-song-name">{t('sunlight.step.song.none')}</span>
+                <span className="sl-song-desc">Cotizar exclusivamente portada o arte digital sin producción sonora.</span>
               </div>
-              <span className="sl-song-price">$0 USD</span>
+              <span className="sl-price">$0 USD</span>
             </button>
 
             {musicTracks.map((song) => (
               <button
                 key={song.Key}
                 type="button"
-                className={`sl-song-card ${selectedSongKey === song.Key ? 'selected' : ''}`}
+                className={`sl-card sl-song-card ${selectedSongKey === song.Key ? 'selected' : ''}`}
                 onClick={() => {
-                  setSelectedSongKey(selectedSongKey === song.Key ? null : song.Key);
-                  setPlayerTrackKey(song.Key);
+                  const newKey = selectedSongKey === song.Key ? null : song.Key;
+                  setSelectedSongKey(newKey);
+                  if (newKey) {
+                    setPlayerTrackKey(newKey);
+                  }
                   setCopied(false);
                 }}
+                aria-pressed={selectedSongKey === song.Key}
               >
                 <div className="sl-song-info">
-                  <h3>{song.Title}</h3>
-                  <p>{song.Description}</p>
+                  <span className="sl-song-name">{song.Title}</span>
+                  <span className="sl-song-desc">{song.Description}</span>
                 </div>
-                <div className="sl-song-price-col">
-                  <span className="sl-song-price">${song.PriceUsd} USD</span>
-                  <span className="sl-song-price-mxn">~${song.PriceMxn} MXN</span>
+                <div className="sl-price-block">
+                  <span className="sl-price">${song.PriceUsd} USD</span>
+                  <span className="sl-price-sub">~${song.PriceMxn} MXN</span>
                 </div>
               </button>
             ))}
           </div>
+        </section>
 
-          {/* Details & Options Section */}
-          <div className="sl-details-card">
-            <h3 className="sl-details-title">{t('sunlight.step.options')}</h3>
+        {/* Step 4: Studio Options & Add-ons */}
+        <section className="sl-step">
+          <h2>
+            <span className="sl-num">4</span>
+            <span>{t('sunlight.step.options')}</span>
+          </h2>
 
+          <div className="sl-options-panel">
             {/* Lyrics Language Selector (if vocals selected) */}
             {selectedSongKey === 'vocal-with-lyrics' && (
-              <div className="sl-field-row animate-fade-in">
-                <label className="sl-field-label">{t('sunlight.lyrics.lang')}</label>
-                <div className="sl-radio-pill-group">
+              <div className="sl-field-block animate-fade-in">
+                <label className="sl-field-title">{t('sunlight.lyrics.lang')}</label>
+                <div className="sl-lang-pills">
                   <button
                     type="button"
-                    className={`sl-pill-btn ${lyricsLanguage === 'es' ? 'active' : ''}`}
+                    className={`sl-pill-btn ${lyricsLanguage === 'es' ? 'is-active' : ''}`}
                     onClick={() => {
                       setLyricsLanguage('es');
                       setCopied(false);
@@ -299,7 +332,7 @@ export function SunlightCommissionsPage() {
                   </button>
                   <button
                     type="button"
-                    className={`sl-pill-btn ${lyricsLanguage === 'en' ? 'active' : ''}`}
+                    className={`sl-pill-btn ${lyricsLanguage === 'en' ? 'is-active' : ''}`}
                     onClick={() => {
                       setLyricsLanguage('en');
                       setCopied(false);
@@ -309,13 +342,13 @@ export function SunlightCommissionsPage() {
                   </button>
                   <button
                     type="button"
-                    className={`sl-pill-btn ${lyricsLanguage === 'both' ? 'active' : ''}`}
+                    className={`sl-pill-btn ${lyricsLanguage === 'both' ? 'is-active' : ''}`}
                     onClick={() => {
                       setLyricsLanguage('both');
                       setCopied(false);
                     }}
                   >
-                    Bilingual / Ambos
+                    Bilingüe / Both
                   </button>
                 </div>
               </div>
@@ -323,14 +356,14 @@ export function SunlightCommissionsPage() {
 
             {/* Genre / Vibe Selector (if any song selected) */}
             {selectedSongKey && (
-              <div className="sl-field-row animate-fade-in">
-                <label className="sl-field-label">{t('sunlight.genre.title')}</label>
+              <div className="sl-field-block animate-fade-in">
+                <label className="sl-field-title">{t('sunlight.genre.title')}</label>
                 <div className="sl-genre-chips">
                   {GENRE_OPTIONS.map((g) => (
                     <button
                       key={g.id}
                       type="button"
-                      className={`sl-chip-btn ${selectedGenre === g.id ? 'active' : ''}`}
+                      className={`sl-chip-btn ${selectedGenre === g.id ? 'is-active' : ''}`}
                       onClick={() => {
                         setSelectedGenre(g.id);
                         setCopied(false);
@@ -343,49 +376,64 @@ export function SunlightCommissionsPage() {
               </div>
             )}
 
-            {/* Optional Add-ons */}
-            <div className="sl-addons-stack">
-              <label className="sl-addon-checkbox">
-                <input
-                  type="checkbox"
-                  checked={hasCommercialRights}
-                  onChange={(e) => {
-                    setHasCommercialRights(e.target.checked);
-                    setCopied(false);
-                  }}
-                />
-                <span className="sl-addon-text">{t('sunlight.addon.commercial')}</span>
-              </label>
+            {/* Add-on Checkbox Cards */}
+            <div className="sl-field-block">
+              <label className="sl-field-title">Servicios Complementarios:</label>
+              <div className="sl-addons-grid">
+                <label className={`sl-addon-card ${hasCommercialRights ? 'is-checked' : ''}`}>
+                  <input
+                    type="checkbox"
+                    checked={hasCommercialRights}
+                    onChange={(e) => {
+                      setHasCommercialRights(e.target.checked);
+                      setCopied(false);
+                    }}
+                  />
+                  <div className="addon-details">
+                    <span className="addon-name">{t('sunlight.addon.commercial')}</span>
+                    <span className="addon-sub">Licencia para distribución comercial y plataformas de streaming.</span>
+                  </div>
+                  <span className="addon-price">+$20 USD</span>
+                </label>
 
-              <label className="sl-addon-checkbox">
-                <input
-                  type="checkbox"
-                  checked={hasStems}
-                  onChange={(e) => {
-                    setHasStems(e.target.checked);
-                    setCopied(false);
-                  }}
-                />
-                <span className="sl-addon-text">{t('sunlight.addon.stems')}</span>
-              </label>
+                <label className={`sl-addon-card ${hasStems ? 'is-checked' : ''}`}>
+                  <input
+                    type="checkbox"
+                    checked={hasStems}
+                    onChange={(e) => {
+                      setHasStems(e.target.checked);
+                      setCopied(false);
+                    }}
+                  />
+                  <div className="addon-details">
+                    <span className="addon-name">{t('sunlight.addon.stems')}</span>
+                    <span className="addon-sub">Pistas multitrack separadas en alta definición (WAV 24-bit).</span>
+                  </div>
+                  <span className="addon-price">+$15 USD</span>
+                </label>
 
-              <label className="sl-addon-checkbox">
-                <input
-                  type="checkbox"
-                  checked={hasRushDelivery}
-                  onChange={(e) => {
-                    setHasRushDelivery(e.target.checked);
-                    setCopied(false);
-                  }}
-                />
-                <span className="sl-addon-text">{t('sunlight.addon.rush')}</span>
-              </label>
+                <label className={`sl-addon-card ${hasRushDelivery ? 'is-checked' : ''}`}>
+                  <input
+                    type="checkbox"
+                    checked={hasRushDelivery}
+                    onChange={(e) => {
+                      setHasRushDelivery(e.target.checked);
+                      setCopied(false);
+                    }}
+                  />
+                  <div className="addon-details">
+                    <span className="addon-name">{t('sunlight.addon.rush')}</span>
+                    <span className="addon-sub">Prioridad máxima en el calendario de producción del estudio.</span>
+                  </div>
+                  <span className="addon-price">+$20 USD</span>
+                </label>
+              </div>
             </div>
 
-            {/* Brief Notes */}
-            <div className="sl-field-group">
-              <label htmlFor="sl-notes" className="sl-field-label">
-                Idea o Descripción del Proyecto (Opcional):
+            {/* Project Idea / Notes */}
+            <div className="sl-field-block">
+              <label htmlFor="sl-notes" className="sl-field-title">
+                Descripción de tu Proyecto o Idea (Opcional):
               </label>
               <textarea
                 id="sl-notes"
@@ -396,18 +444,23 @@ export function SunlightCommissionsPage() {
                   setNotes(e.target.value);
                   setCopied(false);
                 }}
-                placeholder="Cuéntale a Sunlight Blue sobre tu visión, temática de la canción o estilo de la portada..."
+                placeholder="Cuéntale a Sunlight Blue sobre tu temática, referencias de sonido, atmósfera deseada..."
               />
             </div>
           </div>
         </section>
 
-        {/* Section 4: Live Order Slip / Summary */}
-        <section className="sl-section sl-summary-section">
+        {/* Step 5: Studio Order Summary & Discord Action */}
+        <section className="sl-step sl-summary-step">
+          <h2>
+            <span className="sl-num">5</span>
+            <span>{t('sunlight.summary.title')}</span>
+          </h2>
+
           <div className="sl-summary-card">
             <div className="sl-summary-header">
-              <span className="sl-summary-tag">90s ANALOG STUDIO ORDER</span>
-              <h2 className="sl-summary-title">{t('sunlight.summary.title')}</h2>
+              <span className="sl-receipt-tag">SUNLIGHT BLUE RECORDING STUDIO ORDER</span>
+              <span className="sl-receipt-date">SERIES 1990-2026</span>
             </div>
 
             {!hasSelection ? (
@@ -416,35 +469,40 @@ export function SunlightCommissionsPage() {
               <ul className="sl-summary-lines">
                 {selectedArt && (
                   <li className="sl-summary-line">
-                    <span className="line-label">Arte: {selectedArt.Title}</span>
+                    <span className="line-category">Arte Digital</span>
+                    <span className="line-title">{selectedArt.Title}</span>
                     <span className="line-price">${selectedArt.PriceUsd} USD</span>
                   </li>
                 )}
                 {selectedSong && (
                   <li className="sl-summary-line">
-                    <span className="line-label">
-                      Música: {selectedSong.Title}
+                    <span className="line-category">Producción Sonora</span>
+                    <span className="line-title">
+                      {selectedSong.Title}
                       {selectedSong.Key === 'vocal-with-lyrics' &&
-                        ` (${lyricsLanguage === 'es' ? 'Español' : 'English'})`}
+                        ` (${lyricsLanguage === 'es' ? 'Español' : lyricsLanguage === 'en' ? 'Inglés' : 'Bilingüe'})`}
                     </span>
                     <span className="line-price">${selectedSong.PriceUsd} USD</span>
                   </li>
                 )}
                 {hasCommercialRights && (
-                  <li className="sl-summary-line line-extra">
-                    <span className="line-label">Derechos comerciales</span>
+                  <li className="sl-summary-line is-addon">
+                    <span className="line-category">Extra</span>
+                    <span className="line-title">Derechos comerciales & Streaming</span>
                     <span className="line-price">+$20 USD</span>
                   </li>
                 )}
                 {hasStems && (
-                  <li className="sl-summary-line line-extra">
-                    <span className="line-label">Stems separados</span>
+                  <li className="sl-summary-line is-addon">
+                    <span className="line-category">Extra</span>
+                    <span className="line-title">Stems multitrack separados</span>
                     <span className="line-price">+$15 USD</span>
                   </li>
                 )}
                 {hasRushDelivery && (
-                  <li className="sl-summary-line line-extra">
-                    <span className="line-label">Entrega prioritaria</span>
+                  <li className="sl-summary-line is-addon">
+                    <span className="line-category">Extra</span>
+                    <span className="line-title">Entrega prioritaria</span>
                     <span className="line-price">+$20 USD</span>
                   </li>
                 )}
@@ -453,13 +511,13 @@ export function SunlightCommissionsPage() {
 
             {/* Total Row */}
             <div className="sl-summary-total">
-              <div className="total-usd">
-                <span>{t('sunlight.total')}</span>
-                <strong>${totalUsd} USD</strong>
+              <div className="sl-total-chip total-usd">
+                <span className="chip-label">{t('sunlight.total')}</span>
+                <strong className="chip-value">${totalUsd} USD</strong>
               </div>
-              <div className="total-mxn">
-                <span>{t('sunlight.mxn')}</span>
-                <strong>~${totalMxn} MXN</strong>
+              <div className="sl-total-chip total-mxn">
+                <span className="chip-label">{t('sunlight.mxn')}</span>
+                <strong className="chip-value">~${totalMxn} MXN</strong>
               </div>
             </div>
 
@@ -467,7 +525,7 @@ export function SunlightCommissionsPage() {
             <div className="sl-discord-action">
               <button
                 type="button"
-                className={`sl-discord-btn ${!hasSelection ? 'disabled' : ''}`}
+                className={`sl-discord-btn ${!hasSelection ? 'is-disabled' : ''}`}
                 onClick={handleGenerateQuote}
                 disabled={!hasSelection}
               >
