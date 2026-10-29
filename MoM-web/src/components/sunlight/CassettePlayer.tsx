@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLang } from '../../i18n';
 import type { SunlightSampleBase, SunlightCompiledCassette } from '../../models/Sunlight';
+import { CassetteSfx } from '../../utils/CassetteSfx';
 import './CassettePlayer.scss';
 
 interface CassettePlayerProps {
@@ -182,6 +183,7 @@ export function CassettePlayer({
   const handleSelectSide = (side: 'A' | 'B') => {
     hasUserInteractedRef.current = true;
     shouldKeepPlayingRef.current = true;
+    CassetteSfx.playTapeSwitch();
 
     if (compiledCassette) {
       if (side === 'B' && !compiledCassette.sideB) return;
@@ -215,6 +217,7 @@ export function CassettePlayer({
   const handleTrackEndedInternal = () => {
     hasUserInteractedRef.current = true;
 
+    CassetteSfx.playTapeSwitch();
     if (onTrackEnded) {
       const advanced = onTrackEnded(isLoop);
       if (advanced === false) {
@@ -494,10 +497,11 @@ export function CassettePlayer({
 
           <button
             type="button"
-            className={`sl-side-switch-btn ${!isSideA ? 'is-active' : ''}`}
+            className={`sl-side-switch-btn ${!isSideA ? 'is-active' : ''} ${compiledCassette && !compiledCassette.sideB ? 'is-sunken is-empty' : ''}`}
             onClick={() => handleSelectSide('B')}
             disabled={compiledCassette ? !compiledCassette.sideB : false}
             title={compiledCassette && !compiledCassette.sideB ? 'Sin Cara B' : 'Cara B'}
+            aria-disabled={compiledCassette ? !compiledCassette.sideB : false}
           >
             <span className="btn-side-char">B</span>
             <span className="btn-side-label">

@@ -43,23 +43,28 @@
 
   width: 100%;
   max-width: 350px;
+  height: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
   background: var(--tower-bg);
   border: 2px solid var(--tower-border);
   border-radius: 14px;
-  padding: 0.9rem 0.85rem 1.1rem;
+  padding: 0.75rem 0.75rem 0.85rem;
   box-shadow: var(--tower-shadow);
   display: flex;
   flex-direction: column;
   user-select: none;
   transition: all 0.3s ease;
+  overflow: hidden;
 
   // Tower Header
   .sl-tower-header {
+    flex: 0 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding-bottom: 0.45rem;
-    margin-bottom: 0.55rem;
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.45rem;
     border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
 
     .sl-tower-title-block {
@@ -134,12 +139,34 @@
 
   // Vertical Stack of Cassette Jewel Cases (Generous padding to prevent any edge clipping)
   .sl-tower-stack {
+    flex: 1 1 0;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
-    padding: 4px 6px 10px;
+    gap: 0.55rem;
+    padding: 3px 5px 6px;
     overflow-y: auto;
     overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(37, 75, 130, 0.4) rgba(0, 0, 0, 0.04);
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(37, 75, 130, 0.35);
+      border-radius: 4px;
+
+      &:hover {
+        background: var(--jcard-accent);
+      }
+    }
   }
 
   // Individual Slot Wrapper
@@ -187,13 +214,13 @@
     position: relative;
     background: var(--case-glass-bg);
     border: 2px solid var(--case-glass-border);
-    border-radius: 12px;
-    padding: 0.45rem 0.55rem 0.55rem;
+    border-radius: 10px;
+    padding: 0.32rem 0.45rem 0.45rem;
     box-shadow: var(--case-glass-shadow);
     backdrop-filter: blur(6px);
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
+    gap: 0.35rem;
     transition: all 0.25s ease;
 
     // Glass Reflection Diagonal Sheen
@@ -240,9 +267,9 @@
       position: relative;
       background: var(--jcard-bg);
       border: 1px solid var(--jcard-border);
-      border-left: 4px solid var(--jcard-accent);
-      border-radius: 6px;
-      padding: 0.4rem 0.6rem;
+      border-left: 3px solid var(--jcard-accent);
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -302,11 +329,11 @@
       position: relative;
       background: var(--shell-bg);
       border: 1.5px solid var(--shell-border);
-      border-radius: 8px;
-      padding: 0.35rem 0.45rem 0.35rem;
+      border-radius: 7px;
+      padding: 0.22rem 0.35rem 0.22rem;
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.25rem;
       box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 3px 8px rgba(0, 0, 0, 0.25);
       z-index: 2;
 
@@ -355,11 +382,11 @@
             width: 100%;
             display: flex;
             align-items: center;
-            gap: 0.45rem;
+            gap: 0.35rem;
             background: rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 4px;
-            padding: 0.25rem 0.45rem;
+            padding: 0.18rem 0.35rem;
             cursor: pointer;
             transition: all 0.15s ease;
             text-align: left;
@@ -397,11 +424,22 @@
             }
 
             &.pill-empty {
-              opacity: 0.45;
-              cursor: default;
+              background: rgba(0, 0, 0, 0.12) !important;
+              border-color: rgba(0, 0, 0, 0.18) !important;
+              box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.28) !important;
+              transform: translateY(1.5px) !important;
+              opacity: 0.55;
+              cursor: not-allowed;
+              pointer-events: none;
 
               .side-char {
-                background: #887d73;
+                background: #645a50 !important;
+                color: #b0a498 !important;
+              }
+
+              .side-name {
+                color: var(--tower-muted) !important;
+                font-style: italic;
               }
             }
 
@@ -521,8 +559,8 @@
 
       // Bottom Cassette Notch Area (Head cavity & roller guide pins)
       .sl-case-tape-notch {
-        height: 12px;
-        margin-top: 0.15rem;
+        height: 9px;
+        margin-top: 0.05rem;
         background: #16120f;
         border-radius: 2px;
         display: flex;
@@ -550,7 +588,8 @@
 // ========================================================
 // NIGHT MODE STYLING (Dark Theme Parity)
 // ========================================================
-[data-theme='dark'] .sl-cassette-tower {
+[data-theme='dark'] .sl-cassette-tower,
+[data-theme='night'] .sl-cassette-tower {
   --tower-bg: linear-gradient(170deg, #1c1815 0%, #120f0d 100%);
   --tower-border: #38302b;
   --tower-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -618,5 +657,15 @@
       color: #ffffff;
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
     }
+  }
+}
+
+[data-theme='night'] .sl-cassette-tower .sl-tower-stack {
+  .sl-case-track-pill.pill-empty {
+    background: rgba(0, 0, 0, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8) !important;
+    transform: translateY(1.5px) !important;
+    opacity: 0.45;
   }
 }

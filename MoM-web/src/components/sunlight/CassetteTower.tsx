@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import type { SunlightCompiledCassette } from '../../models/Sunlight';
+import { CassetteSfx } from '../../utils/CassetteSfx';
 import './CassetteTower.scss';
-
-const VISIBLE_SLOTS_CAPACITY = 10;
 
 interface CassetteTowerProps {
   cassettes: SunlightCompiledCassette[];
@@ -17,34 +16,16 @@ export function CassetteTower({
   activeSide,
   onSelectCassette,
 }: CassetteTowerProps) {
-  const [scrollOffset, setScrollOffset] = useState(0);
   const stackRef = useRef<HTMLDivElement | null>(null);
 
-  const maxOffset = Math.max(0, cassettes.length - VISIBLE_SLOTS_CAPACITY);
-  const hasOverflow = cassettes.length > VISIBLE_SLOTS_CAPACITY;
-
-  const handleScrollUp = () => {
-    setScrollOffset((prev) => Math.max(0, prev - 1));
-  };
-
-  const handleScrollDown = () => {
-    setScrollOffset((prev) => Math.min(maxOffset, prev + 1));
-  };
-
-  // Keep active cassette visible in viewport when tower auto-advances or loops
+  // Auto-scroll the stack so the active cassette is always smoothly in view
   useEffect(() => {
-    if (!hasOverflow) return;
-    if (activeCassetteIndex < scrollOffset) {
-      setScrollOffset(activeCassetteIndex);
-    } else if (activeCassetteIndex >= scrollOffset + VISIBLE_SLOTS_CAPACITY) {
-      setScrollOffset(Math.min(maxOffset, activeCassetteIndex - VISIBLE_SLOTS_CAPACITY + 1));
+    if (!stackRef.current) return;
+    const activeSlot = stackRef.current.querySelector<HTMLElement>('.sl-tower-slot.is-loaded');
+    if (activeSlot) {
+      activeSlot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-  }, [activeCassetteIndex, hasOverflow, maxOffset, scrollOffset]);
-
-  // Visible window of cassettes if overflow exceeds 10
-  const displayedCassettes = hasOverflow
-    ? cassettes.slice(scrollOffset, scrollOffset + VISIBLE_SLOTS_CAPACITY)
-    : cassettes;
+  }, [activeCassetteIndex]);
 
   return (
     <aside className="sl-cassette-tower" aria-label="Torre de Cassettes">
@@ -59,28 +40,10 @@ export function CassetteTower({
         </span>
       </div>
 
-      {/* Up Arrow (Visible when overflow and not at top) */}
-      {hasOverflow && (
-        <button
-          type="button"
-          className={`sl-tower-arrow-btn arrow-up ${scrollOffset === 0 ? 'is-disabled' : ''}`}
-          onClick={handleScrollUp}
-          disabled={scrollOffset === 0}
-          title="Subir en la torre de cassettes"
-          aria-label="Subir en la torre de cassettes"
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <polyline points="18 15 12 9 6 15" />
-          </svg>
-          <span className="arrow-label">Subir en la torre</span>
-        </button>
-      )}
-
-      {/* Stack of Cassette Jewel Cases (Prepared for 10 tapes) */}
+      {/* Stack of Cassette Jewel Cases with Dynamic Scroll */}
       <div className="sl-tower-stack" ref={stackRef}>
-        {displayedCassettes.map((tape, localIdx) => {
-          const actualIdx = hasOverflow ? scrollOffset + localIdx : localIdx;
-          const isActive = actualIdx === activeCassetteIndex;
+        {cassettes.map((tape, idx) => {
+          const isActive = idx === activeCassetteIndex;
 
           const tapeDisplayName = tape.title.includes(':')
             ? tape.title.split(':')[0].trim()
@@ -90,18 +53,18 @@ export function CassetteTower({
             <div
               key={tape.id}
               className={`sl-tower-slot ${isActive ? 'is-loaded' : ''}`}
-              onClick={() => onSelectCassette(actualIdx, 'A')}
+              onClick={() => { CassetteSfx.playTapeSwitch(); onSelectCassette(idx, 'A'); }}
               role="button"
               tabIndex={0}
               aria-pressed={isActive}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  onSelectCassette(actualIdx, 'A');
+                  onSelectCassette(idx, 'A');
                 }
               }}
             >
-              {/* 3D Acrylic Jewel Case (Caja de Cassette Transparente) */}
+              {/* 3D Acrylic Jewel Case */}
               <div className="sl-jewel-case">
                 {/* Crystal Glass Reflection & Beveled Sheen */}
                 <div className="sl-case-sheen" />
@@ -139,7 +102,8 @@ export function CassetteTower({
                         className={`sl-case-track-pill pill-a ${isActive && activeSide === 'A' ? 'is-playing' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          onSelectCassette(actualIdx, 'A');
+                          CassetteSfx.playTapeSwitch();
+                          onSelectCassette(idx, 'A');
                         }}
                         title={`Lado A: ${tape.sideA.Title}`}
                       >
@@ -153,7 +117,8 @@ export function CassetteTower({
                           className={`sl-case-track-pill pill-b ${isActive && activeSide === 'B' ? 'is-playing' : ''}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            onSelectCassette(actualIdx, 'B');
+                            CassetteSfx.playTapeSwitch();
+                            onSelectCassette(idx, 'B');
                           }}
                           title={`Lado B: ${tape.sideB.Title}`}
                         >
@@ -180,10 +145,12 @@ export function CassetteTower({
                       </div>
                     </div>
 
-                    {/* Magnetic Tape Ribbon Bridge */}
-                    <div className="sl-case-bridge">
+                    {/* Analog Tape Film Strip with Scale Ticks */}
+                    <div className="sl-case-tape-window">
                       <div className="sl-case-tape-ribbon" />
                       <div className="sl-case-ticks">
+                        <span />
+                        <span />
                         <span />
                         <span />
                         <span />
@@ -200,7 +167,7 @@ export function CassetteTower({
                     </div>
                   </div>
 
-                  {/* Bottom Cassette Notch Area (Head cavity & roller guide pins) */}
+                  {/* Bottom Cassette Notch Area */}
                   <div className="sl-case-tape-notch">
                     <span className="notch-guide-pin" />
                     <span className="notch-felt-pad" />
@@ -212,23 +179,6 @@ export function CassetteTower({
           );
         })}
       </div>
-
-      {/* Down Arrow (Visible when overflow and not at bottom) */}
-      {hasOverflow && (
-        <button
-          type="button"
-          className={`sl-tower-arrow-btn arrow-down ${scrollOffset >= maxOffset ? 'is-disabled' : ''}`}
-          onClick={handleScrollDown}
-          disabled={scrollOffset >= maxOffset}
-          title="Bajar en la torre de cassettes"
-          aria-label="Bajar en la torre de cassettes"
-        >
-          <span className="arrow-label">Bajar en la torre</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </button>
-      )}
     </aside>
   );
 }

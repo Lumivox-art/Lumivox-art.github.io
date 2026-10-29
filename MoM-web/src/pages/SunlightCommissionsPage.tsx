@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
@@ -7,6 +7,7 @@ import { useTheme } from '../components/ThemeContext';
 import { useLang } from '../i18n';
 import { SunlightCommissionsService } from '../services/SunlightCommissionsService';
 import type { SunlightSampleBase } from '../models/Sunlight';
+import { CassetteSfx } from '../utils/CassetteSfx';
 import { CassettePlayer } from '../components/sunlight/CassettePlayer';
 import { CassetteTower } from '../components/sunlight/CassetteTower';
 import { VinylCoverCard } from '../components/sunlight/VinylCoverCard';
@@ -41,6 +42,23 @@ export function SunlightCommissionsPage() {
   const [playerTrackKey, setPlayerTrackKey] = useState<string>('instrumental');
   const [activeCassetteIndex, setActiveCassetteIndex] = useState(0);
   const [activeSide, setActiveSide] = useState<'A' | 'B'>('A');
+
+  const playerColRef = useRef<HTMLDivElement | null>(null);
+  const [deckHeight, setDeckHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const el = playerColRef.current;
+    if (!el) return;
+    const update = () => {
+      if (el.clientHeight > 0) {
+        setDeckHeight(el.clientHeight);
+      }
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   // Zoom modal state for album covers
   const [zoomedSample, setZoomedSample] = useState<SunlightSampleBase | null>(null);
@@ -182,7 +200,7 @@ export function SunlightCommissionsPage() {
           <h2 className="sl-stage-title">{t('sunlight.stage.music_gallery')}</h2>
         </div>
         <div className="sl-stage-layout">
-          <div className="sl-stage-player-col">
+          <div className="sl-stage-player-col" ref={playerColRef}>
             <CassettePlayer
               tracks={musicTracks}
               activeTrackKey={playerTrackKey}
@@ -191,6 +209,7 @@ export function SunlightCommissionsPage() {
               autoPlayOnChange={true}
               onTrackEnded={handleTrackEnded}
               onSideChange={(side) => {
+                CassetteSfx.playTapeSwitch();
                 setActiveSide(side);
                 const tape = compiledCassettes[activeCassetteIndex];
                 if (tape) {
@@ -210,12 +229,19 @@ export function SunlightCommissionsPage() {
             />
           </div>
 
-          <div className="sl-stage-tower-col">
+          <div
+            className="sl-stage-tower-col"
+            style={{
+              height: deckHeight ? `${deckHeight}px` : undefined,
+              maxHeight: deckHeight ? `${deckHeight}px` : undefined,
+            }}
+          >
             <CassetteTower
               cassettes={compiledCassettes}
               activeCassetteIndex={activeCassetteIndex}
               activeSide={activeSide}
               onSelectCassette={(idx, side = 'A') => {
+                CassetteSfx.playTapeSwitch();
                 setActiveCassetteIndex(idx);
                 setActiveSide(side);
                 const tape = compiledCassettes[idx];
@@ -278,6 +304,7 @@ export function SunlightCommissionsPage() {
                   const newKey = selectedSongKey === song.Key ? null : song.Key;
                   setSelectedSongKey(newKey);
                   if (newKey) {
+                    CassetteSfx.playTapeSwitch();
                     setPlayerTrackKey(newKey);
                     const tapeIdx = Math.floor(songIdx / 2);
                     const tapeSide = songIdx % 2 === 1 ? 'B' : 'A';

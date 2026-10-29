@@ -209,23 +209,26 @@
     z-index: 2;
 
     .sl-stage-header {
-      text-align: center;
-      margin-bottom: 0.65rem;
+      text-align: left;
+      margin-bottom: 0.75rem;
 
       .sl-stage-title {
-        font-family: 'Fraunces', Georgia, serif;
-        font-size: clamp(1.2rem, 2.5vw, 1.55rem);
-        font-weight: 800;
-        color: var(--sl-ink);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
         margin: 0;
-        letter-spacing: -0.01em;
+        color: var(--sl-ink);
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+        font-weight: 700;
+        line-height: 1.25;
       }
     }
 
     .sl-stage-layout {
       display: flex;
       gap: 1.5rem;
-      align-items: flex-start;
+      align-items: stretch;
       justify-content: center;
 
       @media (max-width: 960px) {
@@ -239,15 +242,22 @@
       min-width: 0;
       width: 100%;
       max-width: 580px;
+      display: flex;
+      flex-direction: column;
     }
 
     .sl-stage-tower-col {
       flex: 0 0 340px;
       width: 100%;
       max-width: 350px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
 
       @media (max-width: 960px) {
         max-width: 440px;
+        height: auto !important;
+        max-height: 380px !important;
       }
     }
   }
@@ -811,7 +821,6 @@
     .sl-stage-header {
       .sl-stage-title {
         color: #f1ece0;
-        text-shadow: 0 3px 14px rgba(0, 0, 0, 0.5);
       }
     }
 

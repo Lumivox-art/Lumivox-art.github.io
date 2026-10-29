@@ -10,7 +10,7 @@ import type { SunlightSampleBase, SunlightCompiledCassette } from '../models/Sun
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v7';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v8';
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
@@ -163,6 +163,74 @@ export class SunlightCommissionsService {
       IsActive: true,
       IsDeleted: false,
     },
+    {
+      SampleID: 10,
+      Key: 'cielo-azul',
+      Title: 'Cielo Azul',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/cielo-azul.mp3',
+      AudioUrl: '/sunlight-media/cielo-azul.mp3',
+      Description: 'Cielo Azul',
+      Duration: '3:24',
+      TrackNumber: 6,
+      Order: 10,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    {
+      SampleID: 11,
+      Key: 'melodia-cosmica',
+      Title: 'Melodía Cósmica (Main Theme)',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/melodia-cosmica.mp3',
+      AudioUrl: '/sunlight-media/melodia-cosmica.mp3',
+      Description: 'Melodía Cósmica (Main Theme)',
+      Duration: '1:39',
+      TrackNumber: 7,
+      Order: 11,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    {
+      SampleID: 12,
+      Key: 'sin-los-pies-en-la-tierra',
+      Title: 'Sin Los Pies En La Tierra',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/sin-los-pies-en-la-tierra.mp3',
+      AudioUrl: '/sunlight-media/sin-los-pies-en-la-tierra.mp3',
+      Description: 'Sin Los Pies En La Tierra',
+      Duration: '3:03',
+      TrackNumber: 8,
+      Order: 12,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    {
+      SampleID: 13,
+      Key: 'veloz',
+      Title: 'Veloz',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/veloz.mp3',
+      AudioUrl: '/sunlight-media/veloz.mp3',
+      Description: 'Veloz',
+      Duration: '2:54',
+      TrackNumber: 9,
+      Order: 13,
+      IsActive: true,
+      IsDeleted: false,
+    },
   ];
 
   /**
@@ -175,6 +243,7 @@ export class SunlightCommissionsService {
     LocalCache.Remove('lvx_cache_sunlight_samples_v4');
     LocalCache.Remove('lvx_cache_sunlight_samples_v5');
     LocalCache.Remove('lvx_cache_sunlight_samples_v6');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v7');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }
