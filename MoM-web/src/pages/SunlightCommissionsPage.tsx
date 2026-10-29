@@ -16,14 +16,7 @@ import './SunlightCommissions.scss';
 const SUNLIGHT_DISCORD_HANDLE = '@sunlight_blue';
 const SUNLIGHT_DISCORD_URL = 'https://discord.com';
 
-const GENRE_OPTIONS = [
-  { id: 'synthwave', label: '90s Synthwave / Cyberpunk' },
-  { id: 'indie_pop', label: 'Indie Pop / Rock' },
-  { id: 'acoustic', label: 'Acoustic / Ballad' },
-  { id: 'lofi', label: 'Lo-Fi / Chillhop' },
-  { id: 'orchestral', label: 'Cinematic / Orchestral' },
-  { id: 'custom', label: 'Custom Style' },
-];
+
 
 export function SunlightCommissionsPage() {
   const { theme } = useTheme();
@@ -38,7 +31,6 @@ export function SunlightCommissionsPage() {
   const [selectedArtKey, setSelectedArtKey] = useState<string | null>(null);
   const [selectedSongKey, setSelectedSongKey] = useState<string | null>(null);
   const [lyricsLanguage, setLyricsLanguage] = useState<'es' | 'en' | 'both'>('es');
-  const [selectedGenre, setSelectedGenre] = useState<string>('synthwave');
 
   // Add-ons
   const [hasCommercialRights, setHasCommercialRights] = useState(false);
@@ -111,7 +103,6 @@ export function SunlightCommissionsPage() {
           ? ` [Idioma: ${lyricsLanguage === 'es' ? 'Español' : lyricsLanguage === 'en' ? 'Inglés' : 'Bilingüe'}]`
           : '';
       items.push(`• Custom Song: ${selectedSong.Title}${lyricsDetail} ($${selectedSong.PriceUsd} USD ~ $${selectedSong.PriceMxn} MXN)`);
-      items.push(`  - Vibe/Género: ${GENRE_OPTIONS.find((g) => g.id === selectedGenre)?.label || selectedGenre}`);
     }
 
     if (hasCommercialRights) {
@@ -349,27 +340,7 @@ export function SunlightCommissionsPage() {
               </div>
             )}
 
-            {/* Genre / Vibe Selector (if any song selected) */}
-            {selectedSongKey && (
-              <div className="sl-field-block animate-fade-in">
-                <label className="sl-field-title">{t('sunlight.genre.title')}</label>
-                <div className="sl-genre-chips">
-                  {GENRE_OPTIONS.map((g) => (
-                    <button
-                      key={g.id}
-                      type="button"
-                      className={`sl-chip-btn ${selectedGenre === g.id ? 'is-active' : ''}`}
-                      onClick={() => {
-                        setSelectedGenre(g.id);
-                        setCopied(false);
-                      }}
-                    >
-                      {g.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+
 
             {/* Add-on Checkbox Cards */}
             <div className="sl-field-block">

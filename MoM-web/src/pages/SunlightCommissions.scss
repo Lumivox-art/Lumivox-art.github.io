@@ -374,35 +374,6 @@
       }
     }
 
-    .sl-genre-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.55rem;
-
-      .sl-chip-btn {
-        background: var(--sl-card-bg);
-        border: 1.5px solid rgba(42, 26, 18, 0.1);
-        color: var(--sl-ink);
-        padding: 0.45rem 0.9rem;
-        border-radius: 8px;
-        font-size: 0.82rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.15s ease;
-
-        &:hover {
-          border-color: var(--sl-accent);
-          background: #ffffff;
-        }
-
-        &.is-active {
-          background: var(--sl-accent);
-          color: #ffffff;
-          border-color: var(--sl-accent);
-          box-shadow: 0 2px 6px rgba(37, 75, 130, 0.28);
-        }
-      }
-    }
 
     .sl-addons-grid {
       display: grid;
@@ -1035,23 +1006,6 @@
         }
       }
 
-      .sl-genre-chips .sl-chip-btn {
-        background: #1c1827;
-        border-color: #3d374e;
-        color: #f1ece0;
-
-        &:hover {
-          border-color: #38bdf8;
-          background: #241f30;
-        }
-
-        &.is-active {
-          background: #38bdf8;
-          color: #0c0b16;
-          border-color: #38bdf8;
-          box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-        }
-      }
 
       .sl-addons-grid .sl-addon-card {
         background: #1c1827;

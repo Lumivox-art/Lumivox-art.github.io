@@ -95,7 +95,6 @@ export function VinylCoverCard({
       {/* Meta info */}
       <div className="vinyl-card-meta">
         <h3 className="meta-title">{sample.Title}</h3>
-        {sample.Vibe && <span className="meta-vibe">{sample.Vibe}</span>}
         <div className="meta-price-row">
           <span className="price-usd">${sample.PriceUsd} USD</span>
           <span className="price-mxn">~${sample.PriceMxn} MXN</span>

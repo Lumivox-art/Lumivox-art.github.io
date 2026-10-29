@@ -283,11 +283,11 @@ export function CassettePlayer({
               </span>
             </div>
 
-            {/* Marquee Song Name Display (Zero emojis) */}
+            {/* Marquee Song Name Display */}
             <div className="sl-lcd-track-line">
               <div className="sl-marquee-wrap">
                 <span className="sl-marquee-text">
-                  TRACK: {currentTrack.Title.toUpperCase()} — {currentTrack.Vibe?.toUpperCase() || '90S ANALOG SOUND'}
+                  TRACK: {currentTrack.Title.toUpperCase()}
                 </span>
               </div>
             </div>
