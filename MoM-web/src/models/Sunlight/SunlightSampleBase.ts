@@ -19,10 +19,8 @@ export interface SunlightSampleBase {
   AudioBinary?: string | null;
   AudioUrl?: string | null;
   Description?: string | null;
-  ReleaseYear?: string | null;
   Duration?: string | null;
   TrackNumber?: number | null;
-  Vibe?: string | null;
   Order: number;
   IsActive: boolean;
   IsDeleted: boolean;

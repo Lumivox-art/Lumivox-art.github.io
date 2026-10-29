@@ -10,7 +10,7 @@ import type { SunlightSampleBase } from '../models/Sunlight';
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v3';
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
@@ -114,6 +114,8 @@ export class SunlightCommissionsService {
    * Synchronously retrieves cached items for instant 0ms initial render on page mount.
    */
   public static GetCachedSamples(): SunlightSampleBase[] {
+    LocalCache.Remove('lvx_cache_sunlight_samples');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v2');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }
@@ -142,10 +144,8 @@ export class SunlightCommissionsService {
                 ImageBinary: typeof rec.ImageBinary === 'string' ? rec.ImageBinary : null,
                 AudioUrl: typeof rec.AudioUrl === 'string' ? rec.AudioUrl : String(rec.MediaUrl || ''),
                 Description: typeof rec.Description === 'string' ? rec.Description : null,
-                ReleaseYear: typeof rec.ReleaseYear === 'string' ? rec.ReleaseYear : null,
                 Duration: typeof rec.Duration === 'string' ? rec.Duration : null,
                 TrackNumber: typeof rec.TrackNumber === 'number' ? rec.TrackNumber : null,
-                Vibe: typeof rec.Vibe === 'string' ? rec.Vibe : null,
                 Order: Number(rec.Order) || 99,
                 IsActive: rec.IsActive !== false,
                 IsDeleted: rec.IsDeleted === true,
