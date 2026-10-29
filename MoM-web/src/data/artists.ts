@@ -139,6 +139,11 @@ export const artists: Artist[] = [
           },
         ],
       },
+      {
+        kind: 'portal',
+        label: 'cta.commissions',
+        route: '/home/sunlight-blue/comisiones',
+      },
     ],
   },
   {

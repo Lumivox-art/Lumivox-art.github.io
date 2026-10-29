@@ -42,7 +42,7 @@ jobs:
       # Pages is sourced from the main branch root, so mirror the built dist there.
       - name: Publish built site to repository root
         run: |
-          rm -rf mom-static lumivox-media team-media
+          rm -rf mom-static lumivox-media team-media sunlight-media
           cp -r MoM-web/dist/* .
 
       - name: Commit and push site snapshot

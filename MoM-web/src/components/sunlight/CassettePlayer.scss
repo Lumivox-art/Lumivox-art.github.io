@@ -1,0 +1,559 @@
+// 90s Hi-Fi Cassette Player & Tape Deck styling
+.sunlight-cassette-deck {
+  background: linear-gradient(180deg, #181c24 0%, #101319 100%);
+  border: 2px solid #2a3446;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  color: #d1d9e6;
+  font-family: 'Inter', system-ui, sans-serif;
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+
+  // Deck Top Bar
+  .deck-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    .deck-brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: #7fa4d4;
+      text-transform: uppercase;
+
+      .deck-led-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #2b4468;
+        box-shadow: 0 0 2px rgba(58, 99, 168, 0.4);
+
+        &.active {
+          background: #38bdf8;
+          box-shadow: 0 0 8px #38bdf8;
+        }
+      }
+    }
+
+    .deck-dolby-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  // Physical Cassette Casing
+  .cassette-casing {
+    background: #0d1017;
+    border: 3px solid #1e293b;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.8);
+    margin-bottom: 1.25rem;
+    position: relative;
+
+    .cassette-body {
+      background: linear-gradient(135deg, #1e2430 0%, #151922 100%);
+      border: 2px solid #2e384d;
+      border-radius: 8px;
+      padding: 0.75rem;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+
+      // Corner Screws
+      .cassette-screw {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #8a99ad 30%, #3e4856 100%);
+        border: 1px solid #1a202c;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 3px;
+          left: 1px;
+          width: 6px;
+          height: 1px;
+          background: #1a202c;
+        }
+
+        &.top-left { top: 6px; left: 6px; }
+        &.top-right { top: 6px; right: 6px; }
+        &.bottom-left { bottom: 6px; left: 6px; }
+        &.bottom-right { bottom: 6px; right: 6px; }
+      }
+
+      // Cassette Sticker
+      .cassette-label {
+        background: #f8fafc;
+        color: #0f172a;
+        border-radius: 4px;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.6rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        border: 1px solid #cbd5e1;
+
+        .label-side-banner {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 2px solid #3a63a8;
+          padding-bottom: 0.25rem;
+          margin-bottom: 0.25rem;
+
+          .label-side-letter {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #3a63a8;
+            border: 2px solid #3a63a8;
+            width: 24px;
+            height: 24px;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 3px;
+          }
+
+          .label-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            color: #1e293b;
+            text-transform: uppercase;
+          }
+
+          .label-year {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #64748b;
+          }
+        }
+
+        .label-sub {
+          font-size: 0.65rem;
+          color: #475569;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-align: center;
+        }
+      }
+
+      // Acrylic Window
+      .cassette-window {
+        background: rgba(10, 14, 20, 0.85);
+        border: 2px solid #1a2233;
+        border-radius: 6px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        position: relative;
+        overflow: hidden;
+
+        // Reflection highlight
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 40%;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+          pointer-events: none;
+        }
+
+        // Spools
+        .spool {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          background: #11151c;
+          border: 2px solid #3b485d;
+          position: relative;
+          display: grid;
+          place-items: center;
+
+          &.is-spinning {
+            animation: spool-rotate 2.5s linear infinite;
+          }
+
+          .spool-core {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #64748b;
+            position: relative;
+
+            .spool-teeth {
+              position: absolute;
+              width: 4px;
+              height: 4px;
+              background: #1e293b;
+              border-radius: 1px;
+
+              &.tooth-1 { top: 2px; left: 8px; }
+              &.tooth-2 { bottom: 2px; left: 4px; }
+              &.tooth-3 { bottom: 2px; right: 4px; }
+            }
+          }
+
+          .tape-pack {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: #2a1f18; // magnetic brown tape
+            z-index: -1;
+            transition: transform 0.5s ease;
+          }
+        }
+
+        // Center tape meter
+        .tape-center-window {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+
+          .tape-bridge {
+            width: 60px;
+            height: 4px;
+            background: #2a1f18;
+            border-radius: 2px;
+          }
+
+          .tape-guide-marks {
+            display: flex;
+            gap: 12px;
+            font-size: 0.6rem;
+            color: #64748b;
+            font-family: monospace;
+          }
+        }
+      }
+
+      // Bottom Trapezoid
+      .cassette-bottom-trap {
+        height: 16px;
+        margin-top: 0.4rem;
+        background: #12161f;
+        border-radius: 3px;
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        .pressure-pad {
+          width: 14px;
+          height: 6px;
+          background: #b45309; // bronze/copper pad
+          border-radius: 1px;
+        }
+
+        .tape-roller {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #94a3b8;
+        }
+      }
+    }
+  }
+
+  // LCD & VU Meter Panel
+  .deck-display-panel {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    background: #090c10;
+    border: 2px solid #1e283a;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.75rem;
+
+    .lcd-screen {
+      .lcd-status-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        margin-bottom: 0.35rem;
+
+        .lcd-status {
+          font-weight: 800;
+
+          &.status-play {
+            color: #22c55e;
+            text-shadow: 0 0 6px rgba(34, 197, 94, 0.6);
+          }
+          &.status-stop {
+            color: #94a3b8;
+          }
+        }
+
+        .lcd-track-num {
+          color: #38bdf8;
+          font-weight: 700;
+        }
+
+        .lcd-time {
+          color: #f59e0b;
+          font-weight: 700;
+        }
+      }
+
+      .lcd-track-title {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #f1f5f9;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    // VU Meter Bars
+    .deck-vu-meter {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+
+      .vu-label {
+        font-size: 0.55rem;
+        color: #64748b;
+        font-family: monospace;
+        margin-bottom: 4px;
+      }
+
+      .vu-bars-row {
+        display: flex;
+        gap: 3px;
+        align-items: flex-end;
+        height: 20px;
+
+        .vu-bar {
+          width: 4px;
+          height: 4px;
+          background: #1e293b;
+          border-radius: 1px;
+          transition: height 0.15s ease;
+        }
+      }
+
+      &.is-active {
+        .vu-bar {
+          background: #22c55e;
+          animation: vu-bounce 0.4s ease infinite alternate;
+
+          &:nth-child(7), &:nth-child(8), &:nth-child(9) {
+            background: #eab308;
+          }
+          &:nth-child(10), &:nth-child(11), &:nth-child(12) {
+            background: #ef4444;
+          }
+
+          &.bar-1 { animation-delay: 0.05s; }
+          &.bar-2 { animation-delay: 0.15s; }
+          &.bar-3 { animation-delay: 0.08s; }
+          &.bar-4 { animation-delay: 0.22s; }
+          &.bar-5 { animation-delay: 0.12s; }
+          &.bar-6 { animation-delay: 0.3s; }
+          &.bar-7 { animation-delay: 0.18s; }
+          &.bar-8 { animation-delay: 0.25s; }
+          &.bar-9 { animation-delay: 0.1s; }
+          &.bar-10 { animation-delay: 0.35s; }
+          &.bar-11 { animation-delay: 0.28s; }
+          &.bar-12 { animation-delay: 0.14s; }
+        }
+      }
+    }
+  }
+
+  // Scrubber
+  .deck-scrubber-row {
+    margin-bottom: 1rem;
+
+    .deck-scrubber {
+      width: 100%;
+      height: 6px;
+      -webkit-appearance: none;
+      background: #1e293b;
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #38bdf8;
+        box-shadow: 0 0 6px #38bdf8;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Controls Panel
+  .deck-controls-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: #141822;
+    padding: 0.85rem;
+    border-radius: 8px;
+    border: 1px solid #253043;
+
+    .deck-side-selector {
+      display: flex;
+      gap: 0.4rem;
+
+      .deck-side-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: #1e2638;
+        border: 1px solid #334155;
+        color: #cbd5e1;
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        .side-letter {
+          color: #38bdf8;
+          font-weight: 900;
+        }
+
+        &.is-active {
+          background: #3a63a8;
+          color: #ffffff;
+          border-color: #60a5fa;
+          box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+
+          .side-letter {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+
+    .deck-transport-buttons {
+      display: flex;
+      gap: 0.4rem;
+
+      .deck-btn {
+        background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+        border: 1px solid #475569;
+        color: #f1f5f9;
+        font-size: 0.75rem;
+        font-weight: 800;
+        padding: 0.4rem 0.75rem;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        transition: transform 0.1s, box-shadow 0.1s;
+
+        &:active {
+          transform: translateY(2px);
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        &.btn-play {
+          color: #4ade80;
+          border-color: #16a34a;
+        }
+
+        &.btn-pause.is-active {
+          background: #eab308;
+          color: #0f172a;
+          border-color: #fef08a;
+        }
+
+        &.btn-stop {
+          color: #f87171;
+        }
+      }
+    }
+
+    .deck-volume-fader {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .vol-icon {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #94a3b8;
+        font-family: monospace;
+      }
+
+      .deck-fader {
+        width: 70px;
+        height: 4px;
+        -webkit-appearance: none;
+        background: #334155;
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 10px;
+          height: 14px;
+          border-radius: 2px;
+          background: #94a3b8;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+// Spool rotation keyframes
+@keyframes spool-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// VU bounce keyframes
+@keyframes vu-bounce {
+  0% {
+    height: 4px;
+  }
+  50% {
+    height: 16px;
+  }
+  100% {
+    height: 8px;
+  }
+}

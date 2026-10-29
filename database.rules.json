@@ -33,6 +33,13 @@
       }
     },
 
+    "sunlight_samples": {
+      ".read": true,
+      "$item": {
+        ".write": "auth != null && (auth.token.email.beginsWith('sunlight') || auth.token.email.beginsWith('nix') || auth.token.email.beginsWith('luis') || auth.token.email === 'admin@lumivox.art')"
+      }
+    },
+
     "audit_logs": {
       ".read": "auth != null && (auth.token.email.beginsWith('nix') || auth.token.email === 'admin@lumivox.art')",
       ".write": "auth != null"

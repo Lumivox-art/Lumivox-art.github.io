@@ -12,6 +12,7 @@ import { IntranetFloatingBadge } from './components/IntranetShortcut';
 import { LumivoxHomePage } from './pages/LumivoxHomePage';
 import { ArtistsPage } from './pages/ArtistsPage';
 import { SamCommissionsPage } from './pages/SamCommissionsPage';
+import { SunlightCommissionsPage } from './pages/SunlightCommissionsPage';
 import { SpeckuCommissionsPage } from './pages/SpeckuCommissionsPage';
 import { SpeckuTermsPage } from './pages/SpeckuTermsPage';
 import { SpeckuGalleryPage } from './pages/SpeckuGalleryPage';
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
         ),
       },
       { path: '/home/sam/comisiones', element: <SamCommissionsPage /> },
+      { path: '/home/sunlight-blue/comisiones', element: <SunlightCommissionsPage /> },
+      { path: '/sunlight-blue/comisiones', element: <Navigate to="/home/sunlight-blue/comisiones" replace /> },
+      { path: '/home/sunlight/comisiones', element: <Navigate to="/home/sunlight-blue/comisiones" replace /> },
+      { path: '/sunlight/comisiones', element: <Navigate to="/home/sunlight-blue/comisiones" replace /> },
       { path: '/home/specku/comisiones', element: <SpeckuCommissionsPage /> },
       { path: '/home/specku/terminos', element: <SpeckuTermsPage /> },
       { path: '/home/specku/galeria', element: <SpeckuGalleryPage /> },

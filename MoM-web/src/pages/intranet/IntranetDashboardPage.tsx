@@ -141,6 +141,7 @@ export function IntranetDashboardPage() {
   }
 
   const isSpecku = artistHandle === 'specku';
+  const isSunlight = artistHandle === 'sunlight-blue' || artistHandle === 'sunlight';
 
   return (
     <div className="intranet-dashboard" data-theme={theme}>
@@ -217,6 +218,27 @@ export function IntranetDashboardPage() {
                 </div>
                 <Link to="/home/specku/galeria" className="ind-tool-btn">
                   {t('intranet.dashboard.tools.gallery_btn')}
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {isSunlight && (
+          <section className="ind-special-tools-card">
+            <h2 className="ind-card-title">
+              Herramientas de Sunlight Blue
+            </h2>
+            <div className="ind-tools-grid">
+              <div className="ind-tool-item">
+                <div className="ind-tool-header">
+                  <div>
+                    <h3>Estudio de Grabación y Comisiones</h3>
+                    <p>Revisa tu catálogo de música en cinta cassette, portadas de vinilo y cotizador para clientes.</p>
+                  </div>
+                </div>
+                <Link to="/home/sunlight-blue/comisiones" className="ind-tool-btn">
+                  Abrir Estudio de Comisiones →
                 </Link>
               </div>
             </div>

@@ -1,0 +1,688 @@
+// 90s Record Label & Vinyl Studio Styling for Sunlight Blue
+.sunlight-commissions-page {
+  min-height: 100vh;
+  background-color: var(--lvx-bg, #0b0f17);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(58, 99, 168, 0.25) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(30, 58, 138, 0.15) 0%, transparent 40%);
+  color: var(--lvx-text, #f1f5f9);
+  font-family: 'Inter', system-ui, sans-serif;
+  padding-bottom: 5rem;
+
+  // Topbar
+  .sl-topbar {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .sl-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+
+      .sl-back-link {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-decoration: none;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: #38bdf8;
+          border-color: #38bdf8;
+        }
+      }
+    }
+  }
+
+  // Hero Section
+  .sl-hero {
+    max-width: 900px;
+    margin: 2rem auto 3rem;
+    text-align: center;
+    padding: 0 1.5rem;
+
+    .sl-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(58, 99, 168, 0.2);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      color: #93c5fd;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+
+      .sl-record-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #38bdf8;
+        box-shadow: 0 0 8px #38bdf8;
+      }
+    }
+
+    .sl-title {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .sl-subtitle {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  }
+
+  // Main Container
+  .sl-container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  // Generic Section
+  .sl-section {
+    .sl-section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.4rem;
+
+      .sl-sec-num {
+        display: inline-grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #3a63a8;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 900;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+    }
+
+    .sl-section-desc {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      margin-bottom: 1.5rem;
+      max-width: 650px;
+    }
+  }
+
+  // Vinyl Covers Grid
+  .sl-covers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  // Custom Song Options Grid
+  .sl-song-options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+
+    .sl-song-card {
+      background: rgba(18, 24, 38, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: inherit;
+
+      &:hover {
+        border-color: rgba(58, 99, 168, 0.6);
+        background: rgba(24, 32, 50, 0.85);
+        transform: translateY(-2px);
+      }
+
+      &.selected {
+        border-color: #3b82f6;
+        background: rgba(30, 48, 80, 0.9);
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+      }
+
+      .sl-song-info {
+        h3 {
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #ffffff;
+          margin-bottom: 0.35rem;
+        }
+
+        p {
+          font-size: 0.82rem;
+          color: #94a3b8;
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
+
+      .sl-song-price-col {
+        text-align: right;
+        flex-shrink: 0;
+
+        .sl-song-price {
+          display: block;
+          font-size: 1.2rem;
+          font-weight: 900;
+          color: #38bdf8;
+        }
+
+        .sl-song-price-mxn {
+          font-size: 0.75rem;
+          color: #64748b;
+        }
+      }
+    }
+  }
+
+  // Details & Customization Card
+  .sl-details-card {
+    background: rgba(18, 24, 38, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    .sl-details-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 0.75rem;
+    }
+
+    .sl-field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .sl-field-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #cbd5e1;
+      }
+
+      .sl-radio-pill-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        .sl-pill-btn {
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #94a3b8;
+          padding: 0.4rem 0.9rem;
+          border-radius: 999px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            border-color: #38bdf8;
+            color: #ffffff;
+          }
+
+          &.active {
+            background: #3a63a8;
+            border-color: #60a5fa;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+          }
+        }
+      }
+
+      .sl-genre-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+
+        .sl-chip-btn {
+          background: rgba(20, 27, 42, 0.8);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          color: #94a3b8;
+          padding: 0.35rem 0.75rem;
+          border-radius: 6px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
+          }
+
+          &.active {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #60a5fa;
+          }
+        }
+      }
+    }
+
+    .sl-addons-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding: 0.85rem;
+      background: rgba(10, 14, 22, 0.6);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+
+      .sl-addon-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        cursor: pointer;
+        font-size: 0.88rem;
+        color: #e2e8f0;
+        user-select: none;
+
+        input {
+          width: 16px;
+          height: 16px;
+          accent-color: #3a63a8;
+          cursor: pointer;
+        }
+
+        .sl-addon-text {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .sl-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+
+      .sl-field-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #cbd5e1;
+      }
+
+      .sl-textarea {
+        background: #090c12;
+        border: 1px solid #202b3d;
+        border-radius: 8px;
+        padding: 0.75rem;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 0.9rem;
+        resize: vertical;
+        outline: none;
+
+        &:focus {
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+      }
+    }
+  }
+
+  // Summary Card / Receipt
+  .sl-summary-card {
+    background: linear-gradient(135deg, #131a26 0%, #0d121c 100%);
+    border: 2px solid #28374f;
+    border-radius: 14px;
+    padding: 1.75rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    max-width: 680px;
+    margin: 0 auto;
+
+    .sl-summary-header {
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+      .sl-summary-tag {
+        font-size: 0.68rem;
+        font-weight: 900;
+        letter-spacing: 0.15em;
+        color: #38bdf8;
+        text-transform: uppercase;
+      }
+
+      .sl-summary-title {
+        font-size: 1.4rem;
+        font-weight: 900;
+        color: #ffffff;
+        margin: 0.25rem 0 0;
+      }
+    }
+
+    .sl-summary-empty {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
+    .sl-summary-lines {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+
+      .sl-summary-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+        color: #e2e8f0;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+
+        .line-label {
+          font-weight: 600;
+        }
+
+        .line-price {
+          font-weight: 800;
+          color: #38bdf8;
+        }
+
+        &.line-extra {
+          color: #94a3b8;
+          font-size: 0.85rem;
+        }
+      }
+    }
+
+    .sl-summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      background: rgba(10, 14, 22, 0.8);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #1e293b;
+
+      .total-usd {
+        display: flex;
+        flex-direction: column;
+
+        span {
+          font-size: 0.75rem;
+          color: #94a3b8;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+
+        strong {
+          font-size: 1.6rem;
+          font-weight: 900;
+          color: #38bdf8;
+        }
+      }
+
+      .total-mxn {
+        text-align: right;
+
+        span {
+          display: block;
+          font-size: 0.72rem;
+          color: #64748b;
+        }
+
+        strong {
+          font-size: 1.1rem;
+          font-weight: 800;
+          color: #cbd5e1;
+        }
+      }
+    }
+
+    .sl-discord-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: #5865f2;
+      border: none;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 800;
+      padding: 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(88, 101, 242, 0.4);
+      transition: all 0.2s ease;
+
+      &:hover:not(.disabled) {
+        background: #4752c4;
+        transform: translateY(-2px);
+      }
+
+      &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    .sl-discord-feedback {
+      margin-top: 1.25rem;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid #22c55e;
+      border-radius: 8px;
+
+      .sl-feedback-header {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+
+        .sl-check-mark {
+          display: inline-grid;
+          place-items: center;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: #22c55e;
+          color: #000000;
+          font-weight: 900;
+          flex-shrink: 0;
+        }
+
+        strong {
+          font-size: 0.95rem;
+          color: #4ade80;
+          display: block;
+        }
+
+        p {
+          font-size: 0.8rem;
+          color: #cbd5e1;
+          margin: 0;
+        }
+      }
+
+      .sl-message-preview {
+        background: #090c12;
+        padding: 0.75rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        color: #cbd5e1;
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        margin-bottom: 0.85rem;
+        border: 1px solid #1e293b;
+      }
+
+      .sl-feedback-actions {
+        display: flex;
+        gap: 0.5rem;
+
+        .sl-btn-recopy {
+          background: #334155;
+          border: none;
+          color: #ffffff;
+          font-size: 0.8rem;
+          font-weight: 700;
+          padding: 0.45rem 0.85rem;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+
+        .sl-btn-send {
+          background: #5865f2;
+          color: #ffffff;
+          text-decoration: none;
+          font-size: 0.8rem;
+          font-weight: 800;
+          padding: 0.45rem 0.85rem;
+          border-radius: 6px;
+          display: inline-block;
+
+          &:hover {
+            background: #4752c4;
+          }
+        }
+      }
+    }
+  }
+
+  // Lightbox Modal
+  .sl-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+
+    .sl-lightbox-card {
+      background: #111622;
+      border: 1px solid #28374f;
+      border-radius: 12px;
+      max-width: 540px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+
+      .sl-lightbox-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 10;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+
+      .sl-lightbox-media {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: #090c12;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .sl-lightbox-info {
+        padding: 1.25rem;
+
+        h3 {
+          font-size: 1.2rem;
+          font-weight: 800;
+          color: #ffffff;
+          margin-bottom: 0.35rem;
+        }
+
+        p {
+          font-size: 0.88rem;
+          color: #94a3b8;
+          line-height: 1.5;
+          margin-bottom: 1rem;
+        }
+
+        .sl-lightbox-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .lightbox-price {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: #38bdf8;
+          }
+
+          .sl-btn-lightbox-select {
+            background: #3a63a8;
+            border: none;
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 800;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+
+            &:hover {
+              background: #2563eb;
+            }
+          }
+        }
+      }
+    }
+  }
+}
