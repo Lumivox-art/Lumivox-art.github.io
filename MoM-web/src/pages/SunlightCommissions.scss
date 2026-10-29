@@ -79,14 +79,6 @@
       line-height: 1.15;
     }
 
-    p.sl-subtitle {
-      margin: 0.5rem auto 0;
-      max-width: 36rem;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--sl-subtext);
-      line-height: 1.5;
-    }
   }
 
   // Stepped Flow Container
@@ -899,9 +891,6 @@
         text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
       }
 
-      p.sl-subtitle {
-        color: #9a93b0;
-      }
     }
 
     .sl-step {

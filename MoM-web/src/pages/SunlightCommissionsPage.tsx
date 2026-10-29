@@ -176,7 +176,6 @@ export function SunlightCommissionsPage() {
       {/* 90s Record Label Hero */}
       <header className="sl-hero">
         <h1 className="sl-title">{t('sunlight.title')}</h1>
-        <p className="sl-subtitle">{t('sunlight.subtitle')}</p>
       </header>
 
       {/* Main Stepped Flow */}

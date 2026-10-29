@@ -301,7 +301,7 @@ export const DICT: Record<Lang, Record<string, string>> = {
     'intranet.dashboard.remove': 'Remove',
 
     // sunlight commissions & 90s studio
-    'sunlight.title': "Sunlight Blue's Sound & Art Studio",
+    'sunlight.title': 'Sunlight Blue Commissions',
     'sunlight.subtitle': 'Custom original music, 90s cassette recordings, and vintage vinyl album covers.',
     'sunlight.badge': 'SUNLIGHT BLUE RECORDS · STEREO ANALOG',
     'sunlight.player.title': 'Cassette Deck · Hi-Fi Audio Player',
@@ -637,7 +637,7 @@ export const DICT: Record<Lang, Record<string, string>> = {
     'intranet.dashboard.remove': 'Eliminar',
 
     // sunlight commissions & 90s studio
-    'sunlight.title': 'Estudio de Arte y Música de Sunlight Blue',
+    'sunlight.title': 'Comisiones de Sunlight Blue',
     'sunlight.subtitle': 'Música original personalizada, grabaciones en cassette de los 90s y portadas de discos vintage.',
     'sunlight.badge': 'SUNLIGHT BLUE RECORDS · STEREO ANÁLOGO',
     'sunlight.player.title': 'Reproductor de Cassette · Audio Hi-Fi',
