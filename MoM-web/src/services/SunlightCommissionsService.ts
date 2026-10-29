@@ -142,7 +142,7 @@ export class SunlightCommissionsService {
                 ImageBinary: typeof rec.ImageBinary === 'string' ? rec.ImageBinary : null,
                 AudioUrl: typeof rec.AudioUrl === 'string' ? rec.AudioUrl : String(rec.MediaUrl || ''),
                 Description: typeof rec.Description === 'string' ? rec.Description : null,
-                ReleaseYear: typeof rec.ReleaseYear === 'string' ? rec.ReleaseYear : '1995',
+                ReleaseYear: typeof rec.ReleaseYear === 'string' ? rec.ReleaseYear : null,
                 Duration: typeof rec.Duration === 'string' ? rec.Duration : null,
                 TrackNumber: typeof rec.TrackNumber === 'number' ? rec.TrackNumber : null,
                 Vibe: typeof rec.Vibe === 'string' ? rec.Vibe : null,

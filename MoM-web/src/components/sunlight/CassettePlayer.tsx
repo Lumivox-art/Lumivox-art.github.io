@@ -206,7 +206,6 @@ export function CassettePlayer({
               <div className="sl-sticker-top">
                 <span className="sl-side-pill">{isSideA ? 'A' : 'B'}</span>
                 <span className="sl-tape-title">{currentTrack.Title}</span>
-                <span className="sl-tape-meta">CHROME TYPE II</span>
               </div>
               <div className="sl-sticker-rule" />
               <div className="sl-sticker-bottom">
