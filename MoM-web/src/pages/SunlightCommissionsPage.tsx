@@ -33,9 +33,6 @@ export function SunlightCommissionsPage() {
   const [lyricsLanguage, setLyricsLanguage] = useState<'es' | 'en' | 'both'>('es');
 
   // Add-ons
-  const [hasCommercialRights, setHasCommercialRights] = useState(false);
-  const [hasStems, setHasStems] = useState(false);
-  const [hasRushDelivery, setHasRushDelivery] = useState(false);
 
   // Custom user notes
   const [notes, setNotes] = useState('');
@@ -72,18 +69,8 @@ export function SunlightCommissionsPage() {
 
   const songCostUsd = selectedSong ? selectedSong.PriceUsd : 0;
   const songCostMxn = selectedSong ? selectedSong.PriceMxn : 0;
-
-  const commercialCostUsd = hasCommercialRights ? 20 : 0;
-  const commercialCostMxn = hasCommercialRights ? 350 : 0;
-
-  const stemsCostUsd = hasStems ? 15 : 0;
-  const stemsCostMxn = hasStems ? 250 : 0;
-
-  const rushCostUsd = hasRushDelivery ? 20 : 0;
-  const rushCostMxn = hasRushDelivery ? 350 : 0;
-
-  const totalUsd = artCostUsd + songCostUsd + commercialCostUsd + stemsCostUsd + rushCostUsd;
-  const totalMxn = artCostMxn + songCostMxn + commercialCostMxn + stemsCostMxn + rushCostMxn;
+  const totalUsd = artCostUsd + songCostUsd;
+  const totalMxn = artCostMxn + songCostMxn;
 
   const hasSelection = Boolean(selectedArt || selectedSong);
 
@@ -104,17 +91,6 @@ export function SunlightCommissionsPage() {
           : '';
       items.push(`• Custom Song: ${selectedSong.Title}${lyricsDetail} ($${selectedSong.PriceUsd} USD ~ $${selectedSong.PriceMxn} MXN)`);
     }
-
-    if (hasCommercialRights) {
-      items.push(`• Add-on: Derechos comerciales / Streaming (+$20 USD ~ $350 MXN)`);
-    }
-    if (hasStems) {
-      items.push(`• Add-on: Pistas separadas / Stems (+$15 USD ~ $250 MXN)`);
-    }
-    if (hasRushDelivery) {
-      items.push(`• Add-on: Entrega prioritaria (+$20 USD ~ $350 MXN)`);
-    }
-
     if (notes.trim()) {
       items.push(`• Notas / Idea: ${notes.trim()}`);
     }
@@ -304,62 +280,6 @@ export function SunlightCommissionsPage() {
               </div>
             )}
 
-
-
-            {/* Add-on Checkbox Cards */}
-            <div className="sl-field-block">
-              <label className="sl-field-title">Servicios Complementarios:</label>
-              <div className="sl-addons-grid">
-                <label className={`sl-addon-card ${hasCommercialRights ? 'is-checked' : ''}`}>
-                  <input
-                    type="checkbox"
-                    checked={hasCommercialRights}
-                    onChange={(e) => {
-                      setHasCommercialRights(e.target.checked);
-                      setCopied(false);
-                    }}
-                  />
-                  <div className="addon-details">
-                    <span className="addon-name">{t('sunlight.addon.commercial')}</span>
-                    <span className="addon-sub">Licencia para distribución comercial y plataformas de streaming.</span>
-                  </div>
-                  <span className="addon-price">+$20 USD</span>
-                </label>
-
-                <label className={`sl-addon-card ${hasStems ? 'is-checked' : ''}`}>
-                  <input
-                    type="checkbox"
-                    checked={hasStems}
-                    onChange={(e) => {
-                      setHasStems(e.target.checked);
-                      setCopied(false);
-                    }}
-                  />
-                  <div className="addon-details">
-                    <span className="addon-name">{t('sunlight.addon.stems')}</span>
-                    <span className="addon-sub">Pistas multitrack separadas en alta definición (WAV 24-bit).</span>
-                  </div>
-                  <span className="addon-price">+$15 USD</span>
-                </label>
-
-                <label className={`sl-addon-card ${hasRushDelivery ? 'is-checked' : ''}`}>
-                  <input
-                    type="checkbox"
-                    checked={hasRushDelivery}
-                    onChange={(e) => {
-                      setHasRushDelivery(e.target.checked);
-                      setCopied(false);
-                    }}
-                  />
-                  <div className="addon-details">
-                    <span className="addon-name">{t('sunlight.addon.rush')}</span>
-                    <span className="addon-sub">Prioridad máxima en el calendario de producción del estudio.</span>
-                  </div>
-                  <span className="addon-price">+$20 USD</span>
-                </label>
-              </div>
-            </div>
-
             {/* Project Idea / Notes */}
             <div className="sl-field-block">
               <label htmlFor="sl-notes" className="sl-field-title">
@@ -413,27 +333,6 @@ export function SunlightCommissionsPage() {
                         ` (${lyricsLanguage === 'es' ? 'Español' : lyricsLanguage === 'en' ? 'Inglés' : 'Bilingüe'})`}
                     </span>
                     <span className="line-price">${selectedSong.PriceUsd} USD</span>
-                  </li>
-                )}
-                {hasCommercialRights && (
-                  <li className="sl-summary-line is-addon">
-                    <span className="line-category">Extra</span>
-                    <span className="line-title">Derechos comerciales & Streaming</span>
-                    <span className="line-price">+$20 USD</span>
-                  </li>
-                )}
-                {hasStems && (
-                  <li className="sl-summary-line is-addon">
-                    <span className="line-category">Extra</span>
-                    <span className="line-title">Stems multitrack separados</span>
-                    <span className="line-price">+$15 USD</span>
-                  </li>
-                )}
-                {hasRushDelivery && (
-                  <li className="sl-summary-line is-addon">
-                    <span className="line-category">Extra</span>
-                    <span className="line-title">Entrega prioritaria</span>
-                    <span className="line-price">+$20 USD</span>
                   </li>
                 )}
               </ul>

@@ -344,74 +344,6 @@
       }
     }
 
-
-    .sl-addons-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.85rem;
-
-      @media (max-width: 720px) {
-        grid-template-columns: 1fr;
-      }
-
-      .sl-addon-card {
-        border: 1.5px solid rgba(42, 26, 18, 0.1);
-        border-radius: 12px;
-        background: var(--sl-card-bg);
-        padding: 0.95rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 0.65rem;
-        cursor: pointer;
-        transition: all 0.15s ease;
-
-        input[type='checkbox'] {
-          accent-color: var(--sl-accent);
-          width: 17px;
-          height: 17px;
-          cursor: pointer;
-        }
-
-        .addon-details {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-
-          .addon-name {
-            font-weight: 800;
-            font-size: 0.92rem;
-            color: var(--sl-ink);
-          }
-
-          .addon-sub {
-            font-size: 0.76rem;
-            color: var(--sl-subtext);
-            line-height: 1.35;
-          }
-        }
-
-        .addon-price {
-          font-family: 'Fraunces', serif;
-          font-size: 1.1rem;
-          font-weight: 800;
-          color: var(--sl-accent);
-          align-self: flex-end;
-        }
-
-        &:hover {
-          border-color: var(--sl-accent);
-          background: #ffffff;
-        }
-
-        &.is-checked {
-          border-color: var(--sl-accent);
-          background: #ffffff;
-          box-shadow: 0 0 0 2px rgba(37, 75, 130, 0.15);
-        }
-      }
-    }
-
     .sl-textarea {
       width: 100%;
       border: 1.5px solid rgba(42, 26, 18, 0.12);
@@ -510,12 +442,6 @@
             font-weight: 800;
             color: var(--sl-accent);
             flex-shrink: 0;
-          }
-
-          &.is-addon {
-            .line-category {
-              color: var(--sl-gold);
-            }
           }
         }
       }
@@ -971,37 +897,6 @@
           box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
         }
       }
-
-
-      .sl-addons-grid .sl-addon-card {
-        background: #1c1827;
-        border-color: #3d374e;
-
-        .addon-details {
-          .addon-name {
-            color: #f1ece0;
-          }
-          .addon-sub {
-            color: #9a93b0;
-          }
-        }
-
-        .addon-price {
-          color: #ffe500;
-        }
-
-        &:hover {
-          border-color: #38bdf8;
-          background: #241f30;
-        }
-
-        &.is-checked {
-          border-color: #38bdf8;
-          background: #241f30;
-          box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
-        }
-      }
-
       .sl-textarea {
         background: #1c1827;
         border-color: #3d374e;
@@ -1049,10 +944,6 @@
           }
 
           .line-price {
-            color: #ffe500;
-          }
-
-          &.is-addon .line-category {
             color: #ffe500;
           }
         }
