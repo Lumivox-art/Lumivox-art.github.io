@@ -82,6 +82,10 @@ export function CassetteTower({
           const actualIdx = hasOverflow ? scrollOffset + localIdx : localIdx;
           const isActive = actualIdx === activeCassetteIndex;
 
+          const tapeDisplayName = tape.title.includes(':')
+            ? tape.title.split(':')[0].trim()
+            : tape.title;
+
           return (
             <div
               key={tape.id}
@@ -104,14 +108,14 @@ export function CassetteTower({
                 <span className="sl-case-hinge hinge-top" />
                 <span className="sl-case-hinge hinge-bottom" />
 
-                {/* Top: J-Card Spine Fold with Title & Status */}
+                {/* Top: J-Card Spine Fold with Clean Title & Status */}
                 <div className="sl-case-jcard">
                   <div className="sl-jcard-left">
                     <span className="sl-jcard-num">
                       {String(tape.tapeNumber).padStart(2, '0')}
                     </span>
                     <span className="sl-jcard-title" title={tape.title}>
-                      {tape.title}
+                      {tapeDisplayName}
                     </span>
                   </div>
                   <span className={`sl-jcard-status ${isActive ? 'is-active-badge' : ''}`}>
@@ -127,7 +131,7 @@ export function CassetteTower({
                   <span className="sl-mini-screw s-bl" />
                   <span className="sl-mini-screw s-br" />
 
-                  {/* Tape Label Sticker with Cara A & Cara B Tracks */}
+                  {/* Tape Label Sticker with Full Cara A & Cara B Tracks */}
                   <div className="sl-case-tape-label">
                     <div className="sl-label-tracks">
                       <button
@@ -194,6 +198,13 @@ export function CassetteTower({
                         <span className="hub-tooth t-3" />
                       </div>
                     </div>
+                  </div>
+
+                  {/* Bottom Cassette Notch Area (Head cavity & roller guide pins) */}
+                  <div className="sl-case-tape-notch">
+                    <span className="notch-guide-pin" />
+                    <span className="notch-felt-pad" />
+                    <span className="notch-guide-pin" />
                   </div>
                 </div>
               </div>

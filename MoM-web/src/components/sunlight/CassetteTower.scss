@@ -18,10 +18,10 @@
   --tower-muted: #6e5845;
 
   // Jewel Case Acrylic Colors
-  --case-glass-bg: rgba(255, 255, 255, 0.45);
-  --case-glass-border: rgba(255, 255, 255, 0.75);
+  --case-glass-bg: rgba(255, 255, 255, 0.5);
+  --case-glass-border: rgba(255, 255, 255, 0.85);
   --case-glass-bevel: rgba(0, 0, 0, 0.12);
-  --case-glass-shadow: 0 6px 16px rgba(42, 26, 18, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.8), inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+  --case-glass-shadow: 0 6px 18px rgba(42, 26, 18, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85), inset 0 -1px 2px rgba(0, 0, 0, 0.15);
 
   // J-Card Insert Spine
   --jcard-bg: linear-gradient(180deg, #faf7f0 0%, #ebe3d5 100%);
@@ -42,11 +42,11 @@
   --ribbon-bg: #2b1810;
 
   width: 100%;
-  max-width: 350px;
+  max-width: 380px;
   background: var(--tower-bg);
   border: 2px solid var(--tower-border);
   border-radius: 18px;
-  padding: 1.15rem 1rem;
+  padding: 1.15rem 1rem 1.35rem;
   box-shadow: var(--tower-shadow);
   display: flex;
   flex-direction: column;
@@ -132,13 +132,14 @@
     }
   }
 
-  // Vertical Stack of Cassette Jewel Cases
+  // Vertical Stack of Cassette Jewel Cases (Generous padding to prevent any edge clipping)
   .sl-tower-stack {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    max-height: 560px;
-    overflow: hidden;
+    gap: 0.85rem;
+    padding: 4px 6px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   // Individual Slot Wrapper
@@ -154,11 +155,11 @@
     }
 
     &.is-loaded {
-      transform: translateX(-6px);
+      transform: translateX(-4px);
 
       .sl-jewel-case {
         border-color: #38bdf8;
-        box-shadow: 0 8px 24px rgba(37, 75, 130, 0.35), 0 0 0 1.5px #38bdf8,
+        box-shadow: 0 8px 24px rgba(37, 75, 130, 0.32), 0 0 0 1.5px #38bdf8,
           inset 0 1px 2px rgba(255, 255, 255, 0.85);
 
         .sl-case-jcard .sl-jcard-status.is-active-badge {
@@ -187,13 +188,12 @@
     background: var(--case-glass-bg);
     border: 2px solid var(--case-glass-border);
     border-radius: 12px;
-    padding: 0.55rem 0.65rem 0.65rem;
+    padding: 0.65rem 0.75rem 0.75rem;
     box-shadow: var(--case-glass-shadow);
     backdrop-filter: blur(6px);
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.55rem;
     transition: all 0.25s ease;
 
     // Glass Reflection Diagonal Sheen
@@ -202,11 +202,11 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 60%;
+      height: 50%;
       background: linear-gradient(
         135deg,
         rgba(255, 255, 255, 0.45) 0%,
-        rgba(255, 255, 255, 0.12) 35%,
+        rgba(255, 255, 255, 0.1) 35%,
         transparent 70%
       );
       pointer-events: none;
@@ -216,20 +216,20 @@
     // Jewel Case Plastic Hinge Pins
     .sl-case-hinge {
       position: absolute;
-      right: 4px;
+      right: 5px;
       width: 5px;
       height: 10px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.75);
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 3px;
       z-index: 6;
 
       &.hinge-top {
-        top: 6px;
+        top: 8px;
       }
 
       &.hinge-bottom {
-        bottom: 6px;
+        bottom: 8px;
       }
     }
 
@@ -242,7 +242,7 @@
       border: 1px solid var(--jcard-border);
       border-left: 4px solid var(--jcard-accent);
       border-radius: 6px;
-      padding: 0.35rem 0.55rem;
+      padding: 0.4rem 0.6rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -268,17 +268,15 @@
         }
 
         .sl-jcard-title {
-          font-size: 0.78rem;
+          font-size: 0.8rem;
           font-weight: 800;
           color: var(--jcard-text);
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          letter-spacing: 0.02em;
         }
       }
 
       .sl-jcard-status {
-        font-size: 0.58rem;
+        font-size: 0.6rem;
         font-weight: 800;
         letter-spacing: 0.08em;
         color: var(--tower-muted);
@@ -305,10 +303,10 @@
       background: var(--shell-bg);
       border: 1.5px solid var(--shell-border);
       border-radius: 8px;
-      padding: 0.5rem 0.6rem;
+      padding: 0.55rem 0.65rem 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.45rem;
       box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 3px 8px rgba(0, 0, 0, 0.25);
       z-index: 2;
 
@@ -340,28 +338,28 @@
         }
       }
 
-      // Cassette Tape Label Sticker
+      // Cassette Tape Label Sticker (Full stacked rows so titles never cut off)
       .sl-case-tape-label {
         background: var(--shell-label-bg);
         border: 1px solid var(--shell-label-border);
         border-radius: 5px;
-        padding: 0.3rem 0.4rem;
+        padding: 0.35rem 0.45rem;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 
         .sl-label-tracks {
           display: flex;
-          gap: 0.35rem;
+          flex-direction: column;
+          gap: 0.3rem;
 
           .sl-case-track-pill {
-            flex: 1;
-            min-width: 0;
+            width: 100%;
             display: flex;
             align-items: center;
-            gap: 0.35rem;
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            gap: 0.45rem;
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 4px;
-            padding: 0.2rem 0.4rem;
+            padding: 0.25rem 0.45rem;
             cursor: pointer;
             transition: all 0.15s ease;
             text-align: left;
@@ -369,8 +367,8 @@
             .side-char {
               font-size: 0.65rem;
               font-weight: 900;
-              width: 14px;
-              height: 14px;
+              width: 16px;
+              height: 16px;
               display: grid;
               place-items: center;
               border-radius: 3px;
@@ -380,12 +378,12 @@
             }
 
             .side-name {
-              font-size: 0.68rem;
+              font-size: 0.75rem;
               font-weight: 700;
               color: var(--shell-label-text);
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
+              white-space: normal;
+              word-break: break-word;
+              line-height: 1.25;
             }
 
             &:hover:not(.pill-empty) {
@@ -520,6 +518,31 @@
           }
         }
       }
+
+      // Bottom Cassette Notch Area (Head cavity & roller guide pins)
+      .sl-case-tape-notch {
+        height: 12px;
+        margin-top: 0.15rem;
+        background: #16120f;
+        border-radius: 2px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        .notch-guide-pin {
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: #46536b;
+        }
+
+        .notch-felt-pad {
+          width: 18px;
+          height: 4px;
+          background: #c58252;
+          border-radius: 1px;
+        }
+      }
     }
   }
 }
@@ -535,8 +558,8 @@
   --tower-muted: #a39485;
 
   // Jewel Case Acrylic in Dark (Clear smoky glass with neon/crystal sheen)
-  --case-glass-bg: rgba(36, 30, 26, 0.55);
-  --case-glass-border: rgba(255, 255, 255, 0.16);
+  --case-glass-bg: rgba(36, 30, 26, 0.6);
+  --case-glass-border: rgba(255, 255, 255, 0.18);
   --case-glass-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.5);
 
   // J-Card Spine in Dark
