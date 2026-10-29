@@ -25,12 +25,12 @@
   --btn-active-text: #ffffff;
   --spool-core: #f5f0e8;
 
-  max-width: 680px;
+  max-width: 600px;
   margin: 0 auto;
   background: var(--deck-bg);
   border: 2px solid var(--deck-border);
-  border-radius: 18px;
-  padding: 1.5rem;
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
   box-shadow: var(--deck-shadow);
   color: var(--deck-text);
   font-family: 'Inter', system-ui, sans-serif;
@@ -42,8 +42,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.85rem;
-    margin-bottom: 1.25rem;
+    padding-bottom: 0.45rem;
+    margin-bottom: 0.55rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 
     .sl-deck-branding {
@@ -51,9 +51,9 @@
       flex-direction: column;
 
       .sl-brand-logo-text {
-        font-size: 0.95rem;
+        font-size: 0.82rem;
         font-weight: 900;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.12em;
         color: var(--sticker-accent);
       }
 
@@ -71,8 +71,8 @@
       gap: 0.5rem;
 
       .sl-led {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
         background: #94a3b8;
         box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -97,9 +97,9 @@
   .sl-deck-main {
     background: rgba(0, 0, 0, 0.05);
     border: 2px solid rgba(0, 0, 0, 0.08);
-    border-radius: 14px;
-    padding: 1.15rem;
-    margin-bottom: 1rem;
+    border-radius: 10px;
+    padding: 0.6rem;
+    margin-bottom: 0.55rem;
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.06);
   }
 
@@ -107,12 +107,12 @@
   .sl-tape-door {
     background: var(--door-bg);
     border: 2px solid var(--door-border);
-    border-radius: 12px;
-    padding: 0.85rem;
+    border-radius: 8px;
+    padding: 0.45rem;
     position: relative;
     cursor: pointer;
     box-shadow: inset 0 4px 16px rgba(0, 0, 0, 0.7);
-    margin-bottom: 1rem;
+    margin-bottom: 0.55rem;
     overflow: hidden;
     outline: none;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -139,14 +139,14 @@
       background: var(--shell-bg);
       border: 2px solid var(--shell-border);
       border-radius: 8px;
-      padding: 0.75rem;
+      padding: 0.4rem 0.55rem;
       position: relative;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 
       .sl-screw {
         position: absolute;
-        width: 7px;
-        height: 7px;
+        width: 5px;
+        height: 5px;
         border-radius: 50%;
         background: radial-gradient(circle, #b0bec5 20%, #455a64 100%);
         border: 1px solid #1a202c;
@@ -162,8 +162,8 @@
         background: var(--sticker-bg);
         color: var(--sticker-text);
         border-radius: 4px;
-        padding: 0.45rem 0.75rem;
-        margin-bottom: 0.6rem;
+        padding: 0.25rem 0.5rem;
+        margin-bottom: 0.35rem;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         border: 1px solid rgba(0, 0, 0, 0.12);
 
@@ -175,18 +175,18 @@
           .sl-side-pill {
             display: inline-grid;
             place-items: center;
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
             border-radius: 3px;
             background: var(--sticker-accent);
             color: #ffffff;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             font-weight: 900;
             flex-shrink: 0;
           }
 
           .sl-tape-title {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 800;
             letter-spacing: 0.05em;
             color: #1e293b;
@@ -197,7 +197,7 @@
         .sl-sticker-rule {
           height: 2px;
           background: var(--sticker-accent);
-          margin: 0.3rem 0;
+          margin: 0.15rem 0;
           border-radius: 1px;
         }
 
@@ -216,17 +216,17 @@
         background: rgba(10, 14, 20, 0.85);
         border: 2px solid rgba(0, 0, 0, 0.4);
         border-radius: 6px;
-        height: 80px;
+        height: 50px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0 1.5rem;
+        padding: 0 1.25rem;
         position: relative;
         overflow: hidden;
 
         .sl-spool {
-          width: 54px;
-          height: 54px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
           background: #11151c;
           border: 2px solid #3b485d;
@@ -240,8 +240,8 @@
           }
 
           .sl-spool-hub {
-            width: 26px;
-            height: 26px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: var(--spool-core);
             border: 3px solid #64748b;
@@ -279,8 +279,8 @@
           z-index: 1;
 
           .sl-tape-ribbon {
-            width: 70px;
-            height: 4px;
+            width: 48px;
+            height: 3px;
             background: #2b1f19;
             border-radius: 2px;
           }
@@ -297,8 +297,8 @@
 
       // Bottom notch
       .sl-tape-bottom-notch {
-        height: 14px;
-        margin-top: 0.35rem;
+        height: 10px;
+        margin-top: 0.25rem;
         background: #141822;
         border-radius: 2px;
         display: flex;
@@ -327,7 +327,7 @@
     background: var(--lcd-bg);
     border: 3px solid var(--lcd-border);
     border-radius: 8px;
-    padding: 0.75rem 1rem;
+    padding: 0.45rem 0.75rem;
     color: var(--lcd-text);
     box-shadow: inset 0 2px 6px var(--lcd-glow);
     font-family: 'Courier New', Courier, monospace;
@@ -335,14 +335,14 @@
     .sl-lcd-glass {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.25rem;
     }
 
     .sl-lcd-status-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.05em;
 
@@ -369,7 +369,7 @@
       overflow: hidden;
       white-space: nowrap;
       background: rgba(0, 0, 0, 0.08);
-      padding: 0.3rem 0.5rem;
+      padding: 0.2rem 0.45rem;
       border-radius: 4px;
 
       .sl-marquee-wrap {
@@ -378,7 +378,7 @@
         animation: lcd-marquee 12s linear infinite;
 
         .sl-marquee-text {
-          font-size: 0.95rem;
+          font-size: 0.82rem;
           font-weight: 900;
           letter-spacing: 0.05em;
         }
@@ -390,8 +390,8 @@
       display: flex;
       gap: 3px;
       align-items: flex-end;
-      height: 18px;
-      margin-top: 0.2rem;
+      height: 13px;
+      margin-top: 0.15rem;
 
       .sl-eq-col {
         flex: 1;
@@ -435,7 +435,7 @@
 
   // Scrubbing row
   .sl-deck-scrub-row {
-    margin-bottom: 1rem;
+    margin-bottom: 0.55rem;
 
     .sl-scrub-slider {
       width: 100%;
@@ -465,7 +465,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 0.85rem;
-    padding-top: 0.5rem;
+    padding-top: 0.2rem;
 
     .sl-deck-sides {
       display: flex;
@@ -478,9 +478,9 @@
         background: var(--btn-bg);
         border: 1px solid var(--btn-border);
         color: var(--btn-text);
-        padding: 0.45rem 0.8rem;
+        padding: 0.3rem 0.65rem;
         border-radius: 6px;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         font-weight: 800;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -512,9 +512,9 @@
         background: var(--btn-bg);
         border: 1px solid var(--btn-border);
         color: var(--btn-text);
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 900;
-        padding: 0.5rem 0.9rem;
+        padding: 0.35rem 0.75rem;
         border-radius: 6px;
         cursor: pointer;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);

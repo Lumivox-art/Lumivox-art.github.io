@@ -42,11 +42,11 @@
   --ribbon-bg: #2b1810;
 
   width: 100%;
-  max-width: 380px;
+  max-width: 350px;
   background: var(--tower-bg);
   border: 2px solid var(--tower-border);
-  border-radius: 18px;
-  padding: 1.15rem 1rem 1.35rem;
+  border-radius: 14px;
+  padding: 0.9rem 0.85rem 1.1rem;
   box-shadow: var(--tower-shadow);
   display: flex;
   flex-direction: column;
@@ -58,8 +58,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding-bottom: 0.75rem;
-    margin-bottom: 0.75rem;
+    padding-bottom: 0.45rem;
+    margin-bottom: 0.55rem;
     border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
 
     .sl-tower-title-block {
@@ -76,7 +76,7 @@
 
       .sl-tower-heading {
         font-family: 'Fraunces', serif;
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         font-weight: 800;
         margin: 0;
         color: var(--tower-text);
@@ -188,7 +188,7 @@
     background: var(--case-glass-bg);
     border: 2px solid var(--case-glass-border);
     border-radius: 12px;
-    padding: 0.65rem 0.75rem 0.75rem;
+    padding: 0.45rem 0.55rem 0.55rem;
     box-shadow: var(--case-glass-shadow);
     backdrop-filter: blur(6px);
     display: flex;
@@ -303,7 +303,7 @@
       background: var(--shell-bg);
       border: 1.5px solid var(--shell-border);
       border-radius: 8px;
-      padding: 0.55rem 0.65rem 0.5rem;
+      padding: 0.35rem 0.45rem 0.35rem;
       display: flex;
       flex-direction: column;
       gap: 0.45rem;

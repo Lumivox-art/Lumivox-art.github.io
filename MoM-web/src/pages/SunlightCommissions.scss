@@ -29,7 +29,7 @@
   // Topbar
   .sl-topbar {
     max-width: 920px;
-    margin: 0 auto 1.25rem;
+    margin: 0 auto 0.6rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,13 +67,14 @@
   // Hero Section
   .sl-hero {
     max-width: 920px;
-    margin: 0 auto 2.25rem;
+    margin: 0 auto 0.75rem;
     text-align: center;
 
 
     h1.sl-title {
       font-family: 'Fraunces', Georgia, serif;
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      line-height: 1.15;
       margin: 0 0 0.5rem;
       color: var(--sl-ink);
       line-height: 1.15;
@@ -201,8 +202,8 @@
 
   // --- Cassette Deck Stage (Outside form, sitting directly on background) ---
   .sl-cassette-stage {
-    max-width: 1080px;
-    margin: 0 auto 2.5rem;
+    max-width: 960px;
+    margin: 0 auto 1.25rem;
     padding: 0 1rem;
     position: relative;
     z-index: 2;
@@ -220,16 +221,16 @@
     }
 
     .sl-stage-player-col {
-      flex: 1 1 640px;
+      flex: 1 1 560px;
       min-width: 0;
       width: 100%;
-      max-width: 680px;
+      max-width: 580px;
     }
 
     .sl-stage-tower-col {
-      flex: 0 0 380px;
+      flex: 0 0 340px;
       width: 100%;
-      max-width: 380px;
+      max-width: 350px;
 
       @media (max-width: 960px) {
         max-width: 440px;
