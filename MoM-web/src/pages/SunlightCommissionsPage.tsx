@@ -145,30 +145,23 @@ export function SunlightCommissionsPage() {
         <h1 className="sl-title">{t('sunlight.title')}</h1>
       </header>
 
+      {/* Cassette Deck Stage - Outside the form, sitting directly over the background */}
+      <section className="sl-cassette-stage">
+        <CassettePlayer
+          tracks={musicTracks}
+          activeTrackKey={playerTrackKey}
+          onTrackChange={(key) => {
+            setPlayerTrackKey(key);
+            if (key === 'instrumental' || key === 'vocal-with-lyrics') {
+              setSelectedSongKey(key);
+              setCopied(false);
+            }
+          }}
+        />
+      </section>
+
       {/* Main Stepped Flow */}
       <main className="sl-container">
-        {/* Audio Showcase: Integrated 90s Analog Cassette Deck */}
-        <section className="sl-showcase-section">
-          <div className="sl-showcase-header">
-            <span className="sl-showcase-tag">AUDIO SAMPLE SHOWCASE</span>
-            <h2>{t('sunlight.player.title')}</h2>
-            <p className="sl-showcase-desc">
-              Escucha muestras musicales análogas compuestas por Sunlight Blue. Pulsa PLAY en el cassette para escuchar ejemplos de producción.
-            </p>
-          </div>
-
-          <CassettePlayer
-            tracks={musicTracks}
-            activeTrackKey={playerTrackKey}
-            onTrackChange={(key) => {
-              setPlayerTrackKey(key);
-              if (key === 'instrumental' || key === 'vocal-with-lyrics') {
-                setSelectedSongKey(key);
-                setCopied(false);
-              }
-            }}
-          />
-        </section>
 
         {/* Step 1: Digital Art Styles & 90s Vinyl Album Covers */}
         <section className="sl-step">
