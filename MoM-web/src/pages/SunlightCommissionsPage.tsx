@@ -202,25 +202,6 @@ export function SunlightCommissionsPage() {
           </h2>
           <p className="sl-step-desc">{t('sunlight.gallery.subtitle')}</p>
 
-          <div className="sl-art-choice-row">
-            {/* Option to skip cover art (audio-only) */}
-            <button
-              type="button"
-              className={`sl-card sl-skip-card ${selectedArtKey === null ? 'selected' : ''}`}
-              onClick={() => {
-                setSelectedArtKey(null);
-                setCopied(false);
-              }}
-              aria-pressed={selectedArtKey === null}
-            >
-              <div className="sl-skip-info">
-                <span className="sl-skip-title">{t('sunlight.step.art.none')}</span>
-                <span className="sl-skip-desc">Cotizar únicamente producción musical o grabación sonora.</span>
-              </div>
-              <span className="sl-price">$0 USD</span>
-            </button>
-          </div>
-
           <div className="sl-covers-grid">
             {artCovers.map((cover) => (
               <VinylCoverCard
@@ -248,23 +229,6 @@ export function SunlightCommissionsPage() {
           </p>
 
           <div className="sl-song-grid">
-            {/* Option: No song (visual art only) */}
-            <button
-              type="button"
-              className={`sl-card sl-song-card ${selectedSongKey === null ? 'selected' : ''}`}
-              onClick={() => {
-                setSelectedSongKey(null);
-                setCopied(false);
-              }}
-              aria-pressed={selectedSongKey === null}
-            >
-              <div className="sl-song-info">
-                <span className="sl-song-name">{t('sunlight.step.song.none')}</span>
-                <span className="sl-song-desc">Cotizar exclusivamente portada o arte digital sin producción sonora.</span>
-              </div>
-              <span className="sl-price">$0 USD</span>
-            </button>
-
             {musicTracks.map((song) => (
               <button
                 key={song.Key}

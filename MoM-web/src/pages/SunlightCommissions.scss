@@ -242,36 +242,6 @@
     }
   }
 
-  // --- Step 2: Covers & Art Choice ---
-  .sl-art-choice-row {
-    margin-bottom: 1.25rem;
-
-    .sl-skip-card {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.25rem;
-      gap: 1rem;
-
-      .sl-skip-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-
-        .sl-skip-title {
-          font-weight: 800;
-          font-size: 1rem;
-        }
-
-        .sl-skip-desc {
-          font-size: 0.82rem;
-          color: var(--sl-subtext);
-        }
-      }
-    }
-  }
-
   .sl-covers-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -973,10 +943,6 @@
           box-shadow: 0 2px 8px rgba(56, 189, 248, 0.45);
         }
       }
-    }
-
-    .sl-art-choice-row .sl-skip-card .sl-skip-info .sl-skip-desc {
-      color: #9a93b0;
     }
 
     .sl-song-grid .sl-song-card .sl-song-info .sl-song-desc {
