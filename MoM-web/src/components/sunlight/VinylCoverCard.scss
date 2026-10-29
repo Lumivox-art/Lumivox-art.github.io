@@ -57,6 +57,17 @@
     outline-offset: 2px;
   }
 
+  &.no-disc {
+    .sleeve-container {
+      justify-content: center;
+
+      .album-jacket {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
   .sleeve-container {
     position: relative;
     width: 100%;

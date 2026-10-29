@@ -21,6 +21,7 @@ export interface SunlightSampleBase {
   Description?: string | null;
   Duration?: string | null;
   TrackNumber?: number | null;
+  HasVinylDisc?: boolean;
   Order: number;
   IsActive: boolean;
   IsDeleted: boolean;

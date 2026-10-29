@@ -17,10 +17,11 @@ export function VinylCoverCard({
   onZoom,
 }: VinylCoverCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const hasDisc = sample.HasVinylDisc === true;
 
   return (
     <div
-      className={`vinyl-cover-card ${isSelected ? 'is-selected' : ''}`}
+      className={`vinyl-cover-card ${isSelected ? 'is-selected' : ''} ${hasDisc ? 'has-disc' : 'no-disc'}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={onSelect}
@@ -36,17 +37,19 @@ export function VinylCoverCard({
     >
       {/* Vinyl Sleeve & Slipping Record */}
       <div className="sleeve-container">
-        {/* Sliding Vinyl Record */}
-        <div className={`vinyl-disc ${isHovered || isSelected ? 'is-slid-out' : ''}`}>
-          <div className="vinyl-groove groove-1" />
-          <div className="vinyl-groove groove-2" />
-          <div className="vinyl-groove groove-3" />
-          <div className="vinyl-center-label">
-            <span className="vinyl-label-text">SUNLIGHT</span>
-            <span className="vinyl-rpm">33 RPM</span>
+        {/* Sliding Vinyl Record (renders only when HasVinylDisc is true) */}
+        {hasDisc && (
+          <div className={`vinyl-disc ${isHovered || isSelected ? 'is-slid-out' : ''}`}>
+            <div className="vinyl-groove groove-1" />
+            <div className="vinyl-groove groove-2" />
+            <div className="vinyl-groove groove-3" />
+            <div className="vinyl-center-label">
+              <span className="vinyl-label-text">SUNLIGHT</span>
+              <span className="vinyl-rpm">33 RPM</span>
+            </div>
+            <div className="vinyl-spindle-hole" />
           </div>
-          <div className="vinyl-spindle-hole" />
-        </div>
+        )}
 
         {/* 12" Album Jacket Sleeve */}
         <div className="album-jacket">

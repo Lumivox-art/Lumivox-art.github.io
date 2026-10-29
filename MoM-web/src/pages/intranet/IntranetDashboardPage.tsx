@@ -7,7 +7,9 @@ import { useTheme } from '../../components/ThemeContext';
 import { useAuth } from '../../components/AuthContext';
 import { useLang } from '../../i18n';
 import { ArtistProfileService } from '../../services/ArtistProfileService';
+import { SunlightCommissionsService } from '../../services/SunlightCommissionsService';
 import type { ArtistProfile } from '../../models/Artist';
+import type { SunlightSampleBase } from '../../models/Sunlight';
 import type { SocialEntry, SocialPlatform } from '../../data/artists';
 import './IntranetDashboard.scss';
 
@@ -143,6 +145,35 @@ export function IntranetDashboardPage() {
   const isSpecku = artistHandle === 'specku';
   const isSunlight = artistHandle === 'sunlight-blue' || artistHandle === 'sunlight';
 
+  // Sunlight Blue Disc Mode management state
+  const [sunlightArtSamples, setSunlightArtSamples] = useState<SunlightSampleBase[]>([]);
+  const [updatingDiscKey, setUpdatingDiscKey] = useState<string | null>(null);
+  const [discSuccessMsg, setDiscSuccessMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isSunlight) {
+      SunlightCommissionsService.List().then((res) => {
+        if (res.Result) {
+          setSunlightArtSamples(res.Result.filter((s) => s.Kind === 'cover'));
+        }
+      });
+    }
+  }, [isSunlight]);
+
+  const handleToggleDiscMode = async (key: string, currentVal: boolean) => {
+    const newVal = !currentVal;
+    setUpdatingDiscKey(key);
+    setSunlightArtSamples((prev) =>
+      prev.map((s) => (s.Key === key ? { ...s, HasVinylDisc: newVal } : s))
+    );
+    const res = await SunlightCommissionsService.SetDiscMode(key, newVal);
+    setUpdatingDiscKey(null);
+    if (res.CodeNumber === 200) {
+      setDiscSuccessMsg('Modo de disco actualizado exitosamente.');
+      setTimeout(() => setDiscSuccessMsg(null), 3000);
+    }
+  };
+
   return (
     <div className="intranet-dashboard" data-theme={theme}>
       {/* Topbar */}
@@ -240,6 +271,44 @@ export function IntranetDashboardPage() {
                 <Link to="/home/sunlight-blue/comisiones" className="ind-tool-btn">
                   Abrir Estudio de Comisiones →
                 </Link>
+              </div>
+            </div>
+
+            {/* Checkmark interna: Modo de disco para arte digital */}
+            <div className="ind-sunlight-art-card">
+              <div className="ind-subcard-header">
+                <h3>Control Interno: Modo de Disco (Vinilo) para Arte Digital</h3>
+                <p>
+                  Determina qué piezas de arte utilizan la animación de disco de vinilo deslizable
+                  o se muestran en modo de ilustración digital limpia.
+                </p>
+                {discSuccessMsg && <span className="ind-disc-success-badge">{discSuccessMsg}</span>}
+              </div>
+
+              <div className="ind-disc-settings-list">
+                {sunlightArtSamples.map((art) => (
+                  <div key={art.Key} className="ind-disc-setting-row">
+                    <div className="ind-art-preview">
+                      <img src={art.ImageBinary || art.MediaUrl} alt={art.Title} />
+                      <div className="ind-art-info">
+                        <strong>{art.Title}</strong>
+                        <span>${art.PriceUsd} USD (~${art.PriceMxn} MXN)</span>
+                      </div>
+                    </div>
+
+                    <label className="ind-disc-checkmark-label">
+                      <input
+                        type="checkbox"
+                        checked={art.HasVinylDisc === true}
+                        disabled={updatingDiscKey === art.Key}
+                        onChange={() => handleToggleDiscMode(art.Key, art.HasVinylDisc === true)}
+                      />
+                      <span className="ind-checkmark-text">
+                        {art.HasVinylDisc ? 'Modo de disco activado' : 'Sin disco (Arte digital)'}
+                      </span>
+                    </label>
+                  </div>
+                ))}
               </div>
             </div>
           </section>

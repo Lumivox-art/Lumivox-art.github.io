@@ -10,7 +10,7 @@ import type { SunlightSampleBase } from '../models/Sunlight';
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v3';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v4';
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
@@ -28,6 +28,7 @@ export class SunlightCommissionsService {
       PriceMxn: 450,
       MediaUrl: '/sunlight-media/headshot.jpeg',
       Description: 'Headshot',
+      HasVinylDisc: false,
       Order: 1,
       IsActive: true,
       IsDeleted: false,
@@ -42,6 +43,7 @@ export class SunlightCommissionsService {
       PriceMxn: 550,
       MediaUrl: '/sunlight-media/fullbody.jpeg',
       Description: 'Bust/Full body',
+      HasVinylDisc: false,
       Order: 2,
       IsActive: true,
       IsDeleted: false,
@@ -56,6 +58,7 @@ export class SunlightCommissionsService {
       PriceMxn: 800,
       MediaUrl: '/sunlight-media/illustration.jpeg',
       Description: 'Ilustration (Starting on 45 USD / 800 MXN depending on complexity)',
+      HasVinylDisc: false,
       Order: 3,
       IsActive: true,
       IsDeleted: false,
@@ -70,6 +73,7 @@ export class SunlightCommissionsService {
       PriceMxn: 800,
       MediaUrl: '/sunlight-media/book-cover.jpeg',
       Description: 'Book Cover (Starting on 45 USD / 800 MXN depending on complexity)',
+      HasVinylDisc: false,
       Order: 4,
       IsActive: true,
       IsDeleted: false,
@@ -116,6 +120,7 @@ export class SunlightCommissionsService {
   public static GetCachedSamples(): SunlightSampleBase[] {
     LocalCache.Remove('lvx_cache_sunlight_samples');
     LocalCache.Remove('lvx_cache_sunlight_samples_v2');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v3');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }
@@ -146,6 +151,7 @@ export class SunlightCommissionsService {
                 Description: typeof rec.Description === 'string' ? rec.Description : null,
                 Duration: typeof rec.Duration === 'string' ? rec.Duration : null,
                 TrackNumber: typeof rec.TrackNumber === 'number' ? rec.TrackNumber : null,
+                HasVinylDisc: rec.HasVinylDisc === true || rec.HasVinylDisc === 'true',
                 Order: Number(rec.Order) || 99,
                 IsActive: rec.IsActive !== false,
                 IsDeleted: rec.IsDeleted === true,
@@ -213,5 +219,67 @@ export class SunlightCommissionsService {
     return () => {
       active = false;
     };
+  }
+
+  /**
+   * Updates HasVinylDisc flag for a specific sample in Firebase RTDB and LocalCache.
+   */
+  public static async SetDiscMode(key: string, hasVinylDisc: boolean): Promise<ResponseObject<boolean>> {
+    try {
+      // 1. Update cache
+      const cached = SunlightCommissionsService.GetCachedSamples();
+      const updated = cached.map((item) =>
+        item.Key === key ? { ...item, HasVinylDisc: hasVinylDisc } : item
+      );
+      LocalCache.Set(SunlightCommissionsService.cacheKey, updated);
+
+      // 2. Update remote RTDB
+      const resp = await fetch(SunlightCommissionsService.restEndpoint);
+      if (resp.ok) {
+        const data = await resp.json();
+        if (Array.isArray(data)) {
+          const idx = data.findIndex((item) => item && (item.Key === key || item.Title === key));
+          if (idx >= 0) {
+            const patchUrl = `https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples/${idx}/HasVinylDisc.json`;
+            await fetch(patchUrl, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(hasVinylDisc),
+            });
+          }
+        } else if (data && typeof data === 'object') {
+          const entry = Object.entries(data).find(
+            ([_, v]) => (v as Record<string, unknown>).Key === key
+          );
+          if (entry) {
+            const patchUrl = `https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples/${entry[0]}/HasVinylDisc.json`;
+            await fetch(patchUrl, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(hasVinylDisc),
+            });
+          }
+        }
+      }
+
+      return {
+        CodeNumber: 200,
+        CodeName: 'OK',
+        Message: 'Modo de disco actualizado con éxito',
+        ErrorNumber: null,
+        ServerName: 'firebase-rest',
+        Result: true,
+      };
+    } catch (err) {
+      console.warn('SetDiscMode failed:', err);
+      return {
+        CodeNumber: 500,
+        CodeName: 'InternalError',
+        Message: err instanceof Error ? err.message : String(err),
+        ErrorNumber: 500,
+        ServerName: 'local-contingency',
+        Result: false,
+      };
+    }
   }
 }
