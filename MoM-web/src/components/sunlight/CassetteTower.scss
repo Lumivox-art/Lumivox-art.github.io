@@ -1,26 +1,51 @@
 // 90s Hi-Fi Cassette Tower / Tape Rack Styling
-// Accommodates up to 10 cassettes (20 tracks compiled 2 by 2), with arrow navigation for >10
+// Photorealistic 3D Cassette in a Transparent Jewel Case ("Cassette en una caja")
+
+@keyframes spoolSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 .sl-cassette-tower {
   --tower-bg: linear-gradient(170deg, #ede3d4 0%, #dbcbba 100%);
   --tower-border: #bfb09c;
-  --tower-shadow: 0 12px 30px rgba(42, 26, 18, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --tower-shadow: 0 12px 30px rgba(42, 26, 18, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.7);
   --tower-text: #2a1a12;
   --tower-muted: #6e5845;
-  --slot-bg: linear-gradient(180deg, #2a221d 0%, #1a1512 100%);
-  --slot-border: #42362e;
-  --spine-bg: #fffdfa;
-  --spine-text: #1a1512;
-  --spine-accent: #254b82;
-  --chip-bg: #ede6da;
-  --chip-active-bg: #254b82;
-  --chip-active-text: #ffffff;
+
+  // Jewel Case Acrylic Colors
+  --case-glass-bg: rgba(255, 255, 255, 0.45);
+  --case-glass-border: rgba(255, 255, 255, 0.75);
+  --case-glass-bevel: rgba(0, 0, 0, 0.12);
+  --case-glass-shadow: 0 6px 16px rgba(42, 26, 18, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.8), inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+
+  // J-Card Insert Spine
+  --jcard-bg: linear-gradient(180deg, #faf7f0 0%, #ebe3d5 100%);
+  --jcard-border: #d4c8b6;
+  --jcard-text: #2a1a12;
+  --jcard-accent: #254b82;
+
+  // Cassette Shell Inside Case
+  --shell-bg: linear-gradient(180deg, #26201b 0%, #15110e 100%);
+  --shell-border: #3d332c;
+  --shell-label-bg: linear-gradient(180deg, #fdfbf7 0%, #f0e8dc 100%);
+  --shell-label-border: #d2c5b3;
+  --shell-label-text: #1a1512;
+
+  // Spool and Tape Ribbon
+  --spool-hub-bg: #f5f2eb;
+  --spool-hub-border: #bfb4a3;
+  --ribbon-bg: #2b1810;
 
   width: 100%;
-  max-width: 320px;
+  max-width: 350px;
   background: var(--tower-bg);
   border: 2px solid var(--tower-border);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 1.15rem 1rem;
   box-shadow: var(--tower-shadow);
   display: flex;
@@ -28,6 +53,7 @@
   user-select: none;
   transition: all 0.3s ease;
 
+  // Tower Header
   .sl-tower-header {
     display: flex;
     justify-content: space-between;
@@ -45,7 +71,7 @@
         font-size: 0.65rem;
         font-weight: 900;
         letter-spacing: 0.14em;
-        color: var(--spine-accent);
+        color: var(--jcard-accent);
       }
 
       .sl-tower-heading {
@@ -65,11 +91,11 @@
       background: rgba(0, 0, 0, 0.05);
       padding: 0.2rem 0.55rem;
       border-radius: 999px;
-      white-space: nowrap;
+      letter-spacing: 0.04em;
     }
   }
 
-  // Navigation Arrows for >10 Cassettes
+  // Navigation Arrows for >10 Cassettes Overflow
   .sl-tower-arrow-btn {
     display: flex;
     align-items: center;
@@ -77,7 +103,7 @@
     gap: 0.4rem;
     width: 100%;
     padding: 0.45rem;
-    background: var(--chip-bg);
+    background: rgba(255, 255, 255, 0.5);
     border: 1px solid var(--tower-border);
     border-radius: 8px;
     color: var(--tower-text);
@@ -85,230 +111,489 @@
     font-weight: 800;
     cursor: pointer;
     transition: all 0.15s ease;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.55rem;
 
     &:hover:not(:disabled) {
       background: #ffffff;
-      color: var(--spine-accent);
-      border-color: var(--spine-accent);
+      color: var(--jcard-accent);
+      border-color: var(--jcard-accent);
       transform: translateY(-1px);
     }
 
     &.is-disabled,
     &:disabled {
-      opacity: 0.4;
+      opacity: 0.35;
       cursor: not-allowed;
     }
 
     &.arrow-down {
-      margin-top: 0.5rem;
+      margin-top: 0.55rem;
       margin-bottom: 0;
     }
   }
 
-  // Vertical Stack of Cassette Slots
+  // Vertical Stack of Cassette Jewel Cases
   .sl-tower-stack {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
-    max-height: 520px;
+    gap: 0.75rem;
+    max-height: 560px;
     overflow: hidden;
   }
 
-  // Individual Slot
+  // Individual Slot Wrapper
   .sl-tower-slot {
     position: relative;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s;
     outline: none;
+    transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
 
     &:hover {
       transform: translateX(-4px);
     }
 
     &.is-loaded {
-      transform: translateX(-8px);
+      transform: translateX(-6px);
 
-      .sl-spine-case {
-        border-color: var(--spine-accent);
-        box-shadow: 0 4px 14px rgba(37, 75, 130, 0.25);
+      .sl-jewel-case {
+        border-color: #38bdf8;
+        box-shadow: 0 8px 24px rgba(37, 75, 130, 0.35), 0 0 0 1.5px #38bdf8,
+          inset 0 1px 2px rgba(255, 255, 255, 0.85);
 
-        .sl-spine-header .sl-spine-status {
-          background: var(--spine-accent);
+        .sl-case-jcard .sl-jcard-status.is-active-badge {
+          background: #254b82;
+          color: #ffffff;
+          box-shadow: 0 0 8px rgba(37, 75, 130, 0.5);
+        }
+
+        .sl-case-tape-shell {
+          border-color: #4a5d78;
+        }
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--jcard-accent);
+      outline-offset: 3px;
+    }
+  }
+
+  // ========================================================
+  // 3D ACRYLIC JEWEL CASE ("Caja de Cassette Transparente")
+  // ========================================================
+  .sl-jewel-case {
+    position: relative;
+    background: var(--case-glass-bg);
+    border: 2px solid var(--case-glass-border);
+    border-radius: 12px;
+    padding: 0.55rem 0.65rem 0.65rem;
+    box-shadow: var(--case-glass-shadow);
+    backdrop-filter: blur(6px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: all 0.25s ease;
+
+    // Glass Reflection Diagonal Sheen
+    .sl-case-sheen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.12) 35%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    // Jewel Case Plastic Hinge Pins
+    .sl-case-hinge {
+      position: absolute;
+      right: 4px;
+      width: 5px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 3px;
+      z-index: 6;
+
+      &.hinge-top {
+        top: 6px;
+      }
+
+      &.hinge-bottom {
+        bottom: 6px;
+      }
+    }
+
+    // ------------------------------------------------------
+    // J-CARD PAPER INSERT SPINE (Spine fold on top)
+    // ------------------------------------------------------
+    .sl-case-jcard {
+      position: relative;
+      background: var(--jcard-bg);
+      border: 1px solid var(--jcard-border);
+      border-left: 4px solid var(--jcard-accent);
+      border-radius: 6px;
+      padding: 0.35rem 0.55rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      z-index: 2;
+
+      .sl-jcard-left {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-width: 0;
+        flex: 1;
+
+        .sl-jcard-num {
+          font-family: 'Space Mono', monospace, monospace;
+          font-size: 0.72rem;
+          font-weight: 900;
+          color: var(--jcard-accent);
+          background: rgba(37, 75, 130, 0.08);
+          padding: 0.1rem 0.35rem;
+          border-radius: 4px;
+          flex-shrink: 0;
+        }
+
+        .sl-jcard-title {
+          font-size: 0.78rem;
+          font-weight: 800;
+          color: var(--jcard-text);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .sl-jcard-status {
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--tower-muted);
+        background: rgba(0, 0, 0, 0.06);
+        padding: 0.15rem 0.45rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+
+        &.is-active-badge {
+          background: var(--jcard-accent);
           color: #ffffff;
           font-weight: 900;
         }
       }
     }
 
-    &:focus-visible {
-      outline: 2px solid var(--spine-accent);
-      outline-offset: 2px;
-    }
-  }
-
-  // Tape Spine (Realistic 90s cassette case edge)
-  .sl-spine-case {
-    background: var(--spine-bg);
-    border: 1.5px solid var(--slot-border);
-    border-left: 5px solid var(--spine-accent);
-    border-radius: 6px;
-    padding: 0.45rem 0.65rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
-
-    .sl-spine-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .sl-spine-num {
-        font-family: 'Space Mono', monospace, monospace;
-        font-size: 0.72rem;
-        font-weight: 900;
-        color: var(--spine-accent);
-        letter-spacing: 0.05em;
-      }
-
-      .sl-spine-status {
-        font-size: 0.6rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        color: var(--tower-muted);
-        background: rgba(0, 0, 0, 0.06);
-        padding: 0.12rem 0.4rem;
-        border-radius: 4px;
-        text-transform: uppercase;
-      }
-    }
-
-    .sl-spine-info {
+    // ------------------------------------------------------
+    // REAL CASSETTE SHELL NESTED INSIDE THE JEWEL CASE
+    // ------------------------------------------------------
+    .sl-case-tape-shell {
+      position: relative;
+      background: var(--shell-bg);
+      border: 1.5px solid var(--shell-border);
+      border-radius: 8px;
+      padding: 0.5rem 0.6rem;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.4rem;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 3px 8px rgba(0, 0, 0, 0.25);
+      z-index: 2;
 
-      .sl-spine-title {
-        font-size: 0.82rem;
-        font-weight: 800;
-        color: var(--spine-text);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      // Miniature Screws
+      .sl-mini-screw {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: #5c5248;
+        border: 0.5px solid #2e2621;
+        z-index: 4;
+
+        &.s-tl {
+          top: 3px;
+          left: 4px;
+        }
+        &.s-tr {
+          top: 3px;
+          right: 4px;
+        }
+        &.s-bl {
+          bottom: 3px;
+          left: 4px;
+        }
+        &.s-br {
+          bottom: 3px;
+          right: 4px;
+        }
       }
 
-      .sl-spine-tracks {
-        display: flex;
-        gap: 0.35rem;
-        flex-wrap: wrap;
+      // Cassette Tape Label Sticker
+      .sl-case-tape-label {
+        background: var(--shell-label-bg);
+        border: 1px solid var(--shell-label-border);
+        border-radius: 5px;
+        padding: 0.3rem 0.4rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 
-        .sl-track-chip {
-          font-size: 0.68rem;
-          font-weight: 700;
-          padding: 0.15rem 0.45rem;
-          background: var(--chip-bg);
-          border-radius: 4px;
-          color: var(--tower-muted);
-          cursor: pointer;
-          transition: all 0.15s ease;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-width: 130px;
+        .sl-label-tracks {
+          display: flex;
+          gap: 0.35rem;
 
-          &:hover {
-            color: var(--spine-accent);
-            background: rgba(37, 75, 130, 0.1);
-          }
+          .sl-case-track-pill {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 0.2rem 0.4rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
 
-          &.is-side-active {
-            background: var(--chip-active-bg);
-            color: var(--chip-active-text);
-            font-weight: 900;
-            box-shadow: 0 1px 4px rgba(37, 75, 130, 0.3);
+            .side-char {
+              font-size: 0.65rem;
+              font-weight: 900;
+              width: 14px;
+              height: 14px;
+              display: grid;
+              place-items: center;
+              border-radius: 3px;
+              background: #254b82;
+              color: #ffffff;
+              flex-shrink: 0;
+            }
+
+            .side-name {
+              font-size: 0.68rem;
+              font-weight: 700;
+              color: var(--shell-label-text);
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            &:hover:not(.pill-empty) {
+              background: #ffffff;
+              border-color: #254b82;
+              transform: translateY(-1px);
+            }
+
+            &.pill-b .side-char {
+              background: #b44a30;
+            }
+
+            &.pill-empty {
+              opacity: 0.45;
+              cursor: default;
+
+              .side-char {
+                background: #887d73;
+              }
+            }
+
+            &.is-playing {
+              background: #254b82;
+              border-color: #254b82;
+
+              .side-char {
+                background: #ffffff;
+                color: #254b82;
+              }
+
+              .side-name {
+                color: #ffffff;
+                font-weight: 800;
+              }
+
+              &.pill-b {
+                background: #b44a30;
+                border-color: #b44a30;
+
+                .side-char {
+                  color: #b44a30;
+                }
+              }
+            }
           }
         }
       }
-    }
 
-    .sl-spine-teeth {
-      display: flex;
-      justify-content: space-between;
-      padding-top: 0.15rem;
+      // Central Tape Viewing Chamber (Reels & Dark Ribbon)
+      .sl-case-spool-chamber {
+        background: #110e0c;
+        border: 1px solid #2e2621;
+        border-radius: 5px;
+        height: 24px;
+        padding: 0 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
 
-      span {
-        width: 12px;
-        height: 2px;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 1px;
+        // Reel Spools
+        .sl-case-spool {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: var(--spool-hub-bg);
+          border: 1px solid var(--spool-hub-border);
+          position: relative;
+          display: grid;
+          place-items: center;
+
+          &.is-spinning {
+            animation: spoolSpin 2.5s linear infinite;
+          }
+
+          .sl-case-hub {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            .hub-tooth {
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 3px;
+              height: 2px;
+              background: #2a221d;
+              margin-top: -1px;
+              margin-left: -1.5px;
+              border-radius: 1px;
+
+              &.t-1 {
+                transform: rotate(0deg) translate(5px);
+              }
+              &.t-2 {
+                transform: rotate(120deg) translate(5px);
+              }
+              &.t-3 {
+                transform: rotate(240deg) translate(5px);
+              }
+            }
+          }
+        }
+
+        // Ribbon Bridge
+        .sl-case-bridge {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+          padding: 0 0.5rem;
+
+          .sl-case-tape-ribbon {
+            width: 100%;
+            height: 4px;
+            background: var(--ribbon-bg);
+            border-radius: 1px;
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+          }
+
+          .sl-case-ticks {
+            display: flex;
+            justify-content: space-between;
+            width: 60%;
+
+            span {
+              width: 1px;
+              height: 3px;
+              background: rgba(255, 255, 255, 0.25);
+            }
+          }
+        }
       }
     }
   }
 }
 
-// --- NIGHT MODE PARITY ---
-[data-theme='night'] .sl-cassette-tower {
-  --tower-bg: linear-gradient(170deg, #1c182a 0%, #100d1b 100%);
-  --tower-border: #312b45;
-  --tower-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  --tower-text: #f4efe6;
-  --tower-muted: #9a93b0;
-  --slot-bg: #09070f;
-  --slot-border: #2c2540;
-  --spine-bg: #151221;
-  --spine-text: #f4efe6;
-  --spine-accent: #38bdf8;
-  --chip-bg: #241f32;
-  --chip-active-bg: #38bdf8;
-  --chip-active-text: #0c0b16;
+// ========================================================
+// NIGHT MODE STYLING (Dark Theme Parity)
+// ========================================================
+[data-theme='dark'] .sl-cassette-tower {
+  --tower-bg: linear-gradient(170deg, #1c1815 0%, #120f0d 100%);
+  --tower-border: #38302b;
+  --tower-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --tower-text: #f5eee6;
+  --tower-muted: #a39485;
+
+  // Jewel Case Acrylic in Dark (Clear smoky glass with neon/crystal sheen)
+  --case-glass-bg: rgba(36, 30, 26, 0.55);
+  --case-glass-border: rgba(255, 255, 255, 0.16);
+  --case-glass-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+
+  // J-Card Spine in Dark
+  --jcard-bg: linear-gradient(180deg, #241d18 0%, #191411 100%);
+  --jcard-border: #3d332b;
+  --jcard-text: #f5eee6;
+  --jcard-accent: #38bdf8;
+
+  // Cassette Shell Inside Case in Dark
+  --shell-bg: linear-gradient(180deg, #14110f 0%, #0a0807 100%);
+  --shell-border: #28211c;
+  --shell-label-bg: linear-gradient(180deg, #26201b 0%, #1c1714 100%);
+  --shell-label-border: #3d332c;
+  --shell-label-text: #f5eee6;
 
   .sl-tower-header {
     border-bottom-color: rgba(255, 255, 255, 0.08);
-
-    .sl-tower-count-badge {
-      background: rgba(255, 255, 255, 0.08);
-      color: #9a93b0;
-    }
   }
 
   .sl-tower-arrow-btn {
-    background: #241f32;
-    border-color: #312b45;
-    color: #f4efe6;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #38302b;
+    color: #f5eee6;
 
     &:hover:not(:disabled) {
-      background: #2f2842;
-      border-color: #38bdf8;
+      background: rgba(255, 255, 255, 0.12);
       color: #38bdf8;
+      border-color: #38bdf8;
     }
   }
 
-  .sl-spine-case {
-    border-color: #312b45;
-    border-left-color: #38bdf8;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-
-    .sl-spine-header .sl-spine-status {
-      background: rgba(255, 255, 255, 0.08);
-      color: #9a93b0;
+  .sl-jewel-case {
+    .sl-case-hinge {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(0, 0, 0, 0.4);
     }
 
-    .sl-spine-teeth span {
-      background: rgba(255, 255, 255, 0.08);
+    .sl-case-tape-label .sl-label-tracks .sl-case-track-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.08);
+
+      &:hover:not(.pill-empty) {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: #38bdf8;
+      }
     }
   }
 
-  .sl-tower-slot.is-loaded .sl-spine-case {
+  .sl-tower-slot.is-loaded .sl-jewel-case {
     border-color: #38bdf8;
-    box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+    box-shadow: 0 8px 24px rgba(56, 189, 248, 0.3), 0 0 0 1.5px #38bdf8,
+      inset 0 1px 2px rgba(255, 255, 255, 0.35);
 
-    .sl-spine-header .sl-spine-status {
-      background: #38bdf8;
-      color: #0c0b16;
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    .sl-case-jcard .sl-jcard-status.is-active-badge {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
     }
   }
 }

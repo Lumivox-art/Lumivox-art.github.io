@@ -76,7 +76,7 @@ export function CassetteTower({
         </button>
       )}
 
-      {/* Stack of Cassette Slots (Prepared for 10 tapes) */}
+      {/* Stack of Cassette Jewel Cases (Prepared for 10 tapes) */}
       <div className="sl-tower-stack" ref={stackRef}>
         {displayedCassettes.map((tape, localIdx) => {
           const actualIdx = hasOverflow ? scrollOffset + localIdx : localIdx;
@@ -97,51 +97,104 @@ export function CassetteTower({
                 }
               }}
             >
-              {/* Tape Spine Case */}
-              <div className="sl-spine-case">
-                <div className="sl-spine-header">
-                  <span className="sl-spine-num">
-                    {String(tape.tapeNumber).padStart(2, '0')}
-                  </span>
-                  <span className="sl-spine-status">
-                    {isActive ? 'EN DECK' : 'SLOT'}
+              {/* 3D Acrylic Jewel Case (Caja de Cassette Transparente) */}
+              <div className="sl-jewel-case">
+                {/* Crystal Glass Reflection & Beveled Sheen */}
+                <div className="sl-case-sheen" />
+                <span className="sl-case-hinge hinge-top" />
+                <span className="sl-case-hinge hinge-bottom" />
+
+                {/* Top: J-Card Spine Fold with Title & Status */}
+                <div className="sl-case-jcard">
+                  <div className="sl-jcard-left">
+                    <span className="sl-jcard-num">
+                      {String(tape.tapeNumber).padStart(2, '0')}
+                    </span>
+                    <span className="sl-jcard-title" title={tape.title}>
+                      {tape.title}
+                    </span>
+                  </div>
+                  <span className={`sl-jcard-status ${isActive ? 'is-active-badge' : ''}`}>
+                    {isActive ? 'EN DECK' : `SLOT ${tape.tapeNumber}`}
                   </span>
                 </div>
 
-                {/* Spine Label Content */}
-                <div className="sl-spine-info">
-                  <span className="sl-spine-title">{tape.title}</span>
-                  <div className="sl-spine-tracks">
-                    <span
-                      className={`sl-track-chip ${isActive && activeSide === 'A' ? 'is-side-active' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectCassette(actualIdx, 'A');
-                      }}
-                      title={`Lado A: ${tape.sideA.Title}`}
-                    >
-                      A: {tape.sideA.Title}
-                    </span>
+                {/* Real Cassette Body nested inside the transparent case */}
+                <div className="sl-case-tape-shell">
+                  {/* Corner Screws of the Cassette Shell */}
+                  <span className="sl-mini-screw s-tl" />
+                  <span className="sl-mini-screw s-tr" />
+                  <span className="sl-mini-screw s-bl" />
+                  <span className="sl-mini-screw s-br" />
 
-                    {tape.sideB && (
-                      <span
-                        className={`sl-track-chip ${isActive && activeSide === 'B' ? 'is-side-active' : ''}`}
+                  {/* Tape Label Sticker with Cara A & Cara B Tracks */}
+                  <div className="sl-case-tape-label">
+                    <div className="sl-label-tracks">
+                      <button
+                        type="button"
+                        className={`sl-case-track-pill pill-a ${isActive && activeSide === 'A' ? 'is-playing' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation();
-                          onSelectCassette(actualIdx, 'B');
+                          onSelectCassette(actualIdx, 'A');
                         }}
-                        title={`Lado B: ${tape.sideB.Title}`}
+                        title={`Lado A: ${tape.sideA.Title}`}
                       >
-                        B: {tape.sideB.Title}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                        <span className="side-char">A</span>
+                        <span className="side-name">{tape.sideA.Title}</span>
+                      </button>
 
-                {/* Spine Texture Details */}
-                <div className="sl-spine-teeth">
-                  <span />
-                  <span />
+                      {tape.sideB ? (
+                        <button
+                          type="button"
+                          className={`sl-case-track-pill pill-b ${isActive && activeSide === 'B' ? 'is-playing' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectCassette(actualIdx, 'B');
+                          }}
+                          title={`Lado B: ${tape.sideB.Title}`}
+                        >
+                          <span className="side-char">B</span>
+                          <span className="side-name">{tape.sideB.Title}</span>
+                        </button>
+                      ) : (
+                        <span className="sl-case-track-pill pill-empty">
+                          <span className="side-char">B</span>
+                          <span className="side-name">Sin Cara B</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Central Tape Viewing Chamber with Spools & Ribbon */}
+                  <div className="sl-case-spool-chamber">
+                    {/* Left Reel Spool */}
+                    <div className={`sl-case-spool ${isActive ? 'is-spinning' : ''}`}>
+                      <div className="sl-case-hub">
+                        <span className="hub-tooth t-1" />
+                        <span className="hub-tooth t-2" />
+                        <span className="hub-tooth t-3" />
+                      </div>
+                    </div>
+
+                    {/* Magnetic Tape Ribbon Bridge */}
+                    <div className="sl-case-bridge">
+                      <div className="sl-case-tape-ribbon" />
+                      <div className="sl-case-ticks">
+                        <span />
+                        <span />
+                        <span />
+                      </div>
+                    </div>
+
+                    {/* Right Reel Spool */}
+                    <div className={`sl-case-spool ${isActive ? 'is-spinning' : ''}`}>
+                      <div className="sl-case-hub">
+                        <span className="hub-tooth t-1" />
+                        <span className="hub-tooth t-2" />
+                        <span className="hub-tooth t-3" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
