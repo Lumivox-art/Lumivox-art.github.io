@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { LumivoxBrand } from '../components/LumivoxBrand';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { LanguageToggle } from '../components/LanguageToggle';
@@ -159,9 +158,6 @@ export function SunlightCommissionsPage() {
       <div className="sl-topbar">
         <LumivoxBrand />
         <div className="sl-topbar-actions">
-          <Link to="/artistas/sunlight-blue" className="sl-back-link">
-            ← {t('artists.back')}
-          </Link>
           <IntranetShortcut />
           <LanguageToggle />
           <ThemeToggle />
