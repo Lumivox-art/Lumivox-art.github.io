@@ -302,6 +302,7 @@ export const DICT: Record<Lang, Record<string, string>> = {
 
     // sunlight commissions & 90s studio
     'sunlight.title': 'Sunlight Blue Commissions',
+    'sunlight.stage.music_gallery': 'Music Gallery',
     'sunlight.subtitle': 'Custom original music, 90s cassette recordings, and vintage vinyl album covers.',
     'sunlight.badge': 'SUNLIGHT BLUE RECORDS · STEREO ANALOG',
     'sunlight.player.side_a': 'Side A · Instrumental',
@@ -631,6 +632,7 @@ export const DICT: Record<Lang, Record<string, string>> = {
 
     // sunlight commissions & 90s studio
     'sunlight.title': 'Comisiones de Sunlight Blue',
+    'sunlight.stage.music_gallery': 'Galería Musical',
     'sunlight.subtitle': 'Música original personalizada, grabaciones en cassette de los 90s y portadas de discos vintage.',
     'sunlight.badge': 'SUNLIGHT BLUE RECORDS · STEREO ANÁLOGO',
     'sunlight.player.side_a': 'Lado A · Instrumental',

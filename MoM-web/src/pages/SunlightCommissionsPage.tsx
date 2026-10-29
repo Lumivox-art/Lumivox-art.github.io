@@ -177,7 +177,10 @@ export function SunlightCommissionsPage() {
       </header>
 
       {/* Cassette Deck Stage - Outside the form, sitting directly over the background */}
-      <section className="sl-cassette-stage">
+      <section className="sl-cassette-stage" aria-label={t('sunlight.stage.music_gallery')}>
+        <div className="sl-stage-header">
+          <h2 className="sl-stage-title">{t('sunlight.stage.music_gallery')}</h2>
+        </div>
         <div className="sl-stage-layout">
           <div className="sl-stage-player-col">
             <CassettePlayer
