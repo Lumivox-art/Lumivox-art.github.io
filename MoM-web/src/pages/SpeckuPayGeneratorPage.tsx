@@ -205,7 +205,7 @@ export function SpeckuPayGeneratorPage() {
         <LumivoxBrand />
         <div className="spg-topbar-actions">
           <Link to="/home/specku/comisiones" className="spg-back-link">
-            ← {t('artists.back') || 'Comisiones'}
+            ← {t('cta.commissions')}
           </Link>
           <IntranetShortcut />
           <LanguageToggle />
@@ -230,27 +230,27 @@ export function SpeckuPayGeneratorPage() {
           <section className="spg-form-card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h2 className="spg-section-title" style={{ margin: 0 }}>
-                <span className="spg-num-badge">1</span> Detalles del Cobro
+                <span className="spg-num-badge">1</span> {t('specku.pay.generator.section1')}
               </h2>
               <button
                 type="button"
                 onClick={handleNewFolio}
                 className="spg-chip-btn"
                 style={{ fontSize: '0.78rem', padding: '0.3rem 0.6rem' }}
-                title="Generar un nuevo folio de cobro"
+                title="Nuevo Folio"
               >
-                Nuevo Folio
+                {t('specku.pay.generator.new_folio')}
               </button>
             </div>
 
             <div style={{ fontSize: '0.8rem', color: 'var(--spg-muted)', marginBottom: '1rem' }}>
-              Folio Asignado: <code style={{ fontWeight: 700, color: 'var(--spg-primary)' }}>{orderId}</code>
+              {t('specku.pay.generator.assigned_folio')} <code style={{ fontWeight: 700, color: 'var(--spg-primary)' }}>{orderId}</code>
             </div>
 
             {/* Concept / Title */}
             <div className="spg-field-group">
               <label htmlFor="spg-title" className="spg-label">
-                Concepto o Título de la Comisión:
+                {t('specku.pay.generator.concept_label')}
               </label>
               <input
                 id="spg-title"
@@ -258,7 +258,7 @@ export function SpeckuPayGeneratorPage() {
                 className="spg-input"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ej. Ilustración Semi-Real - Cuerpo Completo"
+                placeholder={t('specku.pay.generator.concept_placeholder')}
               />
               <div className="spg-chips-row">
                 {PRESET_CONCEPTS.map((concept) => (
@@ -277,7 +277,7 @@ export function SpeckuPayGeneratorPage() {
             {/* Client / Handle (Optional) */}
             <div className="spg-field-group">
               <label htmlFor="spg-client" className="spg-label">
-                Cliente o Referencia (Opcional):
+                {t('specku.pay.generator.client_label')}
               </label>
               <input
                 id="spg-client"
@@ -285,14 +285,14 @@ export function SpeckuPayGeneratorPage() {
                 className="spg-input"
                 value={client}
                 onChange={(e) => setClient(e.target.value)}
-                placeholder="Ej. @UsuarioDiscord o Nombre del cliente"
+                placeholder={t('specku.pay.generator.client_placeholder')}
               />
             </div>
 
             {/* Notes / Description (Optional) */}
             <div className="spg-field-group">
               <label htmlFor="spg-notes" className="spg-label">
-                Notas adicionales para el cliente (Opcional):
+                {t('specku.pay.generator.notes_label')}
               </label>
               <textarea
                 id="spg-notes"
@@ -312,7 +312,7 @@ export function SpeckuPayGeneratorPage() {
             {/* Base Price */}
             <div className="spg-field-group">
               <label htmlFor="spg-price" className="spg-label">
-                Precio Base (USD):
+                {t('specku.pay.generator.price_label')}
               </label>
               <div className="spg-input-currency-wrapper">
                 <span className="spg-currency-prefix">$</span>
@@ -343,7 +343,7 @@ export function SpeckuPayGeneratorPage() {
 
             {/* Discount Selector */}
             <div className="spg-field-group">
-              <label className="spg-label">Aplicar Descuento:</label>
+              <label className="spg-label">{t('specku.pay.generator.discount_label')}</label>
               <div className="spg-radio-group">
                 <label className="spg-radio-label">
                   <input
@@ -352,7 +352,7 @@ export function SpeckuPayGeneratorPage() {
                     checked={discountType === 'none'}
                     onChange={() => setDiscountType('none')}
                   />
-                  <span>Sin descuento</span>
+                  <span>{t('specku.pay.generator.discount_none')}</span>
                 </label>
                 <label className="spg-radio-label">
                   <input
@@ -361,7 +361,7 @@ export function SpeckuPayGeneratorPage() {
                     checked={discountType === 'fixed'}
                     onChange={() => setDiscountType('fixed')}
                   />
-                  <span>Monto Fijo ($ USD)</span>
+                  <span>{t('specku.pay.generator.discount_fixed')}</span>
                 </label>
                 <label className="spg-radio-label">
                   <input
@@ -370,7 +370,7 @@ export function SpeckuPayGeneratorPage() {
                     checked={discountType === 'percent'}
                     onChange={() => setDiscountType('percent')}
                   />
-                  <span>Porcentaje (%)</span>
+                  <span>{t('specku.pay.generator.discount_percent')}</span>
                 </label>
               </div>
 
@@ -415,7 +415,7 @@ export function SpeckuPayGeneratorPage() {
 
             {/* Fee Coverage Switch */}
             <h2 className="spg-section-title mt-4">
-              <span className="spg-num-badge">3</span> Comisión de PayPal
+              <span className="spg-num-badge">3</span> {t('specku.pay.generator.fee_title')}
             </h2>
 
             <div className={`spg-fee-toggle-box ${forceFee ? 'is-forced' : ''}`}>
@@ -428,7 +428,7 @@ export function SpeckuPayGeneratorPage() {
                 />
                 <span className="spg-switch-slider" />
                 <span className="spg-switch-label-text">
-                  <strong>Forzar al cliente a pagar la comisión de PayPal</strong>
+                  <strong>{t('specku.pay.generator.fee_toggle')}</strong>
                 </span>
               </label>
 
@@ -458,7 +458,7 @@ export function SpeckuPayGeneratorPage() {
 
               <div className="spg-preview-breakdown">
                 <div className="spg-breakdown-row">
-                  <span>Precio de obra</span>
+                  <span>{t('specku.pay.generator.base_price')}</span>
                   <span>${basePrice.toFixed(2)} USD</span>
                 </div>
 
@@ -472,7 +472,7 @@ export function SpeckuPayGeneratorPage() {
                 )}
 
                 <div className="spg-breakdown-row spg-row-subtotal">
-                  <span>Subtotal</span>
+                  <span>{t('specku.pay.generator.subtotal')}</span>
                   <span>${previewBreakdown.subtotal.toFixed(2)} USD</span>
                 </div>
 
@@ -486,7 +486,7 @@ export function SpeckuPayGeneratorPage() {
 
                 {/* Total */}
                 <div className="spg-breakdown-total">
-                  <div className="spg-total-label">Total a pagar:</div>
+                  <div className="spg-total-label">{t('specku.pay.generator.total_charge')}:</div>
                   <div className="spg-total-values">
                     <span className="spg-total-usd">${previewBreakdown.total.toFixed(2)} USD</span>
                     <span className="spg-total-mxn">(~${previewBreakdown.totalMxn.toFixed(2)} MXN)</span>
@@ -514,10 +514,10 @@ export function SpeckuPayGeneratorPage() {
                     disabled={!generatedLink || isSavingServer}
                   >
                     {isSavingServer
-                      ? 'Registrando en Servidor...'
+                      ? t('specku.pay.generator.saving_btn')
                       : copied
-                        ? '¡Enlace Copiado y Registrado!'
-                        : 'Copiar Enlace para el Cliente'}
+                        ? t('specku.pay.generator.copied')
+                        : t('specku.pay.generator.copy_link')}
                   </button>
 
                   {generatedLink && (

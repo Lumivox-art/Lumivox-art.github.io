@@ -4,8 +4,9 @@ import { createContext, useContext, useState, type ReactNode } from 'react';
 // localStorage and is shared app-wide (like the theme).
 export type Lang = 'en' | 'es';
 const LANG_KEY = 'lumivox-lang';
+const ALT_LANG_KEY = 'lvx_lang';
 
-const DICT: Record<Lang, Record<string, string>> = {
+export const DICT: Record<Lang, Record<string, string>> = {
   en: {
     'common.example': 'EXAMPLE',
     'common.days': 'days',
@@ -162,7 +163,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.terms.s3.authorship.text':
       'You gain the ownership of the art piece; however, I remain having the right of being the artist/creator and to be recognized as such.',
 
-        'specku.terms.ctaBack': 'Back to Commission Builder',
+    'specku.terms.ctaBack': 'Back to Commission Builder',
 
     // specku gallery
     'specku.gallery.badge': 'Gallery',
@@ -183,6 +184,36 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.generator.title': 'Payment Link Generator',
     'specku.pay.generator.subtitle':
       'Set the price, discounts, and fee coverage to generate a custom PayPal link for your client.',
+    'specku.pay.generator.section1': 'Payment Details',
+    'specku.pay.generator.new_folio': 'New Folio',
+    'specku.pay.generator.assigned_folio': 'Assigned Folio:',
+    'specku.pay.generator.concept_label': 'Commission Concept or Title:',
+    'specku.pay.generator.concept_placeholder': 'E.g. Semi-Real Illustration - Full Body',
+    'specku.pay.generator.client_label': 'Client or Reference (Optional):',
+    'specku.pay.generator.client_placeholder': 'E.g. @DiscordUser or Client Name',
+    'specku.pay.generator.notes_label': 'Additional notes for client (Optional):',
+    'specku.pay.generator.price_label': 'Base Price (USD):',
+    'specku.pay.generator.discount_label': 'Special Discount:',
+    'specku.pay.generator.discount_none': 'No discount',
+    'specku.pay.generator.discount_fixed': 'Fixed amount ($)',
+    'specku.pay.generator.discount_percent': 'Percentage (%)',
+    'specku.pay.generator.discount_reason': 'Discount reason:',
+    'specku.pay.generator.fee_title': 'PayPal Processing Fee:',
+    'specku.pay.generator.fee_toggle': 'Charge fee to client (+4.4% + $0.30 USD)',
+    'specku.pay.generator.live_breakdown': 'Live Breakdown',
+    'specku.pay.generator.base_price': 'Base Price',
+    'specku.pay.generator.discount': 'Discount',
+    'specku.pay.generator.subtotal': 'Subtotal',
+    'specku.pay.generator.paypal_fee': 'PayPal Fee (4.4% + $0.30)',
+    'specku.pay.generator.total_charge': 'Total to Charge',
+    'specku.pay.generator.generate_btn': 'Generate Payment Link',
+    'specku.pay.generator.saving_btn': 'Saving to Server...',
+    'specku.pay.generator.copy_link': 'Copy Link',
+    'specku.pay.generator.copied': 'Copied!',
+    'specku.pay.generator.history_title': 'Generated Links History',
+    'specku.pay.generator.history_empty': 'No links generated yet.',
+
+    // checkout
     'specku.pay.checkout.invalid.title': 'Invalid or Incomplete Payment Link',
     'specku.pay.checkout.invalid.desc':
       'This payment portal requires a payment link generated beforehand by Specku. To request a commission or get your payment link, please reach out to the artist.',
@@ -192,26 +223,82 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.checkout.already_paid.title': 'Order Already Settled',
     'specku.pay.checkout.already_paid.desc':
       'This payment order has already been paid and settled. Double charging is prevented by security policy.',
+    'specku.pay.checkout.already_paid_sub':
+      'If you already completed your payment, please notify Specku on Discord with your transaction ID.',
     'specku.pay.checkout.expired.title': 'Payment Link Expired',
     'specku.pay.checkout.expired.desc':
       'For security and anti-tampering protection (TTL policy), this payment link has expired. Please contact Specku to receive a fresh link.',
     'specku.pay.checkout.verifying': 'Verifying order authenticity on server...',
+    'specku.pay.checkout.order_details': 'Order Details',
+    'specku.pay.checkout.folio': 'Order Folio:',
+    'specku.pay.checkout.concept': 'Concept:',
+    'specku.pay.checkout.recipient': 'Recipient:',
+    'specku.pay.checkout.notes': 'Notes:',
+    'specku.pay.checkout.base_price': 'Base Price',
+    'specku.pay.checkout.discount': 'Discount',
+    'specku.pay.checkout.subtotal': 'Subtotal',
+    'specku.pay.checkout.fee_included': 'PayPal Processing Fee',
+    'specku.pay.checkout.fee_voluntary':
+      'Cover PayPal fee (+4.4% + $0.30 USD) so Specku receives the full amount',
+    'specku.pay.checkout.total_pay': 'Total to Pay',
+    'specku.pay.checkout.pay_title': 'Pay with PayPal or Card',
+    'specku.pay.checkout.trans_completed': 'TRANSACTION COMPLETED',
+    'specku.pay.checkout.thanks_prefix': 'Thank you very much',
+    'specku.pay.checkout.thanks_suffix': 'Your payment has been processed and credited to Specku.',
+    'specku.pay.checkout.tx_id': 'PayPal Transaction ID:',
+    'specku.pay.checkout.date': 'Date:',
+    'specku.pay.checkout.amount_paid': 'Amount Paid:',
+    'specku.pay.checkout.notify_discord': 'Notify Specku on Discord',
+    'specku.pay.checkout.req_new_link': 'Request New Link on Discord',
+    'specku.pay.checkout.view_commissions_btn': 'View Commissions',
 
     // intranet & artist auth
     'intranet.login.title': 'Artist Intranet',
     'intranet.login.subtitle': 'Exclusive portal for Lumivox creators to manage cards, profiles and workflows.',
+    'intranet.login.user': 'Username:',
+    'intranet.login.user_placeholder': 'Username',
+    'intranet.login.password': 'Password:',
     'intranet.login.btn': 'Sign In to My Dashboard',
     'intranet.login.loading': 'Signing in...',
+    'intranet.login.notice':
+      'Closed access: This portal does not accept public registration. If you are an artist member of the collective, please request your account from the administrator.',
     'intranet.login.error.empty': 'Please enter your username and password.',
     'intranet.login.error.credentials': 'Unrecognized credentials. Please verify your username and password.',
     'intranet.login.error.rate_limit': 'Too many failed attempts. For security, please wait a moment before retrying.',
     'intranet.login.error.general': 'Could not reach authentication server. Please try again.',
+    'intranet.shortcut.tooltip': 'Go to creator dashboard',
+    'intranet.shortcut.artist': 'Artist',
     'intranet.dashboard.title': 'Creator Dashboard',
     'intranet.dashboard.subtitle': 'Customize your public card information, update socials and access specialized tools.',
+    'intranet.dashboard.badge': 'INTRANET · CREATOR DASHBOARD',
+    'intranet.dashboard.welcome': 'Welcome, ',
+    'intranet.dashboard.loading': 'Loading artist dashboard...',
+    'intranet.dashboard.success': 'Changes saved successfully to database!',
     'intranet.dashboard.save': 'Save Changes to My Card',
     'intranet.dashboard.saving': 'Saving to database...',
     'intranet.dashboard.logout': 'Sign Out',
-    'intranet.dashboard.view_public': 'View public card',
+    'intranet.dashboard.view_public': 'View my public card',
+    'intranet.dashboard.tools.specku_title': 'Exclusive Tools for Specku',
+    'intranet.dashboard.tools.pay_title': 'PayPal Payment Link Generator',
+    'intranet.dashboard.tools.pay_desc': 'Create payment links for your commissions with custom pricing, discounts, and fee settings.',
+    'intranet.dashboard.tools.pay_btn': 'Open Payment Generator →',
+    'intranet.dashboard.tools.gallery_title': 'Gallery Samples',
+    'intranet.dashboard.tools.gallery_desc': 'Review how your styles, sketches, and artworks appear in your interactive catalog.',
+    'intranet.dashboard.tools.gallery_btn': 'Explore my Gallery →',
+    'intranet.dashboard.card_info': 'Public Card Information',
+    'intranet.dashboard.display_name': 'Display Name:',
+    'intranet.dashboard.tagline': 'Tagline / Highlight Phrase:',
+    'intranet.dashboard.discipline': 'Discipline / Specialty:',
+    'intranet.dashboard.bio': 'Short Bio:',
+    'intranet.dashboard.brief': 'Additional Message / Brief:',
+    'intranet.dashboard.accent_color': 'Accent Color:',
+    'intranet.dashboard.socials': 'Social Links:',
+    'intranet.dashboard.add_social': '+ Add Social Link',
+    'intranet.dashboard.platform': 'Platform',
+    'intranet.dashboard.url': 'URL / Link',
+    'intranet.dashboard.label': 'Visible label',
+    'intranet.dashboard.hide': 'Hide',
+    'intranet.dashboard.remove': 'Remove',
 
     // sam commissions (mockup)
     'sam.tag': 'commissions',
@@ -368,7 +455,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.terms.s3.authorship.text':
       'Obtienes la propiedad de la pieza; sin embargo, conservo el derecho moral como artista/creador de ser reconocido y acreditado como autor.',
 
-        'specku.terms.ctaBack': 'Volver al Cotizador de Comisiones',
+    'specku.terms.ctaBack': 'Volver al Cotizador de Comisiones',
 
     // specku gallery
     'specku.gallery.badge': 'Galería',
@@ -389,6 +476,36 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.generator.title': 'Generador de Enlaces de Pago',
     'specku.pay.generator.subtitle':
       'Configura el precio, descuentos y la cobertura de comisión para generar un enlace único de PayPal para tu cliente.',
+    'specku.pay.generator.section1': 'Detalles del Cobro',
+    'specku.pay.generator.new_folio': 'Nuevo Folio',
+    'specku.pay.generator.assigned_folio': 'Folio Asignado:',
+    'specku.pay.generator.concept_label': 'Concepto o Título de la Comisión:',
+    'specku.pay.generator.concept_placeholder': 'Ej. Ilustración Semi-Real - Cuerpo Completo',
+    'specku.pay.generator.client_label': 'Cliente o Referencia (Opcional):',
+    'specku.pay.generator.client_placeholder': 'Ej. @UsuarioDiscord o Nombre del cliente',
+    'specku.pay.generator.notes_label': 'Notas adicionales para el cliente (Opcional):',
+    'specku.pay.generator.price_label': 'Precio Base (USD):',
+    'specku.pay.generator.discount_label': 'Descuento Especial:',
+    'specku.pay.generator.discount_none': 'Sin descuento',
+    'specku.pay.generator.discount_fixed': 'Monto fijo ($)',
+    'specku.pay.generator.discount_percent': 'Porcentaje (%)',
+    'specku.pay.generator.discount_reason': 'Motivo del descuento:',
+    'specku.pay.generator.fee_title': 'Tarifa de Comisión PayPal:',
+    'specku.pay.generator.fee_toggle': 'Cobrar comisión al cliente (+4.4% + $0.30 USD)',
+    'specku.pay.generator.live_breakdown': 'Desglose en Vivo',
+    'specku.pay.generator.base_price': 'Precio Base',
+    'specku.pay.generator.discount': 'Descuento',
+    'specku.pay.generator.subtotal': 'Subtotal',
+    'specku.pay.generator.paypal_fee': 'Comisión PayPal (4.4% + $0.30)',
+    'specku.pay.generator.total_charge': 'Total a Cobrar',
+    'specku.pay.generator.generate_btn': 'Generar Enlace de Cobro',
+    'specku.pay.generator.saving_btn': 'Guardando en Servidor...',
+    'specku.pay.generator.copy_link': 'Copiar Enlace',
+    'specku.pay.generator.copied': '¡Copiado!',
+    'specku.pay.generator.history_title': 'Historial de Enlaces Generados',
+    'specku.pay.generator.history_empty': 'No has generado ningún enlace todavía.',
+
+    // checkout
     'specku.pay.checkout.invalid.title': 'Enlace de Pago No Válido o Incompleto',
     'specku.pay.checkout.invalid.desc':
       'Esta pasarela de pago requiere un enlace de cobro generado previamente por Specku. Para adquirir una comisión personalizada o solicitar tu enlace de pago, por favor contacta al artista.',
@@ -398,36 +515,110 @@ const DICT: Record<Lang, Record<string, string>> = {
     'specku.pay.checkout.already_paid.title': 'Esta Orden Ya Fue Liquidada',
     'specku.pay.checkout.already_paid.desc':
       'Esta orden de pago ya ha sido liquidada con anterioridad. Por políticas de seguridad, no se admiten cobros duplicados.',
+    'specku.pay.checkout.already_paid_sub':
+      'Si ya realizaste tu pago, puedes notificar a Specku por Discord con tu comprobante.',
     'specku.pay.checkout.expired.title': 'Enlace de Pago Expirado',
     'specku.pay.checkout.expired.desc':
       'Por políticas de seguridad y protección contra alteraciones (política TTL), esta liga ha expirado. Por favor solicita un nuevo enlace a Specku.',
     'specku.pay.checkout.verifying': 'Verificando autenticidad de la orden en el servidor...',
+    'specku.pay.checkout.order_details': 'Detalles de la Orden',
+    'specku.pay.checkout.folio': 'Folio de Orden:',
+    'specku.pay.checkout.concept': 'Concepto:',
+    'specku.pay.checkout.recipient': 'Destinatario:',
+    'specku.pay.checkout.notes': 'Notas:',
+    'specku.pay.checkout.base_price': 'Precio Base',
+    'specku.pay.checkout.discount': 'Descuento',
+    'specku.pay.checkout.subtotal': 'Subtotal',
+    'specku.pay.checkout.fee_included': 'Comisión de Procesamiento PayPal',
+    'specku.pay.checkout.fee_voluntary':
+      'Cubrir tarifa de PayPal (+4.4% + $0.30 USD) para que Specku reciba el monto íntegro',
+    'specku.pay.checkout.total_pay': 'Total a Pagar',
+    'specku.pay.checkout.pay_title': 'Pagar con PayPal o Tarjeta',
+    'specku.pay.checkout.trans_completed': 'TRANSACCIÓN COMPLETADA',
+    'specku.pay.checkout.thanks_prefix': 'Muchas gracias',
+    'specku.pay.checkout.thanks_suffix': 'ha sido procesado y acreditado a Specku.',
+    'specku.pay.checkout.tx_id': 'ID de Transacción PayPal:',
+    'specku.pay.checkout.date': 'Fecha:',
+    'specku.pay.checkout.amount_paid': 'Monto Pagado:',
+    'specku.pay.checkout.notify_discord': 'Notificar a Specku por Discord',
+    'specku.pay.checkout.req_new_link': 'Solicitar Nueva Liga en Discord',
+    'specku.pay.checkout.view_commissions_btn': 'Ver Comisiones',
 
     // intranet & artist auth
     'intranet.login.title': 'Intranet de Artistas',
     'intranet.login.subtitle': 'Portal exclusivo para que los creadores de Lumivox administren sus tarjetas, enlaces y herramientas.',
+    'intranet.login.user': 'Usuario:',
+    'intranet.login.user_placeholder': 'Usuario',
+    'intranet.login.password': 'Contraseña:',
     'intranet.login.btn': 'Ingresar a mi Panel',
     'intranet.login.loading': 'Iniciando sesión...',
+    'intranet.login.notice':
+      'Acceso cerrado: Este portal no admite registro público. Si eres un artista miembro del colectivo, solicita tu cuenta al administrador.',
     'intranet.login.error.empty': 'Por favor ingresa tu usuario y contraseña.',
     'intranet.login.error.credentials': 'Credenciales no reconocidas. Verifica tu usuario y contraseña.',
     'intranet.login.error.rate_limit': 'Demasiados intentos fallidos. Por seguridad, espera unos momentos antes de reintentar.',
     'intranet.login.error.general': 'No se pudo conectar al servidor de autenticación. Intenta de nuevo.',
+    'intranet.shortcut.tooltip': 'Ir a mi panel de intranet',
+    'intranet.shortcut.artist': 'Artista',
     'intranet.dashboard.title': 'Panel de Creador',
     'intranet.dashboard.subtitle': 'Personaliza la información de tu tarjeta pública, actualiza tus redes y accede a tus herramientas exclusivas.',
+    'intranet.dashboard.badge': 'INTRANET · PANEL DE CREADOR',
+    'intranet.dashboard.welcome': 'Bienvenido, ',
+    'intranet.dashboard.loading': 'Cargando panel de artista...',
+    'intranet.dashboard.success': '¡Cambios guardados exitosamente en la base de datos!',
     'intranet.dashboard.save': 'Guardar Cambios en mi Tarjeta',
     'intranet.dashboard.saving': 'Guardando en base de datos...',
     'intranet.dashboard.logout': 'Cerrar Sesión',
-    'intranet.dashboard.view_public': 'Ver tarjeta pública',
+    'intranet.dashboard.view_public': 'Ver mi tarjeta pública',
+    'intranet.dashboard.tools.specku_title': 'Herramientas Exclusivas de Specku',
+    'intranet.dashboard.tools.pay_title': 'Generador de Enlaces de Cobro PayPal',
+    'intranet.dashboard.tools.pay_desc': 'Crea links de pago para tus comisiones con precios, descuentos y comisiones forzadas.',
+    'intranet.dashboard.tools.pay_btn': 'Abrir Generador de Cobros →',
+    'intranet.dashboard.tools.gallery_title': 'Muestras de la Galería',
+    'intranet.dashboard.tools.gallery_desc': 'Revisa cómo se muestran tus estilos, bocetos y muestras de arte en tu catálogo interactivo.',
+    'intranet.dashboard.tools.gallery_btn': 'Explorar mi Galería →',
+    'intranet.dashboard.card_info': 'Información Pública de la Tarjeta',
+    'intranet.dashboard.display_name': 'Nombre Artístico:',
+    'intranet.dashboard.tagline': 'Tagline / Frase Destacada:',
+    'intranet.dashboard.discipline': 'Disciplina / Especialidad:',
+    'intranet.dashboard.bio': 'Biografía Corta:',
+    'intranet.dashboard.brief': 'Mensaje / Brief Adicional:',
+    'intranet.dashboard.accent_color': 'Color de Acento:',
+    'intranet.dashboard.socials': 'Redes Sociales y Enlaces:',
+    'intranet.dashboard.add_social': '+ Agregar Red Social',
+    'intranet.dashboard.platform': 'Plataforma',
+    'intranet.dashboard.url': 'URL / Enlace',
+    'intranet.dashboard.label': 'Etiqueta visible',
+    'intranet.dashboard.hide': 'Ocultar',
+    'intranet.dashboard.remove': 'Eliminar',
 
     'sam.tag': 'comisiones',
     'sam.note': 'Diseño de muestra — se modificará más adelante.',
   },
 };
 
+// Inverted dictionaries for bidirectional text lookup
+const REVERSE_ES_TO_KEY: Record<string, string> = {};
+const REVERSE_EN_TO_KEY: Record<string, string> = {};
+
+for (const [key, val] of Object.entries(DICT.es)) {
+  if (typeof val === 'string' && val.length > 0) {
+    REVERSE_ES_TO_KEY[val.trim()] = key;
+  }
+}
+
+for (const [key, val] of Object.entries(DICT.en)) {
+  if (typeof val === 'string' && val.length > 0) {
+    REVERSE_EN_TO_KEY[val.trim()] = key;
+  }
+}
+
 function readLang(): Lang {
   let saved: string | null = null;
   try {
-    saved = typeof localStorage !== 'undefined' ? localStorage.getItem(LANG_KEY) : null;
+    if (typeof localStorage !== 'undefined') {
+      saved = localStorage.getItem(LANG_KEY) || localStorage.getItem(ALT_LANG_KEY);
+    }
   } catch {
     // safe fallback
   }
@@ -445,13 +636,49 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const next: Lang = l === 'es' ? 'en' : 'es';
       try {
         localStorage.setItem(LANG_KEY, next);
+        localStorage.setItem(ALT_LANG_KEY, next);
       } catch {
         // Safe against storage quota or security restrictions
       }
       return next;
     });
 
-  const t = (key: string): string => DICT[lang][key] ?? DICT.en[key] ?? key;
+  const t = (textOrKey: string): string => {
+    if (!textOrKey || typeof textOrKey !== 'string') return textOrKey;
+
+    const trimmed = textOrKey.trim();
+
+    // 1. Direct key hit in active language
+    if (DICT[lang][textOrKey] !== undefined) {
+      return DICT[lang][textOrKey];
+    }
+    if (DICT[lang][trimmed] !== undefined) {
+      return DICT[lang][trimmed];
+    }
+
+    // 2. Direct key hit in English fallback
+    if (DICT.en[textOrKey] !== undefined) {
+      return DICT.en[textOrKey];
+    }
+    if (DICT.en[trimmed] !== undefined) {
+      return DICT.en[trimmed];
+    }
+
+    // 3. Reverse hit: input matches an exact Spanish translation string
+    const keyFromEs = REVERSE_ES_TO_KEY[trimmed];
+    if (keyFromEs && DICT[lang][keyFromEs] !== undefined) {
+      return DICT[lang][keyFromEs];
+    }
+
+    // 4. Reverse hit: input matches an exact English translation string
+    const keyFromEn = REVERSE_EN_TO_KEY[trimmed];
+    if (keyFromEn && DICT[lang][keyFromEn] !== undefined) {
+      return DICT[lang][keyFromEn];
+    }
+
+    // 5. Unrecognized key/literal string fallback
+    return textOrKey;
+  };
 
   return <LangContext.Provider value={{ lang, toggle, t }}>{children}</LangContext.Provider>;
 }

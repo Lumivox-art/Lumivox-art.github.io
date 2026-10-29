@@ -106,7 +106,7 @@ export function IntranetLoginPage() {
           <form className="inl-form" onSubmit={handleSubmit}>
             <div className="inl-field-group">
               <label htmlFor="inl-identifier" className="inl-label">
-                Usuario:
+                {t('intranet.login.user')}
               </label>
               <input
                 id="inl-identifier"
@@ -115,7 +115,7 @@ export function IntranetLoginPage() {
                 autoComplete="username"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="Usuario"
+                placeholder={t('intranet.login.user_placeholder')}
                 disabled={loading}
                 required
               />
@@ -123,7 +123,7 @@ export function IntranetLoginPage() {
 
             <div className="inl-field-group">
               <label htmlFor="inl-password" className="inl-label">
-                Contraseña:
+                {t('intranet.login.password')}
               </label>
               <input
                 id="inl-password"
@@ -147,8 +147,7 @@ export function IntranetLoginPage() {
 
           <footer className="inl-footer">
             <p className="inl-closed-notice">
-              <strong>Acceso cerrado:</strong> Este portal no admite registro público. Si eres
-              un artista miembro del colectivo, solicita tu cuenta al administrador.
+              {t('intranet.login.notice')}
             </p>
           </footer>
         </div>

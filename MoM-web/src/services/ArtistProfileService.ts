@@ -6,6 +6,7 @@
  */
 
 import { LocalCache } from '../utils/LocalCache';
+import { DICT } from '../i18n';
 import type { ArtistProfile } from '../models/Artist';
 import type { ResponseObject } from '../models/Response/ResponseObject';
 import type { Artist, ArtistModule, SocialEntry } from '../data/artists';
@@ -225,15 +226,51 @@ export class ArtistProfileService {
       }
     }
 
-    // If profile defines a brief, update the brief module
+    // Detect if profile values match the default seeded strings
+    const defaultTaglineEs = DICT.es[base.tagline] || '';
+    const defaultTaglineEn = DICT.en[base.tagline] || '';
+    const isTaglineDefault =
+      !profile.tagline ||
+      profile.tagline === defaultTaglineEs ||
+      profile.tagline === defaultTaglineEn ||
+      profile.tagline === base.tagline;
+
+    const defaultDisciplineEs = DICT.es[base.discipline] || '';
+    const defaultDisciplineEn = DICT.en[base.discipline] || '';
+    const isDisciplineDefault =
+      !profile.discipline ||
+      profile.discipline === defaultDisciplineEs ||
+      profile.discipline === defaultDisciplineEn ||
+      profile.discipline === base.discipline;
+
+    const defaultBioEs = DICT.es[base.bio] || '';
+    const defaultBioEn = DICT.en[base.bio] || '';
+    const isBioDefault =
+      !profile.bio ||
+      profile.bio === defaultBioEs ||
+      profile.bio === defaultBioEn ||
+      profile.bio === base.bio;
+
+    const baseBrief = base.modules.find(
+      (m): m is Extract<ArtistModule, { kind: 'brief' }> => m.kind === 'brief',
+    );
+    const defaultBriefEs = baseBrief ? DICT.es[baseBrief.body] || '' : '';
+    const defaultBriefEn = baseBrief ? DICT.en[baseBrief.body] || '' : '';
+    const isBriefDefault =
+      !profile.brief ||
+      profile.brief === defaultBriefEs ||
+      profile.brief === defaultBriefEn ||
+      profile.brief === baseBrief?.body;
+
+    // If profile defines a brief, update the brief module (preserve i18n key if default)
     const briefIdx = modules.findIndex((m) => m.kind === 'brief');
-    if (briefIdx >= 0 && profile.brief) {
+    if (briefIdx >= 0) {
       const existing = modules[briefIdx];
       if (existing.kind === 'brief') {
         modules[briefIdx] = {
           kind: 'brief',
           hidden: existing.hidden,
-          body: profile.brief,
+          body: isBriefDefault ? (baseBrief ? baseBrief.body : existing.body) : profile.brief!,
         };
       }
     }
@@ -241,9 +278,9 @@ export class ArtistProfileService {
     return {
       ...base,
       displayName: profile.displayName || base.displayName,
-      tagline: profile.tagline || base.tagline,
-      discipline: profile.discipline || base.discipline,
-      bio: profile.bio || base.bio,
+      tagline: isTaglineDefault ? base.tagline : profile.tagline,
+      discipline: isDisciplineDefault ? base.discipline : profile.discipline,
+      bio: isBioDefault ? base.bio : profile.bio,
       accentColor: profile.accentColor || base.accentColor,
       modules,
     };

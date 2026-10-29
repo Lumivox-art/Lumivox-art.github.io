@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+import { useLang } from '../i18n';
 import './IntranetShortcut.scss';
 
 export function IntranetShortcut({ className = '' }: { className?: string }) {
   const { currentUser, artistHandle } = useAuth();
+  const { t } = useLang();
   const location = useLocation();
 
   if (!currentUser || location.pathname.startsWith('/intranet')) return null;
@@ -12,11 +14,11 @@ export function IntranetShortcut({ className = '' }: { className?: string }) {
     <Link
       to="/intranet"
       className={`lvx-intranet-shortcut ${className}`}
-      title="Ir a mi panel de intranet"
+      title={t('intranet.shortcut.tooltip')}
     >
       <span className="lvx-intranet-dot" />
       <span className="lvx-intranet-text">
-        Intranet ({artistHandle || currentUser.displayName || 'Artista'})
+        Intranet ({artistHandle || currentUser.displayName || t('intranet.shortcut.artist')})
       </span>
     </Link>
   );
@@ -28,6 +30,7 @@ export function IntranetShortcut({ className = '' }: { className?: string }) {
  */
 export function IntranetFloatingBadge() {
   const { currentUser, artistHandle } = useAuth();
+  const { t } = useLang();
   const location = useLocation();
 
   if (!currentUser || location.pathname.startsWith('/intranet')) return null;
@@ -36,12 +39,12 @@ export function IntranetFloatingBadge() {
     <Link
       to="/intranet"
       className="lvx-intranet-floating-badge animate-fade-in"
-      title="Volver a mi panel de Intranet"
-      aria-label="Panel de Intranet"
+      title={t('intranet.shortcut.tooltip')}
+      aria-label={t('intranet.login.title')}
     >
       <span className="lvx-intranet-dot" />
       <span className="lvx-intranet-floating-label">
-        Intranet ({artistHandle || currentUser.displayName || 'Artista'})
+        Intranet ({artistHandle || currentUser.displayName || t('intranet.shortcut.artist')})
       </span>
     </Link>
   );

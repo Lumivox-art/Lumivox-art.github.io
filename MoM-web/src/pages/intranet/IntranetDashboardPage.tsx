@@ -5,6 +5,7 @@ import { ThemeToggle } from '../../components/ThemeToggle';
 import { LanguageToggle } from '../../components/LanguageToggle';
 import { useTheme } from '../../components/ThemeContext';
 import { useAuth } from '../../components/AuthContext';
+import { useLang } from '../../i18n';
 import { ArtistProfileService } from '../../services/ArtistProfileService';
 import type { ArtistProfile } from '../../models/Artist';
 import type { SocialEntry, SocialPlatform } from '../../data/artists';
@@ -27,6 +28,7 @@ const PLATFORM_OPTIONS: { id: SocialPlatform; label: string }[] = [
 export function IntranetDashboardPage() {
   const { theme } = useTheme();
   const { currentUser, artistHandle, logout } = useAuth();
+  const { t } = useLang();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
@@ -53,10 +55,10 @@ export function IntranetDashboardPage() {
       const data = res.Result;
       if (data) {
         setDisplayName(data.displayName || '');
-        setTagline(data.tagline || '');
-        setDiscipline(data.discipline || '');
-        setBio(data.bio || '');
-        setBrief(data.brief || '');
+        setTagline(t(data.tagline || ''));
+        setDiscipline(t(data.discipline || ''));
+        setBio(t(data.bio || ''));
+        setBrief(data.brief ? t(data.brief) : '');
         setAccentColor(data.accentColor || '#8D3E2E');
         setSocials(data.socials || []);
       }
@@ -115,7 +117,7 @@ export function IntranetDashboardPage() {
       const res = await ArtistProfileService.SaveProfile(payload, idToken);
 
       if (res.CodeNumber === 200) {
-        setSuccessMessage('✓ ¡Cambios guardados exitosamente en la base de datos!');
+        setSuccessMessage(`✓ ${t('intranet.dashboard.success')}`);
         setTimeout(() => setSuccessMessage(null), 4000);
       } else {
         setErrorMessage(res.Message || 'No se pudo guardar los cambios en el servidor.');
@@ -132,7 +134,7 @@ export function IntranetDashboardPage() {
       <div className="intranet-dashboard" data-theme={theme}>
         <div className="ind-loading-screen">
           <div className="ind-spinner" />
-          <p>Cargando panel de artista...</p>
+          <p>{t('intranet.dashboard.loading')}</p>
         </div>
       </div>
     );
@@ -153,10 +155,10 @@ export function IntranetDashboardPage() {
             </span>
           </div>
           <Link to={`/artistas/${artistHandle}`} className="ind-view-public-btn">
-            Ver mi tarjeta pública
+            {t('intranet.dashboard.view_public')}
           </Link>
           <button type="button" className="ind-btn-logout" onClick={handleLogout}>
-            Cerrar Sesión
+            {t('intranet.dashboard.logout')}
           </button>
           <LanguageToggle />
           <ThemeToggle />
@@ -166,10 +168,10 @@ export function IntranetDashboardPage() {
       <main className="ind-container">
         {/* Hero Title */}
         <div className="ind-hero">
-          <div className="ind-hero-badge">INTRANET · PANEL DE CREADOR</div>
-          <h1>Bienvenido, {displayName || 'Artista'}</h1>
+          <div className="ind-hero-badge">{t('intranet.dashboard.badge')}</div>
+          <h1>{t('intranet.dashboard.welcome')}{displayName || t('intranet.shortcut.artist')}</h1>
           <p className="ind-hero-subtitle">
-            Personaliza la información de tu tarjeta, actualiza tus redes y accede a tus herramientas exclusivas.
+            {t('intranet.dashboard.subtitle')}
           </p>
         </div>
 
@@ -189,19 +191,19 @@ export function IntranetDashboardPage() {
         {isSpecku && (
           <section className="ind-special-tools-card">
             <h2 className="ind-card-title">
-              Herramientas Exclusivas de Specku
+              {t('intranet.dashboard.tools.specku_title')}
             </h2>
             <div className="ind-tools-grid">
               <div className="ind-tool-item">
                 <div className="ind-tool-header">
 
                   <div>
-                    <h3>Generador de Enlaces de Cobro PayPal</h3>
-                    <p>Crea links de pago para tus comisiones con precios, descuentos y comisiones forzadas.</p>
+                    <h3>{t('intranet.dashboard.tools.pay_title')}</h3>
+                    <p>{t('intranet.dashboard.tools.pay_desc')}</p>
                   </div>
                 </div>
                 <Link to="/home/specku/cobrar" className="ind-tool-btn">
-                  Abrir Generador de Cobros →
+                  {t('intranet.dashboard.tools.pay_btn')}
                 </Link>
               </div>
 
@@ -209,12 +211,12 @@ export function IntranetDashboardPage() {
                 <div className="ind-tool-header">
 
                   <div>
-                    <h3>Muestras de la Galería</h3>
-                    <p>Revisa cómo se muestran tus estilos, bocetos y muestras de arte en tu catálogo interactivo.</p>
+                    <h3>{t('intranet.dashboard.tools.gallery_title')}</h3>
+                    <p>{t('intranet.dashboard.tools.gallery_desc')}</p>
                   </div>
                 </div>
                 <Link to="/home/specku/galeria" className="ind-tool-btn">
-                  Explorar mi Galería →
+                  {t('intranet.dashboard.tools.gallery_btn')}
                 </Link>
               </div>
             </div>
@@ -228,12 +230,12 @@ export function IntranetDashboardPage() {
             <div className="ind-form-column">
               <div className="ind-card">
                 <h2 className="ind-card-title">
-                  Información Pública de la Tarjeta
+                  {t('intranet.dashboard.card_info')}
                 </h2>
 
                 <div className="ind-field">
                   <label htmlFor="ind-name" className="ind-label">
-                    Nombre Artístico:
+                    {t('intranet.dashboard.display_name')}
                   </label>
                   <input
                     id="ind-name"
@@ -247,7 +249,7 @@ export function IntranetDashboardPage() {
 
                 <div className="ind-field">
                   <label htmlFor="ind-tagline" className="ind-label">
-                    Tagline / Frase Destacada:
+                    {t('intranet.dashboard.tagline')}
                   </label>
                   <input
                     id="ind-tagline"
@@ -261,7 +263,7 @@ export function IntranetDashboardPage() {
 
                 <div className="ind-field">
                   <label htmlFor="ind-discipline" className="ind-label">
-                    Disciplinas / Especialidades:
+                    {t('intranet.dashboard.discipline')}
                   </label>
                   <input
                     id="ind-discipline"
@@ -275,7 +277,7 @@ export function IntranetDashboardPage() {
 
                 <div className="ind-field">
                   <label htmlFor="ind-bio" className="ind-label">
-                    Biografía / Presentación:
+                    {t('intranet.dashboard.bio')}
                   </label>
                   <textarea
                     id="ind-bio"
@@ -289,7 +291,7 @@ export function IntranetDashboardPage() {
 
                 <div className="ind-field">
                   <label htmlFor="ind-brief" className="ind-label">
-                    Mensaje de Contacto / Cotizaciones:
+                    {t('intranet.dashboard.brief')}
                   </label>
                   <textarea
                     id="ind-brief"
@@ -303,7 +305,7 @@ export function IntranetDashboardPage() {
 
                 {/* Accent Color */}
                 <div className="ind-field">
-                  <label className="ind-label">Color de Acento de la Tarjeta:</label>
+                  <label className="ind-label">{t('intranet.dashboard.accent_color')}</label>
                   <div className="ind-color-picker-row">
                     <input
                       type="color"
@@ -334,14 +336,14 @@ export function IntranetDashboardPage() {
               <div className="ind-card">
                 <div className="ind-card-header-flex">
                   <h2 className="ind-card-title mb-0">
-                    Redes Sociales y Enlaces
+                    {t('intranet.dashboard.socials')}
                   </h2>
                   <button
                     type="button"
                     className="ind-btn-add-social"
                     onClick={handleAddSocial}
                   >
-                    + Agregar Red
+                    {t('intranet.dashboard.add_social')}
                   </button>
                 </div>
 
@@ -378,14 +380,14 @@ export function IntranetDashboardPage() {
                                 handleUpdateSocial(index, { hidden: e.target.checked })
                               }
                             />
-                            <span>Ocultar</span>
+                            <span>{t('intranet.dashboard.hide')}</span>
                           </label>
 
                           <button
                             type="button"
                             className="ind-btn-remove-social"
                             onClick={() => handleRemoveSocial(index)}
-                            title="Eliminar red"
+                            title={t('intranet.dashboard.remove')}
                           >
                             ✕
                           </button>
@@ -419,7 +421,7 @@ export function IntranetDashboardPage() {
 
                 <div className="ind-submit-wrapper">
                   <button type="submit" className="ind-btn-save-primary" disabled={saving}>
-                    {saving ? 'Guardando en Base de Datos...' : 'Guardar Cambios en mi Tarjeta'}
+                    {saving ? t('intranet.dashboard.saving') : t('intranet.dashboard.save')}
                   </button>
                 </div>
               </div>

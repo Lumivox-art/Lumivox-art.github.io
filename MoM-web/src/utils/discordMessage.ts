@@ -32,7 +32,7 @@ export function buildDiscordCommissionMessage({
     '',
     ...items.map((item) => `• ${item.category}: ${item.label} ($${item.price} USD)`),
     '',
-    `💰 Total: $${totalUsd} USD (~$${totalMxn} MXN)`,
+    `Total: $${totalUsd} USD (~$${totalMxn} MXN)`,
   ];
   return lines.join('\n');
 }

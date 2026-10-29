@@ -283,7 +283,7 @@ export function SpeckuPayCheckoutPage() {
         <LumivoxBrand />
         <div className="spc-topbar-actions">
           <Link to="/home/specku/comisiones" className="spc-back-link">
-            ← {t('artists.back') || 'Comisiones'}
+            ← {t('cta.commissions')}
           </Link>
           <LanguageToggle />
           <ThemeToggle />
@@ -311,29 +311,29 @@ export function SpeckuPayCheckoutPage() {
 
             <div className="spc-receipt-box">
               <div className="spc-receipt-row">
-                <span>Folio de Orden:</span>
+                <span>{t('specku.pay.checkout.folio')}</span>
                 <code>{invoicePayload.id}</code>
               </div>
               <div className="spc-receipt-row">
-                <span>Concepto:</span>
+                <span>{t('specku.pay.checkout.concept')}</span>
                 <strong>{invoicePayload.title}</strong>
               </div>
               {invoicePayload.client && (
                 <div className="spc-receipt-row">
-                  <span>Destinatario:</span>
+                  <span>{t('specku.pay.checkout.recipient')}</span>
                   <span>{invoicePayload.client}</span>
                 </div>
               )}
               <div className="spc-receipt-row">
-                <span>ID de Transacción PayPal:</span>
+                <span>{t('specku.pay.checkout.tx_id')}</span>
                 <code className="spc-receipt-code">{transactionId || 'Capturado'}</code>
               </div>
               <div className="spc-receipt-row">
-                <span>Fecha:</span>
+                <span>{t('specku.pay.checkout.date')}</span>
                 <span>{new Date().toLocaleString()}</span>
               </div>
               <div className="spc-receipt-row spc-receipt-total">
-                <span>Monto Pagado:</span>
+                <span>{t('specku.pay.checkout.amount_paid')}</span>
                 <strong>${breakdown.total.toFixed(2)} {breakdown.currency} (~${breakdown.totalMxn.toFixed(2)} MXN)</strong>
               </div>
             </div>
@@ -344,7 +344,7 @@ export function SpeckuPayCheckoutPage() {
                 className="spc-btn-primary"
                 onClick={handleDiscordNotify}
               >
-                Notificar a Specku por Discord
+                {t('specku.pay.checkout.notify_discord')}
               </button>
               <button
                 type="button"
@@ -354,7 +354,7 @@ export function SpeckuPayCheckoutPage() {
                 Imprimir / Guardar Recibo
               </button>
               <Link to="/home/specku/comisiones" className="spc-btn-link">
-                ← Volver a Comisiones
+                ← {t('cta.commissions')}
               </Link>
             </div>
           </div>
@@ -389,10 +389,10 @@ export function SpeckuPayCheckoutPage() {
 
             {/* Price Breakdown */}
             <section className="spc-breakdown-section">
-              <h2 className="spc-section-heading">Resumen de la Orden</h2>
+              <h2 className="spc-section-heading">{t('specku.pay.checkout.order_details')}</h2>
 
               <div className="spc-line-item">
-                <span>Precio base de obra</span>
+                <span>{t('specku.pay.checkout.base_price')}</span>
                 <span>${breakdown.basePrice.toFixed(2)} {breakdown.currency}</span>
               </div>
 
@@ -406,7 +406,7 @@ export function SpeckuPayCheckoutPage() {
               )}
 
               <div className="spc-line-item spc-line-subtotal">
-                <span>Subtotal neto</span>
+                <span>{t('specku.pay.checkout.subtotal')}</span>
                 <span>${breakdown.subtotal.toFixed(2)} {breakdown.currency}</span>
               </div>
 
@@ -426,7 +426,7 @@ export function SpeckuPayCheckoutPage() {
                   />
                   <div className="spc-fee-text-col">
                     <div className="spc-fee-title-row">
-                      <strong>Cubrir la comisión de procesamiento PayPal</strong>
+                      <strong>{t('specku.pay.checkout.fee_included')}</strong>
                       <span className="spc-fee-amount-badge">
                         +${breakdown.feeAmount.toFixed(2)} {breakdown.currency}
                       </span>
@@ -447,7 +447,7 @@ export function SpeckuPayCheckoutPage() {
 
               {/* Final Total */}
               <div className="spc-total-container">
-                <div className="spc-total-label">Total Final:</div>
+                <div className="spc-total-label">{t('specku.pay.checkout.total_pay')}:</div>
                 <div className="spc-total-stack">
                   <div className="spc-total-amount">
                     ${breakdown.total.toFixed(2)} {breakdown.currency}
