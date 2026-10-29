@@ -249,7 +249,7 @@ export function SunlightCommissionsPage() {
             <span className="sl-num">1</span>
             <span>{t('sunlight.step.art')}</span>
           </h2>
-          <p className="sl-step-desc">{t('sunlight.gallery.subtitle')}</p>
+
 
           <div className="sl-covers-grid">
             {artCovers.map((cover) => (
