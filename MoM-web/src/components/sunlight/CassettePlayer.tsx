@@ -45,7 +45,7 @@ export function CassettePlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.85);
-  const [isLoop, setIsLoop] = useState(true);
+  const [isLoop, setIsLoop] = useState(false);
 
   const isPlayingRef = useRef(false);
   const shouldKeepPlayingRef = useRef(false);
@@ -85,6 +85,13 @@ export function CassettePlayer({
       audioRef.current.volume = volume;
     }
   }, [volume]);
+
+  // Sync native loop attribute to audio element
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.loop = isLoop;
+    }
+  }, [isLoop]);
 
   // Update audio source when track or cassette changes and ensure play button stays active
   useEffect(() => {
@@ -217,40 +224,30 @@ export function CassettePlayer({
   const handleTrackEndedInternal = () => {
     hasUserInteractedRef.current = true;
 
-    CassetteSfx.playTapeSwitch();
+    if (isLoop) {
+      CassetteSfx.playTapeSwitch();
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
+      }
+      return;
+    }
+
     if (onTrackEnded) {
-      const advanced = onTrackEnded(isLoop);
-      if (advanced === false) {
-        shouldKeepPlayingRef.current = false;
-        setIsPlaying(false);
+      const advanced = onTrackEnded(false);
+      if (advanced === true) {
+        shouldKeepPlayingRef.current = true;
         return;
       }
-      shouldKeepPlayingRef.current = true;
-    } else if (compiledCassette) {
-      // Local fallback for cassette side toggle
-      if (currentSide === 'A' && compiledCassette.sideB) {
-        shouldKeepPlayingRef.current = true;
-        handleSelectSide('B');
-      } else if (isLoop) {
-        shouldKeepPlayingRef.current = true;
-        handleSelectSide('A');
-      } else {
-        shouldKeepPlayingRef.current = false;
-        setIsPlaying(false);
-      }
-    } else if (musicTracks.length > 0) {
-      if (!isLoop && legacyIndex >= musicTracks.length - 1) {
-        shouldKeepPlayingRef.current = false;
-        setIsPlaying(false);
-        return;
-      }
-      const nextIdx = (legacyIndex + 1) % musicTracks.length;
-      setLegacyIndex(nextIdx);
-      const trk = musicTracks[nextIdx];
-      if (trk) {
-        shouldKeepPlayingRef.current = true;
-        notifyTrackChange(trk.Key);
-      }
+    }
+
+    // Default when Loop is disabled: Stop playback cleanly
+    shouldKeepPlayingRef.current = false;
+    setIsPlaying(false);
+    setCurrentTime(0);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
   };
 
@@ -295,6 +292,7 @@ export function CassettePlayer({
     <div className={`sl-cassette-unit ${isPlaying ? 'is-running' : ''}`}>
       <audio
         ref={audioRef}
+        loop={isLoop}
         preload="metadata"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
@@ -517,7 +515,10 @@ export function CassettePlayer({
           <button
             type="button"
             className={`sl-push-btn btn-loop ${isLoop ? 'is-active' : ''}`}
-            onClick={() => setIsLoop((prev) => !prev)}
+            onClick={() => {
+              CassetteSfx.playTapeSwitch();
+              setIsLoop((prev) => !prev);
+            }}
             title={isLoop ? 'Bucle continuo activado' : 'Bucle desactivado'}
             aria-label="Loop"
             aria-pressed={isLoop}
