@@ -180,15 +180,15 @@ export function SunlightCommissionsPage() {
 
       {/* Main Stepped Flow */}
       <main className="sl-container">
-        {/* Step 1: Integrated 90s Analog Cassette Deck */}
-        <section className="sl-step sl-deck-step">
-          <h2>
-            <span className="sl-num">1</span>
-            <span>{t('sunlight.player.title')}</span>
-          </h2>
-          <p className="sl-step-desc">
-            Escucha muestras musicales análogas compuestas por Sunlight Blue. Haz clic sobre la cinta o pulsa PLAY para accionar los cabezales magnéticos.
-          </p>
+        {/* Audio Showcase: Integrated 90s Analog Cassette Deck */}
+        <section className="sl-showcase-section">
+          <div className="sl-showcase-header">
+            <span className="sl-showcase-tag">AUDIO SAMPLE SHOWCASE</span>
+            <h2>{t('sunlight.player.title')}</h2>
+            <p className="sl-showcase-desc">
+              Escucha muestras musicales análogas compuestas por Sunlight Blue. Pulsa PLAY en el cassette para escuchar ejemplos de producción.
+            </p>
+          </div>
 
           <CassettePlayer
             tracks={musicTracks}
@@ -203,10 +203,10 @@ export function SunlightCommissionsPage() {
           />
         </section>
 
-        {/* Step 2: Digital Art Styles & 90s Vinyl Album Covers */}
+        {/* Step 1: Digital Art Styles & 90s Vinyl Album Covers */}
         <section className="sl-step">
           <h2>
-            <span className="sl-num">2</span>
+            <span className="sl-num">1</span>
             <span>{t('sunlight.step.art')}</span>
           </h2>
           <p className="sl-step-desc">{t('sunlight.gallery.subtitle')}</p>
@@ -246,10 +246,10 @@ export function SunlightCommissionsPage() {
           </div>
         </section>
 
-        {/* Step 3: Custom Music / Song Production */}
+        {/* Step 2: Custom Music / Song Production */}
         <section className="sl-step">
           <h2>
-            <span className="sl-num">3</span>
+            <span className="sl-num">2</span>
             <span>{t('sunlight.step.song')}</span>
           </h2>
           <p className="sl-step-desc">
@@ -302,10 +302,10 @@ export function SunlightCommissionsPage() {
           </div>
         </section>
 
-        {/* Step 4: Studio Options & Add-ons */}
+        {/* Step 3: Studio Options & Add-ons */}
         <section className="sl-step">
           <h2>
-            <span className="sl-num">4</span>
+            <span className="sl-num">3</span>
             <span>{t('sunlight.step.options')}</span>
           </h2>
 
@@ -445,10 +445,10 @@ export function SunlightCommissionsPage() {
           </div>
         </section>
 
-        {/* Step 5: Studio Order Summary & Discord Action */}
+        {/* Step 4: Studio Order Summary & Discord Action */}
         <section className="sl-step sl-summary-step">
           <h2>
-            <span className="sl-num">5</span>
+            <span className="sl-num">4</span>
             <span>{t('sunlight.summary.title')}</span>
           </h2>
 

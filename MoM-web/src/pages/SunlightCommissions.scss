@@ -199,9 +199,47 @@
     opacity: 0.85;
   }
 
-  // --- Step 1: Cassette Player Container ---
-  .sl-deck-step {
-    padding-bottom: 1.75rem;
+  // --- Showcase: Audio Samples & Cassette Player (Outside Steps) ---
+  .sl-showcase-section {
+    background: var(--sl-step-bg);
+    border: 1px solid var(--sl-border);
+    border-radius: 20px;
+    padding: 1.5rem 1.5rem 2rem;
+    box-shadow: var(--sl-shadow);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+
+    .sl-showcase-header {
+      margin-bottom: 1.35rem;
+
+      .sl-showcase-tag {
+        display: inline-block;
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        color: var(--sl-accent);
+        background: rgba(37, 75, 130, 0.08);
+        padding: 0.25rem 0.65rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+        color: var(--sl-ink);
+        margin: 0 0 0.35rem 0;
+      }
+
+      .sl-showcase-desc {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--sl-subtext);
+        margin: 0;
+        max-width: 650px;
+        line-height: 1.5;
+      }
+    }
   }
 
   // --- Step 2: Covers & Art Choice ---
@@ -891,6 +929,28 @@
         text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
       }
 
+    }
+
+    .sl-showcase-section {
+      background: rgba(36, 31, 48, 0.85);
+      border: 1px solid #46415a;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+
+      .sl-showcase-header {
+        .sl-showcase-tag {
+          color: #38bdf8;
+          background: rgba(56, 189, 248, 0.12);
+        }
+
+        h2 {
+          color: #f1ece0;
+        }
+
+        .sl-showcase-desc {
+          color: #9a93b0;
+        }
+      }
     }
 
     .sl-step {
