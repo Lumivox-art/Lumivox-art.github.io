@@ -35,13 +35,18 @@ export function CassettePlayer({
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.85);
 
-  // Sync index when active key changes from parent (e.g. commission builder)
+  // Sync index when active key changes from parent and pause automatically
   useEffect(() => {
     if (effectiveActiveKey) {
       const idx = musicTracks.findIndex((t) => t.Key === effectiveActiveKey);
       if (idx >= 0 && idx !== currentIndex) {
         setCurrentIndex(idx);
-        setIsPlaying(true);
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current.currentTime = 0;
+        }
+        setIsPlaying(false);
+        setCurrentTime(0);
       }
     }
   }, [effectiveActiveKey, musicTracks]);
@@ -60,7 +65,7 @@ export function CassettePlayer({
     }
   }, [volume]);
 
-  // Update audio source when track changes without destroying ongoing valid stream
+  // Update audio source when track changes and ensure player is paused
   useEffect(() => {
     const audio = audioRef.current;
     if (audio && currentTrack) {
@@ -68,14 +73,12 @@ export function CassettePlayer({
       const currentSrc = audio.currentSrc || audio.src;
       const isSame = currentSrc && (currentSrc === src || currentSrc.endsWith(src));
       if (!isSame && src) {
+        audio.pause();
+        audio.currentTime = 0;
         audio.src = src;
         audio.load();
-        if (isPlaying) {
-          audio.play().catch((err) => {
-            console.warn('Audio playback prevented:', err);
-            setIsPlaying(false);
-          });
-        }
+        setIsPlaying(false);
+        setCurrentTime(0);
       }
     }
   }, [currentIndex, currentTrack]);
@@ -125,22 +128,13 @@ export function CassettePlayer({
     const audio = audioRef.current;
     if (audio) {
       const src = getTrackSrc(trk);
+      audio.pause();
+      audio.currentTime = 0;
       audio.src = src;
       audio.load();
-      audio
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => {
-          console.warn('Play error:', err);
-          setIsPlaying(false);
-        });
     }
-  };
-
-  const handleNext = () => {
-    if (musicTracks.length === 0) return;
-    const nextIdx = (currentIndex + 1) % musicTracks.length;
-    handleSwitchSide(nextIdx);
+    setIsPlaying(false);
+    setCurrentTime(0);
   };
 
   const handleTimeUpdate = () => {
@@ -194,8 +188,13 @@ export function CassettePlayer({
           }
         }}
         onEnded={() => {
+          const audio = audioRef.current;
+          if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+          }
           setIsPlaying(false);
-          handleNext();
+          setCurrentTime(0);
         }}
         onError={(e) => {
           console.warn('Audio tag playback error:', e);
@@ -406,16 +405,6 @@ export function CassettePlayer({
             aria-label="Stop"
           >
             STOP
-          </button>
-
-          <button
-            type="button"
-            className="sl-push-btn btn-fastforward"
-            onClick={handleNext}
-            title="Fast Forward"
-            aria-label="Fast Forward"
-          >
-            FF
           </button>
         </div>
 
