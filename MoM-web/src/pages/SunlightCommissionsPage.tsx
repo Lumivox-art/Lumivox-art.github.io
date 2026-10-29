@@ -202,7 +202,7 @@ export function SunlightCommissionsPage() {
               }}
               onTrackChange={(key) => {
                 setPlayerTrackKey(key);
-                if (key === 'instrumental' || key === 'vocal-with-lyrics') {
+                if (musicTracks.some((t) => t.Key === key)) {
                   setSelectedSongKey(key);
                   setCopied(false);
                 }

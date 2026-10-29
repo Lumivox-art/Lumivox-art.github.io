@@ -10,7 +10,7 @@ import type { SunlightSampleBase, SunlightCompiledCassette } from '../models/Sun
 import type { ResponseObject } from '../models/Response/ResponseObject';
 
 export class SunlightCommissionsService {
-  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v6';
+  private static readonly cacheKey = 'lvx_cache_sunlight_samples_v7';
   private static readonly restEndpoint =
     'https://multiverseofmadness21-fefd9-default-rtdb.firebaseio.com/sunlight_samples.json';
 
@@ -81,14 +81,14 @@ export class SunlightCommissionsService {
     {
       SampleID: 5,
       Key: 'instrumental',
-      Title: 'Instrumental',
+      Title: 'Deeno Spooky',
       Category: 'custom_song',
       Kind: 'music',
       PriceUsd: 30,
       PriceMxn: 550,
       MediaUrl: '/sunlight-media/instrumental.mp3',
       AudioUrl: '/sunlight-media/instrumental.mp3',
-      Description: 'Instrumental',
+      Description: 'Deeno Spooky',
       Duration: '2:30',
       TrackNumber: 1,
       Order: 5,
@@ -98,17 +98,68 @@ export class SunlightCommissionsService {
     {
       SampleID: 6,
       Key: 'vocal-with-lyrics',
-      Title: 'Vocals with lyrics',
+      Title: 'La tormenta',
       Category: 'custom_song',
       Kind: 'music',
       PriceUsd: 55,
       PriceMxn: 1000,
       MediaUrl: '/sunlight-media/vocal-with-lyrics.mp3',
       AudioUrl: '/sunlight-media/vocal-with-lyrics.mp3',
-      Description: 'Vocals with lyrics (English or Spanish)',
+      Description: 'La tormenta (Vocals with lyrics)',
       Duration: '1:23',
       TrackNumber: 2,
       Order: 6,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    {
+      SampleID: 7,
+      Key: 'chocolimon',
+      Title: 'Chocolimón',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/chocolimon.mp3',
+      AudioUrl: '/sunlight-media/chocolimon.mp3',
+      Description: 'Chocolimón',
+      Duration: '1:08',
+      TrackNumber: 3,
+      Order: 7,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    {
+      SampleID: 8,
+      Key: 'deeno-swing',
+      Title: 'Deeno Swing',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/deeno-swing.mp3',
+      AudioUrl: '/sunlight-media/deeno-swing.mp3',
+      Description: 'Deeno Swing',
+      Duration: '2:16',
+      TrackNumber: 4,
+      Order: 8,
+      IsActive: true,
+      IsDeleted: false,
+    },
+    {
+      SampleID: 9,
+      Key: 'lost-parcel',
+      Title: 'Lost Parcel',
+      Category: 'custom_song',
+      Kind: 'music',
+      PriceUsd: 30,
+      PriceMxn: 550,
+      MediaUrl: '/sunlight-media/lost-parcel.mp3',
+      AudioUrl: '/sunlight-media/lost-parcel.mp3',
+      Description: 'Lost Parcel',
+      Duration: '2:18',
+      TrackNumber: 5,
+      Order: 9,
       IsActive: true,
       IsDeleted: false,
     },
@@ -123,6 +174,7 @@ export class SunlightCommissionsService {
     LocalCache.Remove('lvx_cache_sunlight_samples_v3');
     LocalCache.Remove('lvx_cache_sunlight_samples_v4');
     LocalCache.Remove('lvx_cache_sunlight_samples_v5');
+    LocalCache.Remove('lvx_cache_sunlight_samples_v6');
     const cached = LocalCache.Get<SunlightSampleBase[]>(SunlightCommissionsService.cacheKey);
     return cached && cached.length > 0 ? cached : SunlightCommissionsService.fallbackItems;
   }
