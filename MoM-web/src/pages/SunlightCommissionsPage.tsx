@@ -81,8 +81,25 @@ export function SunlightCommissionsPage() {
   const musicTracks = samples.filter((s) => s.Kind === 'music');
   const compiledCassettes = SunlightCommissionsService.CompileCassettes(musicTracks);
 
+  const customSongPackages = [
+    {
+      Key: 'instrumental',
+      Title: t('sunlight.step.song.instrumental'),
+      Description: t('sunlight.step.song.instrumental.desc'),
+      PriceUsd: 30,
+      PriceMxn: 550,
+    },
+    {
+      Key: 'vocal-with-lyrics',
+      Title: t('sunlight.step.song.vocals'),
+      Description: t('sunlight.step.song.vocals.desc'),
+      PriceUsd: 55,
+      PriceMxn: 1000,
+    },
+  ];
+
   const selectedArt = artCovers.find((s) => s.Key === selectedArtKey) || null;
-  const selectedSong = musicTracks.find((s) => s.Key === selectedSongKey) || null;
+  const selectedSong = customSongPackages.find((s) => s.Key === selectedSongKey) || null;
 
   // Pricing calculation
   const artCostUsd = selectedArt ? selectedArt.PriceUsd : 0;
@@ -193,10 +210,6 @@ export function SunlightCommissionsPage() {
                 }}
                 onTrackChange={(key) => {
                   setPlayerTrackKey(key);
-                  if (musicTracks.some((t) => t.Key === key)) {
-                    setSelectedSongKey(key);
-                    setCopied(false);
-                  }
                 }}
               />
             </div>
@@ -265,7 +278,7 @@ export function SunlightCommissionsPage() {
           </p>
 
           <div className="sl-song-grid">
-            {musicTracks.map((song, songIdx) => (
+            {customSongPackages.map((song) => (
               <button
                 key={song.Key}
                 type="button"
@@ -275,11 +288,6 @@ export function SunlightCommissionsPage() {
                   setSelectedSongKey(newKey);
                   if (newKey) {
                     CassetteSfx.playTapeSwitch();
-                    setPlayerTrackKey(newKey);
-                    const tapeIdx = Math.floor(songIdx / 2);
-                    const tapeSide = songIdx % 2 === 1 ? 'B' : 'A';
-                    setActiveCassetteIndex(tapeIdx);
-                    setActiveSide(tapeSide);
                   }
                   setCopied(false);
                 }}
