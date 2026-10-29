@@ -455,7 +455,7 @@ export function SunlightCommissionsPage() {
           <div className="sl-summary-card">
             <div className="sl-summary-header">
               <span className="sl-receipt-tag">SUNLIGHT BLUE RECORDING STUDIO ORDER</span>
-              <span className="sl-receipt-date">SERIES 1990-2026</span>
+              <span className="sl-receipt-date">ORDEN OFICIAL</span>
             </div>
 
             {!hasSelection ? (

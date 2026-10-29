@@ -159,34 +159,6 @@
         z-index: 3;
       }
 
-      .jacket-overlay-badges {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        display: flex;
-        gap: 4px;
-        z-index: 4;
-
-        span {
-          font-size: 0.6rem;
-          font-weight: 800;
-          padding: 0.15rem 0.4rem;
-          border-radius: 3px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .badge-stereo {
-          background: rgba(42, 26, 18, 0.85);
-          color: #60a5fa;
-          border: 1px solid rgba(96, 165, 250, 0.4);
-        }
-
-        .badge-year {
-          background: #254b82;
-          color: #ffffff;
-        }
-      }
 
       .jacket-zoom-btn {
         position: absolute;
@@ -297,17 +269,6 @@
       border-color: #3d374e;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
 
-      .jacket-overlay-badges {
-        .badge-stereo {
-          background: rgba(0, 0, 0, 0.85);
-          color: #38bdf8;
-          border-color: rgba(56, 189, 248, 0.4);
-        }
-
-        .badge-year {
-          background: #2563eb;
-        }
-      }
 
       .jacket-zoom-btn {
         background: rgba(0, 0, 0, 0.8);

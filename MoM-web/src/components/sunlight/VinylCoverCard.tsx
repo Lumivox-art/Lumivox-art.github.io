@@ -59,12 +59,6 @@ export function VinylCoverCard({
           />
 
           {/* Retro Badges */}
-          <div className="jacket-overlay-badges">
-            <span className="badge-stereo">STEREO</span>
-            {sample.ReleaseYear && (
-              <span className="badge-year">{sample.ReleaseYear}</span>
-            )}
-          </div>
 
           {/* Quick Zoom Pill (No emojis) */}
           <button

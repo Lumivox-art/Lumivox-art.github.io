@@ -166,7 +166,7 @@ export function CassettePlayer({
       <div className="sl-deck-topbar">
         <div className="sl-deck-branding">
           <span className="sl-brand-logo-text">SUNLIGHT BLUE</span>
-          <span className="sl-brand-model">WM-90 STEREO CASSETTE DECK</span>
+          <span className="sl-brand-model">WM-90 CASSETTE DECK</span>
         </div>
         <div className="sl-deck-leds">
           <span className={`sl-led ${isPlaying ? 'is-active' : ''}`} title="Power / Play" />
@@ -206,7 +206,7 @@ export function CassettePlayer({
               <div className="sl-sticker-top">
                 <span className="sl-side-pill">{isSideA ? 'A' : 'B'}</span>
                 <span className="sl-tape-title">{currentTrack.Title}</span>
-                <span className="sl-tape-meta">{currentTrack.ReleaseYear || '1995'}</span>
+                <span className="sl-tape-meta">CHROME TYPE II</span>
               </div>
               <div className="sl-sticker-rule" />
               <div className="sl-sticker-bottom">
