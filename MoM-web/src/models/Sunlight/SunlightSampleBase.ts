@@ -22,6 +22,7 @@ export interface SunlightSampleBase {
   Duration?: string | null;
   TrackNumber?: number | null;
   HasVinylDisc?: boolean;
+  AspectRatio?: string | null;
   CassetteTitle?: string | null;
   CassetteIndex?: number | null;
   Side?: 'A' | 'B' | null;

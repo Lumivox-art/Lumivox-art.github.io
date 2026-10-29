@@ -11,6 +11,7 @@ interface LumivoxDbImageProps {
   circleSize?: number;
   compactError?: boolean;
   style?: React.CSSProperties;
+  onImageLoaded?: (dimensions: { naturalWidth: number; naturalHeight: number }) => void;
 }
 
 export function LumivoxDbImage({
@@ -21,6 +22,7 @@ export function LumivoxDbImage({
   circleSize = 44,
   compactError = false,
   style,
+  onImageLoaded,
 }: LumivoxDbImageProps) {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -30,10 +32,14 @@ export function LumivoxDbImage({
     setHasError(false);
     if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
       setIsLoaded(true);
+      onImageLoaded?.({
+        naturalWidth: imgRef.current.naturalWidth,
+        naturalHeight: imgRef.current.naturalHeight,
+      });
     } else {
       setIsLoaded(false);
     }
-  }, [src]);
+  }, [src, onImageLoaded]);
 
   if (hasError) {
     return <ConnectionFailurePlaceholder compact={compactError} />;
@@ -56,7 +62,13 @@ export function LumivoxDbImage({
           alt={alt}
           loading={effectiveLoading}
           className={`lvx-db-img ${isLoaded ? 'is-loaded' : 'is-loading'}`}
-          onLoad={() => setIsLoaded(true)}
+          onLoad={(e) => {
+            setIsLoaded(true);
+            const { naturalWidth, naturalHeight } = e.currentTarget;
+            if (naturalWidth && naturalHeight) {
+              onImageLoaded?.({ naturalWidth, naturalHeight });
+            }
+          }}
           onError={() => setHasError(true)}
         />
       )}

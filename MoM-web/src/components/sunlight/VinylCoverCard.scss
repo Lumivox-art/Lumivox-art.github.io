@@ -14,6 +14,7 @@
               background-color 0.2s;
   display: flex;
   flex-direction: column;
+  align-self: flex-start;
   user-select: none;
   outline: none;
   color: #2a1a12;
@@ -71,7 +72,7 @@
   .sleeve-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    // Aspect ratio dynamically set per image
     display: flex;
     align-items: center;
     justify-content: flex-start;

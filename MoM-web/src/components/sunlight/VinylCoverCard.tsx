@@ -10,6 +10,13 @@ interface VinylCoverCardProps {
   onZoom?: (sample: SunlightSampleBase) => void;
 }
 
+const KNOWN_ASPECT_RATIOS: Record<string, string> = {
+  headshot: '1 / 1',
+  fullbody: '1275 / 1600',
+  illustration: '1035 / 1600',
+  'book-cover': '1600 / 1144',
+};
+
 export function VinylCoverCard({
   sample,
   isSelected = false,
@@ -18,6 +25,10 @@ export function VinylCoverCard({
 }: VinylCoverCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const hasDisc = sample.HasVinylDisc === true;
+  const initialRatio =
+    KNOWN_ASPECT_RATIOS[sample.Key] ||
+    (sample.AspectRatio ? `${sample.AspectRatio}` : '1 / 1');
+  const [aspectRatio, setAspectRatio] = useState<string>(initialRatio);
 
   return (
     <div
@@ -36,7 +47,12 @@ export function VinylCoverCard({
       }}
     >
       {/* Vinyl Sleeve & Slipping Record */}
-      <div className="sleeve-container">
+      <div
+        className="sleeve-container"
+        style={{
+          aspectRatio,
+        }}
+      >
         {/* Sliding Vinyl Record (renders only when HasVinylDisc is true) */}
         {hasDisc && (
           <div className={`vinyl-disc ${isHovered || isSelected ? 'is-slid-out' : ''}`}>
@@ -59,6 +75,11 @@ export function VinylCoverCard({
             alt={sample.Title}
             circleSize={48}
             className="jacket-art"
+            onImageLoaded={({ naturalWidth, naturalHeight }) => {
+              if (naturalWidth > 0 && naturalHeight > 0) {
+                setAspectRatio(`${naturalWidth} / ${naturalHeight}`);
+              }
+            }}
           />
 
           {/* Retro Badges */}
