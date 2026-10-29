@@ -235,10 +235,11 @@ export function SunlightCommissionsPage() {
 
             <div
               className="sl-stage-tower-col"
-              style={{
-                height: `${deckHeight}px`,
-                maxHeight: `${deckHeight}px`,
-              }}
+              style={
+                {
+                  '--deck-height': `${deckHeight}px`,
+                } as React.CSSProperties
+              }
             >
               <CassetteTower
                 cassettes={compiledCassettes}

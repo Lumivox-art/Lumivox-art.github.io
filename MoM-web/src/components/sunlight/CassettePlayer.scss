@@ -746,3 +746,53 @@
     opacity: 0.35;
   }
 }
+
+
+// Mobile Optimization (<= 480px)
+@media (max-width: 480px) {
+  .sl-cassette-unit {
+    padding: 0.65rem 0.65rem 0.75rem;
+    border-radius: 12px;
+
+    .sl-deck-topbar {
+      padding-bottom: 0.35rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .sl-deck-main {
+      padding: 0.45rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .sl-tape-door {
+      padding: 0.35rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .sl-integrated-lcd {
+      padding: 0.35rem 0.55rem;
+    }
+
+    .sl-deck-controls-row {
+      gap: 0.45rem;
+
+      .sl-deck-sides {
+        gap: 0.3rem;
+
+        .sl-side-switch-btn {
+          padding: 0.25rem 0.5rem;
+          font-size: 0.68rem;
+        }
+      }
+
+      .sl-push-buttons {
+        gap: 0.3rem;
+
+        .sl-push-btn {
+          padding: 0.28rem 0.55rem;
+          font-size: 0.74rem;
+        }
+      }
+    }
+  }
+}
