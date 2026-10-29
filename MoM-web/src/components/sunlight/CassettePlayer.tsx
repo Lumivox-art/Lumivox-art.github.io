@@ -318,7 +318,7 @@ export function CassettePlayer({
         </div>
         <div className="sl-deck-leds">
           <span className={`sl-led ${isPlaying ? 'is-active' : ''}`} title="Power / Play" />
-          <span className="sl-led-label">AUTO REVERSE · DOLBY B-NR</span>
+          <span className="sl-led-label">AUTO REVERSE</span>
         </div>
       </div>
 
